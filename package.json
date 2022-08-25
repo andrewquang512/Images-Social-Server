@@ -1,0 +1,26 @@
+{
+  "name": "images-social-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HUNG-rushb/Images-Social-Server.git"
+  },
+  "author": "BKU",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HUNG-rushb/Images-Social-Server/issues"
+  },
+  "homepage": "https://github.com/HUNG-rushb/Images-Social-Server#readme",
+  "dependencies": {
+    "apollo-server": "^3.10.1",
+    "express": "^4.18.1",
+    "express-graphql": "^0.12.0",
+    "graphql": "^16.6.0",
+    "prisma": "^4.2.1"
+  }
+}
