@@ -1,6 +1,0 @@
-{
-    "mongoURI": "mongodb+srv://chanvi123:k9S38ICmoetdsRnU@devconnect.chtki.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-    "jwtSecret":"mysecrettoken",
-    "githubClientID":"1579ec24e0f7e9037c8e0",
-    "githubSecret":"ab460beb59b307152a5317b6fe92a19761fb88f6"
-}

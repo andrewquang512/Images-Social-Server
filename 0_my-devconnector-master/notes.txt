@@ -1,9 +1,0 @@
-// ?  process.env.PORT will appear when deployed on Heroku
-// ? `` and '' is the same, but we can call variable in `` with $
-// config dependencies ( thu vien config)  help created global values can use thoughout application
-// await mongoose.connect(db) or under method are both correct
-// ? new standard now is sync await, use when it is synchronous
-so we put all default values in default.json
-
-testing github account pushing
-testing github account pushing 2
