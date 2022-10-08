@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Đề Cương Luận Văn BKU 2022",
   "main": "index.js",
+  "type": "module",
   "scripts": {
+    "start": "nodemon src/index.js --ext js,graphql --exec babel-node",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,9 +21,11 @@
   "dependencies": {
     "apollo-server": "^3.10.1",
     "graphql": "^16.6.0",
-    "mongoose": "^6.5.3"
+    "mongoose": "^6.5.3",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "nodemon": "^1.17.5",
     "prisma": "^4.2.1"
   }
 }

@@ -1,38 +1,29 @@
 import { ApolloServer } from "apollo-server";
-import { typeDefs } from "./schema";
-import { Query, Mutation, Profile, Post, User } from "./resolvers";
-import { PrismaClient, Prisma } from "@prisma/client";
-import { getUserFromToken } from "./utils/getUserFromToken";
 
-export const prisma = new PrismaClient();
+// Data
+// import { PrismaClient, Prisma } from "@prisma/client";
+import typeDefs from "./typeDefs.js";
+import db from "./data/db.js";
 
-// export interface Context {
-//   prisma: PrismaClient<
-//     Prisma.PrismaClientOptions,
-//     never,
-//     Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined
-//   >;
-//   userInfo: {
-//     userId: number;
-//   } | null;
-// }
+// Resolvers
+import Query from "./resolvers/_Query.js";
+import Mutation from "./resolvers/_Mutation.js";
+import User from "./resolvers/User.js";
+import Post from "./resolvers/Post.js";
+import Comment from "./resolvers/Comment.js";
 
+// Server
 const server = new ApolloServer({
   typeDefs,
   resolvers: {
     Query,
     Mutation,
-    Profile,
-    Post,
     User,
+    Post,
+    Comment,
   },
-  context: async ({ req }) => {
-    const userInfo = await getUserFromToken(req.headers.authorization);
-
-    return {
-      prisma,
-      userInfo,
-    };
+  context: {
+    db,
   },
 });
 
