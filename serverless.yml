@@ -10,9 +10,12 @@ provider:
 functions:
   graphql:
     # this is formatted as <FILENAME>.<HANDLER>
-    handler: src/graphql.graphqlHandler
+    handler: src/index.graphqlHandler
     events:
       - http:
           path: /
           method: any
           cors: true
+custom:
+  serverless-offline:
+    httpPort: 4000

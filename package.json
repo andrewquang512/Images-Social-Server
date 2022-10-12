@@ -4,7 +4,7 @@
   "description": "Đề Cương Luận Văn BKU 2022",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.js --ext js,graphql --exec babel-node",
+    "start": "serverless offline",
     "dev": "nodemon --exec \"serverless offline start\""
   },
   "repository": {

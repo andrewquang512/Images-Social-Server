@@ -17,9 +17,11 @@ const Query = {
       const isTitleMatch = post.title
         .toLowerCase()
         .includes(args.query.toLowerCase());
+
       const isBodyMatch = post.body
         .toLowerCase()
         .includes(args.query.toLowerCase());
+
       return isTitleMatch || isBodyMatch;
     });
   },
@@ -36,4 +38,4 @@ const Query = {
   },
 };
 
-export default Query;
+module.exports = Query;

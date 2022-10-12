@@ -1,4 +1,4 @@
-import { gql } from "apollo-server";
+const { gql } = require("apollo-server-lambda");
 
 const typeDefs = gql`
   type Query {
@@ -81,4 +81,4 @@ const typeDefs = gql`
   }
 `;
 
-export default typeDefs;
+module.exports = typeDefs;

@@ -11,4 +11,4 @@ const Post = {
   },
 };
 
-export default Post;
+module.exports = Post;
