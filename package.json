@@ -18,16 +18,16 @@
   },
   "homepage": "https://github.com/HUNG-rushb/Images-Social-Server#readme",
   "dependencies": {
-    "apollo-server": "^3.10.1",
     "apollo-server-lambda": "^3.10.3",
     "graphql": "^16.6.0",
     "mongoose": "^6.5.3",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@prisma/client": "^4.4.0",
     "aws-sdk": "^2.1231.0",
     "nodemon": "^1.19.4",
-    "prisma": "^4.2.1",
+    "prisma": "^4.4.0",
     "serverless-offline": "^11.1.1"
   }
 }

@@ -30,9 +30,9 @@ const Query = {
   },
   post() {
     return {
-      id: "092",
-      title: "GraphQL 101",
-      body: "",
+      id: '092',
+      title: 'GraphQL 101',
+      body: '',
       published: false,
     };
   },
