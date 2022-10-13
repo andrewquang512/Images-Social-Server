@@ -17,9 +17,11 @@ const Query = {
       const isTitleMatch = post.title
         .toLowerCase()
         .includes(args.query.toLowerCase());
+
       const isBodyMatch = post.body
         .toLowerCase()
         .includes(args.query.toLowerCase());
+
       return isTitleMatch || isBodyMatch;
     });
   },
@@ -28,12 +30,12 @@ const Query = {
   },
   post() {
     return {
-      id: "092",
-      title: "GraphQL 101",
-      body: "",
+      id: '092',
+      title: 'GraphQL 101',
+      body: '',
       published: false,
     };
   },
 };
 
-export default Query;
+module.exports = Query;

@@ -74,4 +74,4 @@ const db = {
   comments,
 };
 
-export default db;
+module.exports = db;

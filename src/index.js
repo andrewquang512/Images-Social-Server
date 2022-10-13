@@ -1,32 +1,38 @@
-import { ApolloServer } from "apollo-server";
+const { ApolloServer } = require('apollo-server-lambda');
+const {
+  ApolloServerPluginLandingPageLocalDefault,
+} = require('apollo-server-core');
 
 // Data
 // import { PrismaClient, Prisma } from "@prisma/client";
-import typeDefs from "./typeDefs.js";
-import db from "./data/db.js";
+const typeDefs = require('./typeDefs.js');
+const db = require('./data/db.js');
 
 // Resolvers
-import Query from "./resolvers/_Query.js";
-import Mutation from "./resolvers/_Mutation.js";
-import User from "./resolvers/User.js";
-import Post from "./resolvers/Post.js";
-import Comment from "./resolvers/Comment.js";
+const Query = require('./resolvers/_Query.js');
+const Mutation = require('./resolvers/_Mutation.js');
+const Subcription = require('./resolvers/_Subcription.js');
+const User = require('./resolvers/User.js');
+const Post = require('./resolvers/Post.js');
+const Comment = require('./resolvers/Comment.js');
 
-// Server
+// Provide resolver functions for your )schema fields
+const resolvers = {
+  Query,
+  Mutation,
+  // Subcription,
+  User,
+  Post,
+  Comment,
+};
+
 const server = new ApolloServer({
   typeDefs,
-  resolvers: {
-    Query,
-    Mutation,
-    User,
-    Post,
-    Comment,
-  },
-  context: {
-    db,
-  },
+  resolvers,
+  context: { db },
+  csrfPrevention: true,
+  cache: 'bounded',
+  plugins: [ApolloServerPluginLandingPageLocalDefault({ embed: true })],
 });
 
-server.listen().then(({ url }) => {
-  console.log(`Server ready on ${url}`);
-});
+exports.graphqlHandler = server.createHandler();
