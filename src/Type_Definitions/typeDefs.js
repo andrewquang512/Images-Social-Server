@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server-lambda");
+const { gql } = require('apollo-server-lambda');
 
 const typeDefs = gql`
   type Query {
@@ -9,12 +9,15 @@ const typeDefs = gql`
   }
 
   type Mutation {
+    # User
     createUser(data: CreateUserInput!): User!
     deleteUser(id: ID!): User!
     updateUser(id: ID!, data: UpdateUserInput!): User!
+    # Post
     createPost(data: CreatePostInput!): Post!
     deletePost(id: ID!): Post!
     updatePost(id: ID!, data: UpdatePostInput!): Post!
+    # Comment
     createComment(data: CreateCommentInput!): Comment!
     deleteComment(id: ID!): Comment!
     updateComment(id: ID!, data: UpdateCommentInput!): Comment!
@@ -55,6 +58,17 @@ const typeDefs = gql`
     text: String
   }
 
+  # ! Type
+  # ! Type
+  # ! Type
+  # ! Type
+  # ! Type
+  # ! Type
+  # ! Type
+  # ! Type
+  # ! Type
+  # ! Type
+  # ! Type
   type User {
     id: ID!
     name: String!

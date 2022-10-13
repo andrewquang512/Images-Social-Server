@@ -1,38 +1,42 @@
+// Apollo
 const { ApolloServer } = require('apollo-server-lambda');
 const {
   ApolloServerPluginLandingPageLocalDefault,
 } = require('apollo-server-core');
 
-// Data
-// import { PrismaClient, Prisma } from "@prisma/client";
-const typeDefs = require('./typeDefs.js');
-const db = require('./data/db.js');
+// Prisma
+const { PrismaClient } = require('@prisma/client');
+
+// Type definitions
+const typeDefs = require('./Type_Definitions/typeDefs.js');
 
 // Resolvers
-const Query = require('./resolvers/_Query.js');
-const Mutation = require('./resolvers/_Mutation.js');
-const Subcription = require('./resolvers/_Subcription.js');
-const User = require('./resolvers/User.js');
-const Post = require('./resolvers/Post.js');
-const Comment = require('./resolvers/Comment.js');
+const Query = require('./resolvers/Query/_Query.js');
+const Mutation = require('./resolvers/Mutation/_Mutation.js');
+const Subcription = require('./resolvers/Subcription/_Subcription.js');
+const Type = require('./resolvers/Type/_Type.js');
 
-// Provide resolver functions for your )schema fields
+// Connect to MongoDB
+const prisma = new PrismaClient();
+exports.prisma;
+
+// Resolvers
 const resolvers = {
   Query,
   Mutation,
   // Subcription,
-  User,
-  Post,
-  Comment,
+  ...Type,
 };
 
+// The server
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: { db },
+  context: { prisma },
   csrfPrevention: true,
   cache: 'bounded',
   plugins: [ApolloServerPluginLandingPageLocalDefault({ embed: true })],
 });
 
+// Handler for serverless
 exports.graphqlHandler = server.createHandler();

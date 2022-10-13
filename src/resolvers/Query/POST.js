@@ -1,13 +1,4 @@
-const Query = {
-  users(parent, args, { db }, info) {
-    if (!args.query) {
-      return db.users;
-    }
-
-    return db.users.filter((user) => {
-      return user.name.toLowerCase().includes(args.query.toLowerCase());
-    });
-  },
+const postQuery = {
   posts(parent, args, { db }, info) {
     if (!args.query) {
       return db.posts;
@@ -25,9 +16,7 @@ const Query = {
       return isTitleMatch || isBodyMatch;
     });
   },
-  comments(parent, args, { db }, info) {
-    return db.comments;
-  },
+
   post() {
     return {
       id: '092',
@@ -38,4 +27,4 @@ const Query = {
   },
 };
 
-module.exports = Query;
+module.exports = postQuery;
