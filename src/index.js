@@ -8,7 +8,7 @@ const {
 const { PrismaClient } = require('@prisma/client');
 
 // Type definitions
-const typeDefs = require('./Type_Definitions/typeDefs.js');
+const typeDefs = require('./Type_Definitions/_typeDefs.js');
 
 // Resolvers
 const Query = require('./resolvers/Query/_Query.js');
