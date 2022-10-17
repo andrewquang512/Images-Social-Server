@@ -25,11 +25,11 @@ const userDefs = gql`
 
   type User {
     id: ID!
-    name: String!
     email: String!
+    name: String!
     age: Int
     posts: [Post!]!
-    comments: [Comment!]!
+    # comments: [Comment!]!
   }
 `;
 

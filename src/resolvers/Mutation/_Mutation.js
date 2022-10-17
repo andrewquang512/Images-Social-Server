@@ -1,6 +1,6 @@
 const userMutation = require('./user.js');
 const postMutation = require('./post.js');
-const commentMutation = require('./comment.js');
+// const commentMutation = require('./comment.js');
 
 const Mutation = {
   // User
@@ -8,7 +8,7 @@ const Mutation = {
   // Post
   ...postMutation,
   // Comment
-  ...commentMutation,
+  // ...commentMutation,
 };
 
 module.exports = Mutation;

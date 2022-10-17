@@ -28,10 +28,11 @@ const postDefs = gql`
   type Post {
     id: ID!
     title: String!
-    body: String!
-    published: Boolean!
+    content: String!
+    createdAt: String!
+    updatedAt: String!
     author: User!
-    comments: [Comment!]!
+    # comments: [Comment!]!
   }
 `;
 

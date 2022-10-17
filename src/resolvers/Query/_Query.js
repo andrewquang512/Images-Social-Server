@@ -1,6 +1,6 @@
 const userQuery = require('./USER.js');
 const postQuery = require('./POST.js');
-const commentQuery = require('./COMMENT.js');
+// const commentQuery = require('./COMMENT.js');
 
 const Query = {
   // User
@@ -8,7 +8,7 @@ const Query = {
   // Post
   ...postQuery,
   // Comment
-  ...commentQuery,
+  // ...commentQuery,
 };
 
 module.exports = Query;
