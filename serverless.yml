@@ -3,6 +3,9 @@ app: bku-project
 service: bku-project-api
 plugins:
   - serverless-offline
+package:
+  exclude:
+    - node_modules/**
 provider:
   name: aws
   runtime: nodejs14.x
