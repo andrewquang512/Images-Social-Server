@@ -43,18 +43,14 @@ const resolvers = {
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
 const server = new ApolloServer({
+  cors: {
+    origin: true, // <- allow request from all domains
+    credentials: true, // <- enable CORS response for requests with credentials (cookies, http authentication)
+  },
   typeDefs,
   resolvers,
-  cors: {
-    origin: '*', // <- allow request from all domains
-    credentials: true,
-  },
 });
 
-// Passing an ApolloServer instance to the `startStandaloneServer` function:
-//  1. creates an Express app
-//  2. installs your ApolloServer instance as middleware
-//  3. prepares your app to handle incoming requests
 const { url } = await startStandaloneServer(server, {
   listen: { port: 3000 },
 });
