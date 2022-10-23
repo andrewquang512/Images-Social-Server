@@ -4,9 +4,6 @@ const {
   ApolloServerPluginLandingPageLocalDefault,
 } = require('apollo-server-core');
 
-// Prisma
-const { PrismaClient } = require('@prisma/client');
-
 // Type definitions
 // const typeDefs = require('./Type_Definitions/_typeDefs.js');
 
@@ -16,10 +13,6 @@ const Mutation = require('./resolvers/Mutation/_Mutation.js');
 const Subcription = require('./resolvers/Subcription/_Subcription.js');
 const Type = require('./resolvers/Type/_Type.js');
 
-// Connect to MongoDB
-const prisma = new PrismaClient();
-exports.prisma;
-
 // Resolvers
 // const resolvers = {
 //   Query,
@@ -27,6 +20,11 @@ exports.prisma;
 //   // Subcription,
 //   ...Type,
 // };
+
+// Connect to MongoDB
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+exports.prisma;
 
 // Delete Later
 const { gql } = require('apollo-server-lambda');
@@ -55,3 +53,4 @@ const server = new ApolloServer({
 
 // Handler for serverless
 exports.graphqlHandler = server.createHandler();
+// 3x50gqLn1pnA
