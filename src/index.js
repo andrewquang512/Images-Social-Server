@@ -8,7 +8,7 @@ const {
 const { PrismaClient } = require('@prisma/client');
 
 // Type definitions
-const typeDefs = require('./Type_Definitions/_typeDefs.js');
+// const typeDefs = require('./Type_Definitions/_typeDefs.js');
 
 // Resolvers
 const Query = require('./resolvers/Query/_Query.js');
@@ -21,11 +21,26 @@ const prisma = new PrismaClient();
 exports.prisma;
 
 // Resolvers
+// const resolvers = {
+//   Query,
+//   Mutation,
+//   // Subcription,
+//   ...Type,
+// };
+
+// Delete Later
+const { gql } = require('apollo-server-lambda');
+// Construct a schema, using GraphQL schema language
+const typeDefs = gql`
+  type Query {
+    hello: String
+  }
+`;
+// Provide resolver functions for your schema fields
 const resolvers = {
-  Query,
-  Mutation,
-  // Subcription,
-  ...Type,
+  Query: {
+    hello: () => 'Hello world!',
+  },
 };
 
 // The server

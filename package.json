@@ -23,13 +23,13 @@
             "@prisma/client": "^4.4.0",
             "apollo-server-lambda": "^3.10.3",
             "dotenv": "^16.0.3",
-            "graphql": "^16.6.0",
-            "mongoose": "^6.5.3",
-            "prisma": "^4.4.0"
+            "graphql": "^16.6.0"
       },
       "devDependencies": {
             "aws-sdk": "^2.1231.0",
             "nodemon": "^1.19.4",
-            "serverless-offline": "^11.1.1"
+            "serverless-offline": "^11.1.1",
+            "serverless-webpack": "^5.10.0",
+            "webpack": "^5.74.0"
       }
 }
