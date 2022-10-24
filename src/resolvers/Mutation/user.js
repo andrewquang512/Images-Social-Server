@@ -1,5 +1,5 @@
 const userMutation = {
-  async createUser(parent, args, { prisma }, info) {
+  createUser: async (parent, args, { prisma }, info) => {
     await prisma.user.create({
       data: {
         name: 'Hung',
