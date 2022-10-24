@@ -4,10 +4,9 @@
       "description": "Đề Cương Luận Văn BKU 2022",
       "main": "index.js",
       "scripts": {
-            "start": "serverless noffline",
             "prisma_gen": "prisma generate --schema=./src/prisma/schema.prisma",
             "prisma_db_push": "prisma db push --schema=./src/prisma/schema.prisma",
-            "dev": "nodemon --exec \"serverless offline start\""
+            "dev": "nodemon src/index"
       },
       "repository": {
             "type": "git",
