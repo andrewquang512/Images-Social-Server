@@ -1,7 +1,5 @@
 import userMutation from './user.js';
-import postMutation from './post.js';
-
-// const commentMutation = require('./comment.js');
+// import postMutation from './post.js';
 
 const Mutation = {
   // User

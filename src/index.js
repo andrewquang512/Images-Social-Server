@@ -1,37 +1,21 @@
 // Apollo
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
-
-// Type definitions
-import typeDefs from './Type_Definitions/_typeDefs.js';
-
-// Resolvers
-import Query from './resolvers/Query/_Query.js';
-import Mutation from './resolvers/Mutation/_Mutation.js';
-import Subcription from './resolvers/Subcription/_Subcription.js';
-import Type from './resolvers/Type/_Type.js';
-
 // Prisma
 import { PrismaClient } from '@prisma/client';
-
-// Resolvers
-const resolvers = {
-  Query,
-  Mutation,
-  // Subcription,
-  ...Type,
-};
+// Type definitions and resolvers
+import typeDefs from './Type_Definitions/_typeDefs.js';
+import resolvers from './resolvers/resolvers.js';
 
 // Connect to MongoDB
 const prisma = new PrismaClient();
-export { prisma };
 
 // The server
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: { prisma },
-  csrfPrevention: true,
+  // csrfPrevention: true,
 });
 
 const { url } = await startStandaloneServer(server, {

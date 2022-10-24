@@ -5,7 +5,7 @@ datasource db {
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["mongodb"]
+  // previewFeatures = ["mongodb"]
 }
 
 // https://www.prisma.io/docs/concepts/components/prisma-schema/data-model
@@ -13,11 +13,11 @@ generator client {
 
 model User {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
-  email String  @unique
+  // email String  @unique
   name  String
-  age   Int  @default(18)
+  // age   Int  @default(18)
   // posts Post[]
-  createdAt DateTime  @default(now())
+  // createdAt DateTime  @default(now())
   
 }
 // model Post {

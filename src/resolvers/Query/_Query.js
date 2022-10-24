@@ -1,6 +1,4 @@
 import userQuery from './USER.js';
-// const postQuery = require('./POST.js');
-// const commentQuery = require('./COMMENT.js');
 
 const Query = {
   // User
