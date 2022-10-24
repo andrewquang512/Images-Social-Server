@@ -9,4 +9,4 @@ const userQuery = {
   },
 };
 
-module.exports = userQuery;
+export default userQuery;

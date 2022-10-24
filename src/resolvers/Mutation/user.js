@@ -63,4 +63,4 @@ const userMutation = {
   // },
 };
 
-module.exports = userMutation;
+export default userMutation;

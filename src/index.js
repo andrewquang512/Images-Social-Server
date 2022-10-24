@@ -1,45 +1,30 @@
 // Apollo
-const { ApolloServer } = require('apollo-server-lambda');
-const {
-  ApolloServerPluginLandingPageLocalDefault,
-} = require('apollo-server-core');
+import { ApolloServer } from '@apollo/server';
+import { startStandaloneServer } from '@apollo/server/standalone';
 
 // Type definitions
-// const typeDefs = require('./Type_Definitions/_typeDefs.js');
+import typeDefs from './Type_Definitions/_typeDefs.js';
 
 // Resolvers
-const Query = require('./resolvers/Query/_Query.js');
-const Mutation = require('./resolvers/Mutation/_Mutation.js');
-const Subcription = require('./resolvers/Subcription/_Subcription.js');
-const Type = require('./resolvers/Type/_Type.js');
+import Query from './resolvers/Query/_Query.js';
+import Mutation from './resolvers/Mutation/_Mutation.js';
+import Subcription from './resolvers/Subcription/_Subcription.js';
+import Type from './resolvers/Type/_Type.js';
+
+// Prisma
+import { PrismaClient } from '@prisma/client';
 
 // Resolvers
-// const resolvers = {
-//   Query,
-//   Mutation,
-//   // Subcription,
-//   ...Type,
-// };
+const resolvers = {
+  Query,
+  Mutation,
+  // Subcription,
+  ...Type,
+};
 
 // Connect to MongoDB
-const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-exports.prisma;
-
-// Delete Later
-const { gql } = require('apollo-server-lambda');
-// Construct a schema, using GraphQL schema language
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`;
-// Provide resolver functions for your schema fields
-const resolvers = {
-  Query: {
-    hello: () => 'Hello world!',
-  },
-};
+export { prisma };
 
 // The server
 const server = new ApolloServer({
@@ -47,10 +32,10 @@ const server = new ApolloServer({
   resolvers,
   context: { prisma },
   csrfPrevention: true,
-  cache: 'bounded',
-  plugins: [ApolloServerPluginLandingPageLocalDefault({ embed: true })],
 });
 
-// Handler for serverless
-exports.graphqlHandler = server.createHandler();
-// 3x50gqLn1pnA
+const { url } = await startStandaloneServer(server, {
+  listen: { port: 3000 },
+});
+
+console.log(`Server ready at: ${url}`);

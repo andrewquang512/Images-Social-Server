@@ -1,14 +1,15 @@
-const userMutation = require('./user.js');
-const postMutation = require('./post.js');
+import userMutation from './user.js';
+import postMutation from './post.js';
+
 // const commentMutation = require('./comment.js');
 
 const Mutation = {
   // User
   ...userMutation,
   // Post
-  ...postMutation,
+  // ...postMutation,
   // Comment
   // ...commentMutation,
 };
 
-module.exports = Mutation;
+export default Mutation;
