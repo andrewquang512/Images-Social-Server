@@ -3,11 +3,11 @@
       "version": "1.0.0",
       "description": "Đề Cương Luận Văn BKU 2022",
       "main": "index.js",
+      "type": "module",
       "scripts": {
-            "start": "serverless noffline",
             "prisma_gen": "prisma generate --schema=./src/prisma/schema.prisma",
             "prisma_db_push": "prisma db push --schema=./src/prisma/schema.prisma",
-            "dev": "nodemon --exec \"serverless offline start\""
+            "dev": "nodemon src/index"
       },
       "repository": {
             "type": "git",
@@ -21,12 +21,12 @@
       "homepage": "https://github.com/HUNG-rushb/Images-Social-Server#readme",
       "dependencies": {
             "@prisma/client": "^4.4.0",
-            "apollo-server-lambda": "^3.10.3",
+            "apollo-server": "^3.10.3",
             "dotenv": "^16.0.3",
-            "graphql": "^16.6.0"
+            "graphql": "^16.6.0",
+            "graphql-tag": "^2.12.6"
       },
       "devDependencies": {
-            "aws-sdk": "^2.1231.0",
             "nodemon": "^1.19.4"
       }
 }
