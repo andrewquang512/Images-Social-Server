@@ -4,10 +4,10 @@ datasource db {
 }
 
 generator client {
-  provider        = "prisma-client-js"
-  // previewFeatures = ["mongodb"]
+  provider = "prisma-client-js"
 }
 
+// https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/mongodb/install-prisma-client-typescript-mongodb
 // https://www.prisma.io/docs/concepts/components/prisma-schema/data-model
 // https://www.prisma.io/docs/concepts/components/prisma-schema/relations
 

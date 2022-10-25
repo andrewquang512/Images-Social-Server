@@ -1,10 +1,14 @@
 const userMutation = {
   createUser: async (parent, args, { prisma }, info) => {
-    await prisma.user.create({
+    // console.log(prisma);
+
+    const result = await prisma.user.create({
       data: {
         name: 'Hung',
       },
     });
+
+    return result;
 
     // const allUsers = await prisma.user.findMany();
   },
