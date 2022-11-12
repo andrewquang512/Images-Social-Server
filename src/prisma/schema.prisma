@@ -18,6 +18,7 @@ model User {
   // age   Int  @default(18)
   // posts Post[]
   // createdAt DateTime  @default(now())
+  profilePicture String?
   
 }
 // model Post {
