@@ -1,3 +1,3 @@
 const Subcription = {};
 
-module.exports = Subcription;
+export default Subcription;

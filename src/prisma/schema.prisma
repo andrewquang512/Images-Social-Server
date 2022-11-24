@@ -18,8 +18,14 @@ model User {
   // age   Int  @default(18)
   // posts Post[]
   // createdAt DateTime  @default(now())
-  profilePicture String?
+  // profilePicture String?
   
+}
+
+model Image{
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  url   String
+  hash  String
 }
 // model Post {
 //   id    String @id @default(auto()) @map("_id") @db.ObjectId
