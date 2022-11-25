@@ -1,10 +1,11 @@
 const userMutation = {
   createUser: async (parent, args, { prisma }, info) => {
-    // console.log(prisma);
-
     const result = await prisma.user.create({
       data: {
-        name: 'Hung',
+        name: args.data.name,
+        profileImageURL: args.data.profileImageURL
+          ? args.data.profileImageURL
+          : 'https://bku-profile-pic.s3.ap-southeast-1.amazonaws.com/images.jpg',
       },
     });
 

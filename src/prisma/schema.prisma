@@ -15,9 +15,10 @@ model User {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
   // email String  @unique
   name  String
+  profileImageURL  String
   // age   Int  @default(18)
   // posts Post[]
-  // createdAt DateTime  @default(now())
+  createdAt DateTime  @default(now())
   // profilePicture String?
   
 }
@@ -26,6 +27,7 @@ model Image{
   id    String @id @default(auto()) @map("_id") @db.ObjectId
   url   String
   hash  String
+  createdAt DateTime  @default(now())
 }
 // model Post {
 //   id    String @id @default(auto()) @map("_id") @db.ObjectId

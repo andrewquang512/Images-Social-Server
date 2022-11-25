@@ -7,17 +7,18 @@ const userDefs = gql`
   }
 
   extend type Mutation {
-    createUser: User!
+    createUser(data: CreateUserInput!): User!
     # createUser(data: CreateUserInput!): User!
     # deleteUser(id: ID!): User!
     # updateUser(id: ID!, data: UpdateUserInput!): User!
   }
 
-  # input CreateUserInput {
-  #   name: String!
-  #   # email: String!
-  #   # age: Int
-  # }
+  input CreateUserInput {
+    name: String!
+    profileImageURL: String
+    # email: String!
+    # age: Int
+  }
 
   # input UpdateUserInput {
   #   name: String
@@ -32,6 +33,8 @@ const userDefs = gql`
     # age: Int
     # posts: [Post!]!
     # comments: [Comment!]!
+    profileImageURL: String!
+    createdAt: String!
   }
 `;
 

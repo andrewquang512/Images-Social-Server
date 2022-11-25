@@ -7,8 +7,6 @@ const imageDefs = gql`
 
   extend type Mutation {
     createImage(data: CreateImageInput!): Image!
-    # deleteUser(id: ID!): User!
-    # updateUser(id: ID!, data: UpdateUserInput!): User!
   }
 
   input CreateImageInput {
@@ -20,6 +18,7 @@ const imageDefs = gql`
     id: ID!
     url: String!
     hash: String!
+    createdAt: String!
   }
 `;
 
