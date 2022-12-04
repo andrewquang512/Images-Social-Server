@@ -10,8 +10,6 @@ const userMutation = {
     });
 
     return result;
-
-    // const allUsers = await prisma.user.findMany();
   },
   // deleteUser(parent, args, { db }, info) {
   //   const userIndex = db.users.findIndex((user) => user.id === args.id);

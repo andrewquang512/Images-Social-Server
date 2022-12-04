@@ -7,44 +7,118 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator erd {
+  provider                  = "prisma-erd-generator"
+  output                    = "ERD.svg"
+  theme                     = "forest"
+  includeRelationFromFields = true
+}
+
 // https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/mongodb/install-prisma-client-typescript-mongodb
 // https://www.prisma.io/docs/concepts/components/prisma-schema/data-model
 // https://www.prisma.io/docs/concepts/components/prisma-schema/relations
 
 model User {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  // email String  @unique
-  name  String
-  profileImageURL  String
-  // age   Int  @default(18)
-  // posts Post[]
-  createdAt DateTime  @default(now())
-  // profilePicture String?
-  
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  email           String   @unique
+  name            String
+  profileImageURL String
+  age             Int      @default(18)
+  createdAt       DateTime @default(now())
+  groupIDs        String[] @db.ObjectId
+
+  level    Level?
+  posts    Post[]
+  comments Comment[]
+  groups    Group[]   @relation(fields: [groupIDs], references: [id])
+  followers Follower?
+  followings Following?
 }
 
-model Image{
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  url   String
-  hash  String
-  createdAt DateTime  @default(now())
+model Follower {
+ id        String   @id @default(auto()) @map("_id") @db.ObjectId
+ userFollower String[] @db.ObjectId
+  userId String @unique @db.ObjectId
+
+  follower_to_user User @relation(fields: [userId], references: [id])
 }
-// model Post {
-//   id    String @id @default(auto()) @map("_id") @db.ObjectId
-//   title  String
-//   content   String?
-//   author    User @relation(fields: [authorId], references: [id])
-//   authorId  String   @db.ObjectId
-//   createdAt DateTime  @default(now())
-//   updatedAt DateTime @updatedAt
+
+model Following {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userFollowing String[] @db.ObjectId
+  userId String @unique @db.ObjectId
+
+  following_to_user User @relation(fields: [userId], references: [id])
+}
+
+model Group {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  name    String
+  userIDs String[] @db.ObjectId
+
+  users User[] @relation(fields: [userIDs], references: [id])
+}
+
+model Level {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  currentXP    Int
+  currentLevel Int
+
+  userID        String @unique @db.ObjectId
+  level_to_user User   @relation(fields: [userID], references: [id])
+}
+
+// model Camera {
+//   id        String   @id @default(auto()) @map("_id") @db.ObjectId
 // }
 
-// model Comment {
-//   id    String @id @default(auto()) @map("_id") @db.ObjectId
-//   // email String  @unique
-//   content   String?
-//   name  String
-//   createdAt DateTime  @default(now())
-// }
+model Image {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  url       String
+  hash      String
+  createdAt DateTime @default(now())
 
+  postId        String   @unique @db.ObjectId
+  image_to_post Post     @relation(fields: [postId], references: [id])
+  tagIDs        String[] @db.ObjectId
+  tags          Tag[]    @relation(fields: [tagIDs], references: [id])
+  imageInfoId ImageInfo?
 
+}
+
+model ImageInfo {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  imageId String @unique @db.ObjectId
+
+  imageInfo_to_image Image @relation(fields: [imageId], references: [id])
+}
+
+model Tag {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+
+  imageIDs String[] @db.ObjectId
+  images   Image[]  @relation(fields: [imageIDs], references: [id])
+}
+
+model Post {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  content      Image?
+  cmts         Comment[]
+  userId       String    @db.ObjectId
+  post_to_user User      @relation(fields: [userId], references: [id])
+}
+
+model Comment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String?
+  createdAt DateTime @default(now())
+
+  userId      String @db.ObjectId
+  cmt_to_user User   @relation(fields: [userId], references: [id])
+  postId      String @db.ObjectId
+  cmt_to_post Post   @relation(fields: [postId], references: [id])
+}
