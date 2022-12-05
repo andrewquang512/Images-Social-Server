@@ -9,7 +9,7 @@ generator client {
 
 generator erd {
   provider                  = "prisma-erd-generator"
-  output                    = "ERD.svg"
+  output                    = "ERD.pdf"
   theme                     = "forest"
   includeRelationFromFields = true
 }
@@ -21,34 +21,54 @@ generator erd {
 model User {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
   email           String   @unique
+  phoneNumber     String
+  hashPassword    String
   name            String
   profileImageURL String
   age             Int      @default(18)
+  birthday        String
   createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
   groupIDs        String[] @db.ObjectId
 
-  level    Level?
-  posts    Post[]
-  comments Comment[]
-  groups    Group[]   @relation(fields: [groupIDs], references: [id])
-  followers Follower?
-  followings Following?
+  sessions      Session[]
+  level         Level?
+  posts         Post[]
+  comments      Comment[]
+  replyComments ReplyComment[]
+  user_to_group Group[]        @relation(fields: [groupIDs], references: [id])
+  followers     Follower?
+  followings    Following?
+  messages      Message[]
+
+  chatIDs      String[] @db.ObjectId
+  user_to_chat Chat[]   @relation(fields: [chatIDs], references: [id])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  createdAt    DateTime @default(now())
+  expires      DateTime
+
+  userId          String
+  session_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Follower {
- id        String   @id @default(auto()) @map("_id") @db.ObjectId
- userFollower String[] @db.ObjectId
-  userId String @unique @db.ObjectId
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  userFollower String[] @db.ObjectId
+  userId       String   @unique @db.ObjectId
 
   follower_to_user User @relation(fields: [userId], references: [id])
 }
 
 model Following {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
   userFollowing String[] @db.ObjectId
-  userId String @unique @db.ObjectId
 
-  following_to_user User @relation(fields: [userId], references: [id])
+  userId            String @unique @db.ObjectId
+  following_to_user User   @relation(fields: [userId], references: [id])
 }
 
 model Group {
@@ -56,7 +76,7 @@ model Group {
   name    String
   userIDs String[] @db.ObjectId
 
-  users User[] @relation(fields: [userIDs], references: [id])
+  group_to_user User[] @relation(fields: [userIDs], references: [id])
 }
 
 model Level {
@@ -78,16 +98,15 @@ model Image {
   hash      String
   createdAt DateTime @default(now())
 
-  postId        String   @unique @db.ObjectId
-  image_to_post Post     @relation(fields: [postId], references: [id])
-  tagIDs        String[] @db.ObjectId
-  tags          Tag[]    @relation(fields: [tagIDs], references: [id])
-  imageInfoId ImageInfo?
-
+  postId        String     @unique @db.ObjectId
+  image_to_post Post       @relation(fields: [postId], references: [id])
+  tagIDs        String[]   @db.ObjectId
+  image_to_tag  Tag[]      @relation(fields: [tagIDs], references: [id])
+  imageInfoId   ImageInfo?
 }
 
 model ImageInfo {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
   imageId String @unique @db.ObjectId
 
   imageInfo_to_image Image @relation(fields: [imageId], references: [id])
@@ -97,28 +116,67 @@ model Tag {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   name String
 
-  imageIDs String[] @db.ObjectId
-  images   Image[]  @relation(fields: [imageIDs], references: [id])
+  imageIDs     String[] @db.ObjectId
+  tag_to_image Image[]  @relation(fields: [imageIDs], references: [id])
 }
 
 model Post {
-  id           String    @id @default(auto()) @map("_id") @db.ObjectId
-  title        String
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  content      Image?
-  cmts         Comment[]
-  userId       String    @db.ObjectId
-  post_to_user User      @relation(fields: [userId], references: [id])
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  content   Image?
+  cmts      Comment[]
+
+  userId       String @db.ObjectId
+  post_to_user User   @relation(fields: [userId], references: [id])
 }
 
 model Comment {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  content   String?
-  createdAt DateTime @default(now())
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  content       String?
+  createdAt     DateTime       @default(now())
+  replyComments ReplyComment[]
 
   userId      String @db.ObjectId
   cmt_to_user User   @relation(fields: [userId], references: [id])
   postId      String @db.ObjectId
   cmt_to_post Post   @relation(fields: [postId], references: [id])
+}
+
+model ReplyComment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String?
+  createdAt DateTime @default(now())
+
+  userId        String @db.ObjectId
+  reply_to_user User   @relation(fields: [userId], references: [id])
+
+  commentId    String  @db.ObjectId
+  reply_to_cmt Comment @relation(fields: [commentId], references: [id])
+}
+
+// Chat Application
+
+model Message {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String?
+  createdAt DateTime @default(now())
+  isImage   Boolean
+
+  userId          String @db.ObjectId
+  message_to_user User   @relation(fields: [userId], references: [id])
+
+  chatId          String @db.ObjectId
+  message_to_chat Chat   @relation(fields: [chatId], references: [id])
+}
+
+model Chat {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+
+  messages Message[]
+
+  userIDs      String[] @db.ObjectId
+  chat_to_user User[]   @relation(fields: [userIDs], references: [id])
 }
