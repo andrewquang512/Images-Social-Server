@@ -9,7 +9,7 @@ generator client {
 
 generator erd {
   provider                  = "prisma-erd-generator"
-  output                    = "ERD.pdf"
+  output                    = "ERD.svg"
   theme                     = "forest"
   includeRelationFromFields = true
 }
@@ -20,7 +20,8 @@ generator erd {
 
 model User {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  email           String   @unique
+  // email           String   @unique
+  email           String
   phoneNumber     String
   hashPassword    String
   name            String
@@ -29,20 +30,46 @@ model User {
   birthday        String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  groupIDs        String[] @db.ObjectId
 
   sessions      Session[]
   level         Level?
   posts         Post[]
   comments      Comment[]
   replyComments ReplyComment[]
-  user_to_group Group[]        @relation(fields: [groupIDs], references: [id])
   followers     Follower?
   followings    Following?
   messages      Message[]
+  courses       Course[]
+  notifications Notification[]
+
+  reportIDs      String[] @db.ObjectId
+  user_to_report Report[] @relation(fields: [reportIDs], references: [id])
 
   chatIDs      String[] @db.ObjectId
   user_to_chat Chat[]   @relation(fields: [chatIDs], references: [id])
+}
+
+model Admin {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+}
+
+model Notification {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  content String
+  isRead  Boolean
+
+  userId               String
+  notification_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Report {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  reason String
+
+  userIDs        String[] @db.ObjectId
+  report_to_user User[]   @relation(fields: [userIDs], references: [id])
+
+
 }
 
 model Session {
@@ -71,14 +98,6 @@ model Following {
   following_to_user User   @relation(fields: [userId], references: [id])
 }
 
-model Group {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  name    String
-  userIDs String[] @db.ObjectId
-
-  group_to_user User[] @relation(fields: [userIDs], references: [id])
-}
-
 model Level {
   id           String @id @default(auto()) @map("_id") @db.ObjectId
   currentXP    Int
@@ -98,18 +117,26 @@ model Image {
   hash      String
   createdAt DateTime @default(now())
 
-  postId        String     @unique @db.ObjectId
-  image_to_post Post       @relation(fields: [postId], references: [id])
-  tagIDs        String[]   @db.ObjectId
-  image_to_tag  Tag[]      @relation(fields: [tagIDs], references: [id])
-  imageInfoId   ImageInfo?
+  postId        String @unique @db.ObjectId
+  image_to_post Post   @relation(fields: [postId], references: [id])
+
+  tagIDs       String[] @db.ObjectId
+  image_to_tag Tag[]    @relation(fields: [tagIDs], references: [id])
+
+  imageInfoId ImageInfo?
 }
 
 model ImageInfo {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
-  imageId String @unique @db.ObjectId
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  camera       String
+  lens         String
+  aperture     String
+  focalLength  String
+  shutterSpeed String
+  ISO          String
 
-  imageInfo_to_image Image @relation(fields: [imageId], references: [id])
+  imageId            String @unique @db.ObjectId
+  imageInfo_to_image Image  @relation(fields: [imageId], references: [id])
 }
 
 model Tag {
@@ -125,7 +152,9 @@ model Post {
   title     String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  content   Image?
+  points    Int
+  content   String[]
+  images    Image[]
   cmts      Comment[]
 
   userId       String @db.ObjectId
@@ -140,6 +169,7 @@ model Comment {
 
   userId      String @db.ObjectId
   cmt_to_user User   @relation(fields: [userId], references: [id])
+
   postId      String @db.ObjectId
   cmt_to_post Post   @relation(fields: [postId], references: [id])
 }
@@ -156,8 +186,23 @@ model ReplyComment {
   reply_to_cmt Comment @relation(fields: [commentId], references: [id])
 }
 
-// Chat Application
+model Course {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  lessons Lesson[]
 
+  userId         String @db.ObjectId
+  course_to_user User   @relation(fields: [userId], references: [id])
+}
+
+model Lesson {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  content String
+
+  courseId         String @db.ObjectId
+  lesson_to_course Course @relation(fields: [courseId], references: [id])
+}
+
+// Chat Application
 model Message {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   content   String?

@@ -1,15 +1,26 @@
 const userMutation = {
   createUser: async (parent, args, { prisma }, info) => {
-    const result = await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
-        name: args.data.name,
+        ...args.data,
         profileImageURL: args.data.profileImageURL
           ? args.data.profileImageURL
           : 'https://bku-profile-pic.s3.ap-southeast-1.amazonaws.com/images.jpg',
+        phoneNumber: args.data.phoneNumber ? args.data.phoneNumber : 'None',
       },
     });
+    console.log(user);
 
-    return result;
+    const userLevel = await prisma.level.create({
+      data: {
+        userID: user.id,
+        currentXP: 0,
+        currentLevel: 0,
+      },
+    });
+    console.log(userLevel);
+
+    return user;
   },
   // deleteUser(parent, args, { db }, info) {
   //   const userIndex = db.users.findIndex((user) => user.id === args.id);

@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 // Definitions
 import userDefs from './User_User.js';
+import levelDefs from './Level_Level.js';
 import imageDefs from './Image_Image.js';
 // const postDefs = require('./Post_Post.js');
 // const cmtDefs = require('./Cmt_Cmt.js');
@@ -15,6 +16,6 @@ const baseDefs = gql`
   }
 `;
 
-const typeDefs = [baseDefs, userDefs, imageDefs];
+const typeDefs = [baseDefs, userDefs, levelDefs, imageDefs];
 
 export default typeDefs;
