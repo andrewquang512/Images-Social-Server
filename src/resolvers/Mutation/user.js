@@ -3,10 +3,9 @@ const userMutation = {
     const user = await prisma.user.create({
       data: {
         ...args.data,
-        profileImageURL: args.data.profileImageURL
-          ? args.data.profileImageURL
-          : 'https://bku-profile-pic.s3.ap-southeast-1.amazonaws.com/images.jpg',
-        phoneNumber: args.data.phoneNumber ? args.data.phoneNumber : 'None',
+        profileImageURL:
+          'https://bku-profile-pic.s3.ap-southeast-1.amazonaws.com/images.jpg',
+        phoneNumber: '',
       },
     });
     console.log(user);

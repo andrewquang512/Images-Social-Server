@@ -33,7 +33,7 @@ import gql from 'graphql-tag';
 
 const userDefs = gql`
   extend type Query {
-    # user(query: String): [User!]!
+    userInfo(id: String!): User!
     allUsers: [User!]!
   }
 
@@ -58,6 +58,10 @@ const userDefs = gql`
   #   name: String
   #   email: String
   #   age: Int
+  # }
+
+  # input userInfo {
+  #   userID: String!
   # }
 
   type User {
