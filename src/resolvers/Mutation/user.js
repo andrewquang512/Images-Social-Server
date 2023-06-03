@@ -5,10 +5,11 @@ const userMutation = {
         ...args.data,
         profileImageURL:
           'https://bku-profile-pic.s3.ap-southeast-1.amazonaws.com/images.jpg',
+        birthday: '2000-01-01',
         phoneNumber: '',
+        age: new Date().getFullYear() - 2000,
       },
     });
-    console.log(user);
 
     const userLevel = await prisma.level.create({
       data: {
@@ -17,6 +18,7 @@ const userMutation = {
         currentLevel: 0,
       },
     });
+
     console.log(userLevel);
 
     return user;
@@ -43,6 +45,7 @@ const userMutation = {
 
   //   return deletedUsers[0];
   // },
+
   // updateUser(parent, args, { db }, info) {
   //   const { id, data } = args;
   //   const user = db.users.find((user) => user.id === id);
