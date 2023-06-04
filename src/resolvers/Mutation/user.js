@@ -7,9 +7,9 @@ const userMutation = {
     //     email: args.data.email,
     //   },
     // });
-
+    let user;
     try {
-      const user = await prisma.user.create({
+      user = await prisma.user.create({
         data: {
           ...args.data,
           profileImageURL:
@@ -21,39 +21,41 @@ const userMutation = {
       });
     } catch (e) {
       // if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      //   // The .code property can be accessed in a type-safe manner
       //   if (e.code === 'P2002') {
       //     console.log(
       //       'There is a unique constraint violation, a new user cannot be created with this email',
       //     );
       //   }
       // }
+
       throw e;
     }
 
-    // const userPosts = await prisma.post.create({
-    //   data: {
-    //     userID: user.id,
-    //     posts: [],
-    //   },
-    // });
+    const userPosts = await prisma.post.create({
+      data: {
+        userID: user.id,
+        posts: [],
+      },
+    });
 
-    // const userComments = await prisma.comment.create({
-    //   data: {
-    //     userID: user.id,
-    //     comments: [],
-    //   },
-    // });
+    const userComments = await prisma.comment.create({
+      data: {
+        userID: user.id,
+        comments: [],
+      },
+    });
 
-    // const userLevel = await prisma.level.create({
-    //   data: {
-    //     userID: user.id,
-    //     currentXP: 0,
-    //     currentLevel: 0,
-    //   },
-    // });
+    const userLevel = await prisma.level.create({
+      data: {
+        userID: user.id,
+        currentXP: 0,
+        currentLevel: 0,
+      },
+    });
 
-    // console.log(userLevel);
+    console.log(userLevel);
+    console.log(userPosts);
+    console.log(userComments);
 
     return user;
   },
