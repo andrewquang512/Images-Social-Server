@@ -1,25 +1,59 @@
+import { Prisma } from '@prisma/client';
+
 const userMutation = {
   createUser: async (parent, args, { prisma }, info) => {
-    const user = await prisma.user.create({
-      data: {
-        ...args.data,
-        profileImageURL:
-          'https://bku-profile-pic.s3.ap-southeast-1.amazonaws.com/images.jpg',
-        birthday: '2000-01-01',
-        phoneNumber: '',
-        age: new Date().getFullYear() - 2000,
-      },
-    });
+    // const isEmailExisted = await prisma.user.findUnique({
+    //   where: {
+    //     email: args.data.email,
+    //   },
+    // });
 
-    const userLevel = await prisma.level.create({
-      data: {
-        userID: user.id,
-        currentXP: 0,
-        currentLevel: 0,
-      },
-    });
+    try {
+      const user = await prisma.user.create({
+        data: {
+          ...args.data,
+          profileImageURL:
+            'https://bku-profile-pic.s3.ap-southeast-1.amazonaws.com/images.jpg',
+          birthday: '2000-01-01',
+          phoneNumber: '',
+          age: new Date().getFullYear() - 2000,
+        },
+      });
+    } catch (e) {
+      // if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      //   // The .code property can be accessed in a type-safe manner
+      //   if (e.code === 'P2002') {
+      //     console.log(
+      //       'There is a unique constraint violation, a new user cannot be created with this email',
+      //     );
+      //   }
+      // }
+      throw e;
+    }
 
-    console.log(userLevel);
+    // const userPosts = await prisma.post.create({
+    //   data: {
+    //     userID: user.id,
+    //     posts: [],
+    //   },
+    // });
+
+    // const userComments = await prisma.comment.create({
+    //   data: {
+    //     userID: user.id,
+    //     comments: [],
+    //   },
+    // });
+
+    // const userLevel = await prisma.level.create({
+    //   data: {
+    //     userID: user.id,
+    //     currentXP: 0,
+    //     currentLevel: 0,
+    //   },
+    // });
+
+    // console.log(userLevel);
 
     return user;
   },
