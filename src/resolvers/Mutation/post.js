@@ -2,30 +2,80 @@ const postMutation = {
   createPost: async (parent, args, { prisma }, info) => {
     const post = await prisma.post.create({
       data: {
-        ...args.data,
+        title: args.data.title,
+        userId: args.data.userId,
         points: 0,
-        content: {},
-        images: {},
-        cmts: {},
       },
     });
 
     await prisma.user.update({
-      where: { id: args.data.userId },
+      where: {
+        id: args.data.userId,
+      },
       data: {
         posts: {
-          push: post,
+          connect: {
+            id: post.id,
+          },
         },
+      },
+      // include: {
+      //   posts: true,
+      // },
+    });
+    // console.log(a);
+
+    const image = await prisma.image.create({
+      data: {
+        url: args.data.imageURL,
+        hash: args.data.imageHash,
+        postId: post.id,
       },
     });
 
-    // await prisma.image.create({
-    //   data: {
-    //     postId: post.id,
-    //   },
-    // });
+    await prisma.post.update({
+      where: {
+        id: post.id,
+      },
+      data: {
+        image: {
+          connect: {
+            id: image.id,
+          },
+        },
+      },
+      // include: {
+      //   image: true,
+      // },
+    });
+    // console.log(b);
 
-    return { post };
+    const imageInfo = await prisma.imageinfo.create({
+      data: {
+        url: args.data.imageURL,
+        hash: args.data.imageHash,
+        postId: post.id,
+      },
+    });
+
+    await prisma.post.update({
+      where: {
+        id: post.id,
+      },
+      data: {
+        image: {
+          connect: {
+            id: image.id,
+          },
+        },
+      },
+      // include: {
+      //   image: true,
+      // },
+    });
+    // console.log(b);
+
+    return post;
   },
   // deletePost(parent, args, { db }, info) {
   //   const postIndex = db.posts.findIndex((post) => post.id === args.id);

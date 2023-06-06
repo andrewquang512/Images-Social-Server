@@ -2,11 +2,6 @@ import { Prisma } from '@prisma/client';
 
 const userMutation = {
   createUser: async (parent, args, { prisma }, info) => {
-    // const isEmailExisted = await prisma.user.findUnique({
-    //   where: {
-    //     email: args.data.email,
-    //   },
-    // });
     let user;
     try {
       user = await prisma.user.create({
@@ -17,23 +12,24 @@ const userMutation = {
           birthday: '2000-01-01',
           phoneNumber: '',
           age: new Date().getFullYear() - 2000,
-          posts: {},
+          // posts: {
+          //   create: [],
+          // },
         },
+        // include: {
+        //   posts: true, // Include all posts in the returned object
+        // },
       });
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         console.log(e);
-        // if (e.code === 'P2002') {
-        //   console.log(
-        //     'There is a unique constraint violation, a new user cannot be created with this email',
-        //   );
-        // }
       }
 
       throw e;
     }
 
-    const userLevel = await prisma.level.create({
+    // Create and connect level
+    const level = await prisma.level.create({
       data: {
         userId: user.id,
         currentXP: 0,
@@ -41,7 +37,18 @@ const userMutation = {
       },
     });
 
-    console.log(userLevel);
+    await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        level: {
+          connect: {
+            id: level.id,
+          },
+        },
+      },
+    });
 
     return user;
   },

@@ -33,6 +33,7 @@ model User {
   sessions      Session[]
   level         Level?
   posts         Post[] 
+  stories       Story[] 
   comments      Comment[]
   replyComments ReplyComment[]
   followers     Follower?
@@ -152,12 +153,26 @@ model Post {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   points    Int
-  content   String[]
-  images    Image[]
   cmts      Comment[]
 
   userId       String @db.ObjectId
   post_to_user User   @relation(fields: [userId], references: [id])
+
+  image     Image?
+}
+
+model Story {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  points    Int
+  content   String[]
+  // images    Image[]
+  // cmts      Comment[]
+
+  userId       String @db.ObjectId
+  story_to_user User   @relation(fields: [userId], references: [id])
 }
 
 model Comment {

@@ -73,7 +73,7 @@ const userDefs = gql`
     email: String!
     hashPassword: String!
     name: String!
-    age: Int
+    age: Int!
     birthday: String!
     phoneNumber: String!
     profileImageURL: String!

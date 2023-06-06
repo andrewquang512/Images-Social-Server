@@ -1,5 +1,5 @@
 const Post = {
-  userID: async (parent, args, { prisma }, info) => {
+  userId: async (parent, args, { prisma }, info) => {
     console.log(parent);
 
     const result = await prisma.user.findUnique({

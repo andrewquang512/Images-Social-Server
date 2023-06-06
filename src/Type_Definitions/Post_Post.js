@@ -15,6 +15,8 @@ const postDefs = gql`
   input CreatePostInput {
     title: String!
     userId: ID!
+    imageURL: String!
+    imageHash: String!
   }
 
   # input UpdatePostInput {
@@ -26,10 +28,13 @@ const postDefs = gql`
   type Post {
     id: ID!
     title: String!
-    content: String!
     createdAt: String!
     updatedAt: String!
+    points: Int!
     # comments: [Comment!]!
+
+    userId: User!
+    image: Image!
   }
 `;
 

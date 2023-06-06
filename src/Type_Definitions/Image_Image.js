@@ -5,20 +5,22 @@ const imageDefs = gql`
     allImages: [Image!]!
   }
 
-  extend type Mutation {
-    createImage(data: CreateImageInput!): Image!
-  }
+  # extend type Mutation {
+  #   createImage(data: CreateImageInput!): Image!
+  # }
 
-  input CreateImageInput {
-    url: String!
-    hash: String!
-  }
+  # input CreateImageInput {
+  #   url: String!
+  #   hash: String!
+  # }
 
   type Image {
     id: ID!
     url: String!
     hash: String!
     createdAt: String!
+
+    postId: ID!
   }
 `;
 

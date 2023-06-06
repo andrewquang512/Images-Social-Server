@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 
 const levelDefs = gql`
   extend type Query {
-    allUserLevels: [Level!]!
+    allLevels: [Level!]!
     userLevel(userID: String!): Level!
   }
 

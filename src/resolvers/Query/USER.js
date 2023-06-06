@@ -1,17 +1,16 @@
 const userQuery = {
   allUsers: async (parent, args, { prisma }, info) => {
-    const result = await prisma.user.findMany();
-
-    return result;
+    return await prisma.user.findMany();
   },
   userInfo: async (parent, args, { prisma }, info) => {
-    const result = prisma.user.findUnique({
+    return await prisma.user.findUnique({
       where: {
         id: args.data.id,
       },
+      include: {
+        posts: true,
+      },
     });
-
-    return result;
   },
 };
 

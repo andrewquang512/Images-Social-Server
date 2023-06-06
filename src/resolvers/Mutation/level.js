@@ -1,5 +1,5 @@
 const levelMutation = {
-  // ! Ko can dung
+  // ! Ko can dung, da lam trong create user
   // createLevel: async (parent, args, { prisma }, info) => {
   //   const result = await prisma.level.create({
   //     data: {

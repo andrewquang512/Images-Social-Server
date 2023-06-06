@@ -1,6 +1,5 @@
 const User = {
   level: async (parent, args, { prisma }, info) => {
-    console.log({ parent });
     const result = await prisma.level.findUnique({
       where: {
         userId: parent.id,
@@ -9,11 +8,15 @@ const User = {
 
     return result;
   },
-  // comments(parent, args, { prisma }, info) {
-  //   return db.comments.filter((comment) => {
-  //     return comment.author === parent.id;
-  //   });
-  // },
+  posts: async (parent, args, { prisma }, info) => {
+    const result = await prisma.post.findMany({
+      where: {
+        userId: parent.id,
+      },
+    });
+
+    return result;
+  },
 };
 
 export default User;
