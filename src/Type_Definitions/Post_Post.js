@@ -1,29 +1,27 @@
-const { gql } = require('apollo-server-lambda');
+import gql from 'graphql-tag';
 
 const postDefs = gql`
-  extend type Query {
-    post: Post!
-    posts(query: String): [Post!]!
-  }
+  # extend type Query {
+  #   post: Post!
+  #   # posts(query: String): [Post!]!
+  # }
 
   extend type Mutation {
     createPost(data: CreatePostInput!): Post!
-    deletePost(id: ID!): Post!
-    updatePost(id: ID!, data: UpdatePostInput!): Post!
+    # deletePost(id: ID!): Post!
+    # updatePost(id: ID!, data: UpdatePostInput!): Post!
   }
 
   input CreatePostInput {
     title: String!
-    body: String!
-    published: Boolean!
-    author: ID!
+    userId: ID!
   }
 
-  input UpdatePostInput {
-    title: String
-    body: String
-    published: Boolean
-  }
+  # input UpdatePostInput {
+  #   title: String
+  #   body: String
+  #   published: Boolean
+  # }
 
   type Post {
     id: ID!
@@ -31,9 +29,8 @@ const postDefs = gql`
     content: String!
     createdAt: String!
     updatedAt: String!
-    author: User!
     # comments: [Comment!]!
   }
 `;
 
-module.exports = postDefs;
+export default postDefs;

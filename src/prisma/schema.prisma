@@ -32,7 +32,7 @@ model User {
 
   sessions      Session[]
   level         Level?
-  posts         Post[]
+  posts         Post[] 
   comments      Comment[]
   replyComments ReplyComment[]
   followers     Follower?
@@ -102,8 +102,8 @@ model Level {
   currentXP    Int
   currentLevel Int
 
-  userID        String @unique @db.ObjectId
-  level_to_user User   @relation(fields: [userID], references: [id])
+  userId        String @unique @db.ObjectId
+  level_to_user User   @relation(fields: [userId], references: [id])
 }
 
 // model Camera {

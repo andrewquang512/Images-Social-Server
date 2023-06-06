@@ -1,14 +1,14 @@
 const Post = {
-  author(parent, args, { db }, info) {
-    return db.users.find((user) => {
-      return user.id === parent.author;
+  userID: async (parent, args, { prisma }, info) => {
+    console.log(parent);
+
+    const result = await prisma.user.findUnique({
+      where: {
+        id: parent.userId,
+      },
     });
-  },
-  comments(parent, args, { db }, info) {
-    return db.comments.filter((comment) => {
-      return comment.post === parent.id;
-    });
+    return result;
   },
 };
 
-module.exports = Post;
+export default Post;

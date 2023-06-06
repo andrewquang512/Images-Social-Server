@@ -7,14 +7,16 @@ const levelDefs = gql`
   }
 
   # extend type Mutation {
-  #   createLevel(data: CreateLevelInput!): Level!
+  # Ko xai boi vi tao user level truc tiep trong createUser
+  # src/resolvers/Mutation/user.js
+  # createLevel(data: CreateLevelInput!): Level!
   # }
 
   type Level {
     id: ID!
     currentXP: Int!
     currentLevel: Int!
-    userID: String!
+    userId: User!
   }
 `;
 

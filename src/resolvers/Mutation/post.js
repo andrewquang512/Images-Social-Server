@@ -1,55 +1,67 @@
 const postMutation = {
-  createPost(parent, args, { db }, info) {
-    const userExists = db.users.some((user) => user.id === args.data.author);
+  createPost: async (parent, args, { prisma }, info) => {
+    const post = await prisma.post.create({
+      data: {
+        ...args.data,
+        points: 0,
+        content: {},
+        images: {},
+        cmts: {},
+      },
+    });
 
-    if (!userExists) {
-      throw new Error('User not found');
-    }
+    await prisma.user.update({
+      where: { id: args.data.userId },
+      data: {
+        posts: {
+          push: post,
+        },
+      },
+    });
 
-    const post = {
-      id: uuidv4(),
-      ...args.data,
-    };
+    // await prisma.image.create({
+    //   data: {
+    //     postId: post.id,
+    //   },
+    // });
 
-    db.posts.push(post);
-
-    return post;
+    return { post };
   },
-  deletePost(parent, args, { db }, info) {
-    const postIndex = db.posts.findIndex((post) => post.id === args.id);
+  // deletePost(parent, args, { db }, info) {
+  //   const postIndex = db.posts.findIndex((post) => post.id === args.id);
 
-    if (postIndex === -1) {
-      throw new Error('Post not found');
-    }
+  //   if (postIndex === -1) {
+  //     throw new Error('Post not found');
+  //   }
 
-    const deletedPosts = db.posts.splice(postIndex, 1);
+  //   const deletedPosts = db.posts.splice(postIndex, 1);
 
-    db.comments = db.comments.filter((comment) => comment.post !== args.id);
+  //   db.comments = db.comments.filter((comment) => comment.post !== args.id);
 
-    return deletedPosts[0];
-  },
-  updatePost(parent, args, { db }, info) {
-    const { id, data } = args;
-    const post = db.posts.find((post) => post.id === id);
+  //   return deletedPosts[0];
+  // },
+  // updatePost(parent, args, { db }, info) {
+  //   const { id, data } = args;
+  //   const post = db.posts.find((post) => post.id === id);
 
-    if (!post) {
-      throw new Error('Post not found');
-    }
+  //   if (!post) {
+  //     throw new Error('Post not found');
+  //   }
 
-    if (typeof data.title === 'string') {
-      post.title = data.title;
-    }
+  //   if (typeof data.title === 'string') {
+  //     post.title = data.title;
+  //   }
 
-    if (typeof data.body === 'string') {
-      post.body = data.body;
-    }
+  //   if (typeof data.body === 'string') {
+  //     post.body = data.body;
+  //   }
 
-    if (typeof data.published === 'boolean') {
-      post.published = data.published;
-    }
+  //   if (typeof data.published === 'boolean') {
+  //     post.published = data.published;
+  //   }
 
-    return post;
-  },
+  //   return post;
+  // },
 };
 
-module.exports = postMutation;
+export default postMutation;

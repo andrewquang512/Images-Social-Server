@@ -33,7 +33,7 @@ import gql from 'graphql-tag';
 
 const userDefs = gql`
   extend type Query {
-    userInfo(id: String!): User!
+    userInfo(data: UserInfoInput!): User!
     allUsers: [User!]!
   }
 
@@ -42,6 +42,10 @@ const userDefs = gql`
     # createUser(data: CreateUserInput!): User!
     # deleteUser(id: ID!): User!
     # updateUser(id: ID!, data: UpdateUserInput!): User!
+  }
+
+  input UserInfoInput {
+    id: ID!
   }
 
   input CreateUserInput {
@@ -77,6 +81,8 @@ const userDefs = gql`
     updatedAt: String
 
     level: Level!
+
+    posts: [Post]!
   }
 `;
 

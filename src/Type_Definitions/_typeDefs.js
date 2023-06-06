@@ -3,8 +3,7 @@ import gql from 'graphql-tag';
 import userDefs from './User_User.js';
 import levelDefs from './Level_Level.js';
 import imageDefs from './Image_Image.js';
-// const postDefs = require('./Post_Post.js');
-// const cmtDefs = require('./Cmt_Cmt.js');
+import postDefs from './Post_Post.js';
 
 const baseDefs = gql`
   type Query {
@@ -16,6 +15,6 @@ const baseDefs = gql`
   }
 `;
 
-const typeDefs = [baseDefs, userDefs, levelDefs, imageDefs];
+const typeDefs = [baseDefs, userDefs, levelDefs, imageDefs, postDefs];
 
 export default typeDefs;

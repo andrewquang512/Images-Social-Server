@@ -17,45 +17,31 @@ const userMutation = {
           birthday: '2000-01-01',
           phoneNumber: '',
           age: new Date().getFullYear() - 2000,
+          posts: {},
         },
       });
     } catch (e) {
-      // if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      //   if (e.code === 'P2002') {
-      //     console.log(
-      //       'There is a unique constraint violation, a new user cannot be created with this email',
-      //     );
-      //   }
-      // }
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        console.log(e);
+        // if (e.code === 'P2002') {
+        //   console.log(
+        //     'There is a unique constraint violation, a new user cannot be created with this email',
+        //   );
+        // }
+      }
 
       throw e;
     }
 
-    const userPosts = await prisma.post.create({
-      data: {
-        userID: user.id,
-        posts: [],
-      },
-    });
-
-    const userComments = await prisma.comment.create({
-      data: {
-        userID: user.id,
-        comments: [],
-      },
-    });
-
     const userLevel = await prisma.level.create({
       data: {
-        userID: user.id,
+        userId: user.id,
         currentXP: 0,
-        currentLevel: 0,
+        currentLevel: 1,
       },
     });
 
     console.log(userLevel);
-    console.log(userPosts);
-    console.log(userComments);
 
     return user;
   },
