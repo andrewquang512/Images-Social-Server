@@ -21,7 +21,7 @@
       "homepage": "https://github.com/HUNG-rushb/Images-Social-Server#readme",
       "dependencies": {
             "@graphql-tools/schema": "^9.0.10",
-            "@prisma/client": "^4.4.0",
+            "@prisma/client": "4.4.0",
             "@remix-run/node": "^1.7.5",
             "apollo-server": "^3.10.3",
             "aws-sdk": "^2.1252.0",

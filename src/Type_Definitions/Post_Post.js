@@ -1,10 +1,10 @@
 import gql from 'graphql-tag';
 
 const postDefs = gql`
-  # extend type Query {
-  #   post: Post!
-  #   # posts(query: String): [Post!]!
-  # }
+  extend type Query {
+    allPosts: Post!
+    # posts(query: String): [Post!]!
+  }
 
   extend type Mutation {
     createPost(data: CreatePostInput!): Post!

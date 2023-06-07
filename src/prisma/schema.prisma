@@ -104,12 +104,8 @@ model Level {
   currentLevel Int
 
   userId        String @unique @db.ObjectId
-  level_to_user User   @relation(fields: [userId], references: [id])
+  level_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
-
-// model Camera {
-//   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-// }
 
 model Image {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -156,7 +152,7 @@ model Post {
   cmts      Comment[]
 
   userId       String @db.ObjectId
-  post_to_user User   @relation(fields: [userId], references: [id])
+  post_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   image     Image?
 }

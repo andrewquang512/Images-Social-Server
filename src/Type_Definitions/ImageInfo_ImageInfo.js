@@ -1,9 +1,9 @@
 import gql from 'graphql-tag';
 
 const imageDefs = gql`
-  extend type Query {
-    allImages: [Image!]!
-  }
+  #   extend type Query {
+
+  #   }
 
   # extend type Mutation {
   #   createImage(data: CreateImageInput!): Image!
@@ -14,13 +14,16 @@ const imageDefs = gql`
   #   hash: String!
   # }
 
-  type Image {
+  type ImageInfo {
     id: ID!
-    url: String!
-    hash: String!
-    createdAt: String!
+    camera: String
+    lens: String
+    aperture: String
+    focalLength: String
+    shutterSpeed: String
+    ISO: String
 
-    postId: ID!
+    imageId: Image!
   }
 `;
 

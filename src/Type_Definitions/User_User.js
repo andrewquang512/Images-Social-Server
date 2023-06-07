@@ -1,36 +1,5 @@
 import gql from 'graphql-tag';
 
-// model User {
-//   id              String   @id @default(auto()) @map("_id") @db.ObjectId
-//   // email           String   @unique
-//   email           String
-//   phoneNumber     String
-//   hashPassword    String
-//   name            String
-//   profileImageURL String
-//   age             Int      @default(18)
-//   birthday        String
-//   createdAt       DateTime @default(now())
-//   updatedAt       DateTime @updatedAt
-
-//   sessions      Session[]
-//   level         Level?
-//   posts         Post[]
-//   comments      Comment[]
-//   replyComments ReplyComment[]
-//   followers     Follower?
-//   followings    Following?
-//   messages      Message[]
-//   courses       Course[]
-//   notifications Notification[]
-
-//   reportIDs      String[] @db.ObjectId
-//   user_to_report Report[] @relation(fields: [reportIDs], references: [id])
-
-//   chatIDs      String[] @db.ObjectId
-//   user_to_chat Chat[]   @relation(fields: [chatIDs], references: [id])
-// }
-
 const userDefs = gql`
   extend type Query {
     userInfo(data: UserInfoInput!): User!
@@ -39,7 +8,6 @@ const userDefs = gql`
 
   extend type Mutation {
     createUser(data: CreateUserInput!): User!
-    # createUser(data: CreateUserInput!): User!
     # deleteUser(id: ID!): User!
     # updateUser(id: ID!, data: UpdateUserInput!): User!
   }
@@ -81,8 +49,8 @@ const userDefs = gql`
     updatedAt: String
 
     level: Level!
-
     posts: [Post]!
+    stories: [Story]!
   }
 `;
 

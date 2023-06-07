@@ -9,18 +9,14 @@ const imageDefs = gql`
   #   createImage(data: CreateImageInput!): Image!
   # }
 
-  # input CreateImageInput {
-  #   url: String!
-  #   hash: String!
-  # }
-
   type Image {
     id: ID!
     url: String!
     hash: String!
     createdAt: String!
 
-    postId: ID!
+    postId: Post!
+    imageInfoId: ImageInfo!
   }
 `;
 

@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 import userDefs from './User_User.js';
 import levelDefs from './Level_Level.js';
 import imageDefs from './Image_Image.js';
+import imageInfoDefs from './ImageInfo_ImageInfo.js';
 import postDefs from './Post_Post.js';
 
 const baseDefs = gql`
@@ -15,6 +16,13 @@ const baseDefs = gql`
   }
 `;
 
-const typeDefs = [baseDefs, userDefs, levelDefs, imageDefs, postDefs];
+const typeDefs = [
+  baseDefs,
+  userDefs,
+  levelDefs,
+  imageDefs,
+  imageInfoDefs,
+  postDefs,
+];
 
 export default typeDefs;
