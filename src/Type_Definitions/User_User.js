@@ -2,18 +2,19 @@ import gql from 'graphql-tag';
 
 const userDefs = gql`
   extend type Query {
+    allUsers: [User]!
     userInfo(data: UserInfoInput!): User!
-    allUsers: [User!]!
   }
 
   extend type Mutation {
     createUser(data: CreateUserInput!): User!
-    # deleteUser(id: ID!): User!
-    # updateUser(id: ID!, data: UpdateUserInput!): User!
+    deleteUser(data: DeleteUserInput!): User!
+    deleteAllUser()
+    updateUser(id: ID!, data: UpdateUserInput!): User!
   }
 
   input UserInfoInput {
-    id: ID!
+    userId: ID!
   }
 
   input CreateUserInput {
@@ -26,16 +27,22 @@ const userDefs = gql`
     birthday: String
   }
 
-  # input UpdateUserInput {
-  #   name: String
-  #   email: String
-  #   age: Int
-  # }
+  input DeleteUserInput {
+    userId: ID!
+  }
 
-  # input userInfo {
-  #   userID: String!
-  # }
+  input UpdateUserInput {
+    userId: ID!
+    name: String
+    profileImageURL: String
+    email: String
+    hashPassword: String
+    phoneNumber: String
+    age: Int
+    birthday: String
+  }
 
+  
   type User {
     id: ID!
     email: String!

@@ -1,9 +1,9 @@
 import gql from 'graphql-tag';
 
 const imageDefs = gql`
-  #   extend type Query {
-
-  #   }
+  extend type Query {
+    allImageInfos: [ImageInfo]!
+  }
 
   # extend type Mutation {
   #   createImage(data: CreateImageInput!): Image!

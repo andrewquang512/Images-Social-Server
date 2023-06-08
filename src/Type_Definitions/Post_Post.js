@@ -2,14 +2,15 @@ import gql from 'graphql-tag';
 
 const postDefs = gql`
   extend type Query {
-    allPosts: Post!
+    allPosts: Post
     # posts(query: String): [Post!]!
   }
 
   extend type Mutation {
     createPost(data: CreatePostInput!): Post!
-    # deletePost(id: ID!): Post!
-    # updatePost(id: ID!, data: UpdatePostInput!): Post!
+    deletePost(data: DeletePostInput!): Post!
+    deleteAllPost()
+    updatePost(data: UpdatePostInput!): Post!
   }
 
   input CreatePostInput {
@@ -19,11 +20,16 @@ const postDefs = gql`
     imageHash: String!
   }
 
-  # input UpdatePostInput {
-  #   title: String
-  #   body: String
-  #   published: Boolean
-  # }
+  input DeletePostInput {
+    postId: ID!
+  }
+
+  input UpdatePostInput {
+    postId: ID!
+    title: String
+    body: String
+    published: Boolean
+  }
 
   type Post {
     id: ID!

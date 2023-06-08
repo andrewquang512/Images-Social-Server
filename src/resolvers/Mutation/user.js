@@ -33,8 +33,58 @@ const userMutation = {
 
       throw e;
     }
+    return user;
+  },
+  deleteUser: async (parent, args, { prisma }, info) => {
+    let user;
+    try {
+      user = await prisma.user.delete({
+        where: {
+          id: args.data.userId,
+        },
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        console.log(e);
+      }
+      throw e;
+    }
 
     return user;
+  },
+  deleteAllUser: async (parent, args, { prisma }, info) => {
+    let result;
+    try {
+      result = await prisma.user.deleteMany({});
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        console.log(e);
+      }
+      throw e;
+    }
+
+    return result;
+  },
+  updateUser: async (parent, args, { prisma }, info) => {
+    const { userId, ...updateInfo } = args.data;
+    let updatedUser;
+    try {
+      updatedUser = await prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          ...updateInfo,
+        },
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        console.log(e);
+      }
+      throw e;
+    }
+
+    return updatedUser;
   },
 };
 

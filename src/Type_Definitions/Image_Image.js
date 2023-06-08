@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 
 const imageDefs = gql`
   extend type Query {
-    allImages: [Image!]!
+    allImages: [Image]!
   }
 
   # extend type Mutation {

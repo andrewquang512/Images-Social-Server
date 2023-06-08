@@ -2,15 +2,21 @@ import gql from 'graphql-tag';
 
 const levelDefs = gql`
   extend type Query {
-    allLevels: [Level!]!
+    allLevels: [Level]!
     userLevel(userID: String!): Level!
   }
 
-  # extend type Mutation {
-  # Ko xai boi vi tao user level truc tiep trong createUser
-  # src/resolvers/Mutation/user.js
-  # createLevel(data: CreateLevelInput!): Level!
-  # }
+  extend type Mutation {
+    # Ko xai boi vi tao user level truc tiep trong createUser
+    # src/resolvers/Mutation/user.js
+    # createLevel(data: CreateLevelInput!): Level!
+    updateLevel(data: UpdateLevelInput!): Level!
+  }
+
+  input UpdateLevelInput {
+    userId: ID!
+    xp: Int!
+  }
 
   type Level {
     id: ID!

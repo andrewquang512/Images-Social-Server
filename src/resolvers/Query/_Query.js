@@ -3,6 +3,7 @@ import levelQuery from './LEVEL.js';
 import imageQuery from './IMAGE.js';
 import imageInfoQuery from './IMAGE_INFO.js';
 import postQuery from './POST.js';
+import storyQuery from './STORY.js';
 
 const Query = {
   // User
@@ -15,6 +16,8 @@ const Query = {
   ...imageInfoQuery,
   // Post
   ...postQuery,
+  // Story
+  ...storyQuery,
   // Comment
   // ...commentQuery,
 };

@@ -1,41 +1,44 @@
 import gql from 'graphql-tag';
 
-const postDefs = gql`
+const storyDefs = gql`
   extend type Query {
-    allPosts: Post!
-    # posts(query: String): [Post!]!
+    allStories: Story
   }
 
   extend type Mutation {
-    createPost(data: CreatePostInput!): Post!
-    # deletePost(id: ID!): Post!
-    # updatePost(id: ID!, data: UpdatePostInput!): Post!
+    createStory(data: CreateStoryInput!): Story!
+    deleteStory(data: DeleteStoryInput!): Story!
+    deleteAllStory()
+    updateStory(data: UpdateStoryInput!): Story!
   }
 
-  input CreatePostInput {
+  input CreateStoryInput {
     title: String!
     userId: ID!
-    imageURL: String!
-    imageHash: String!
+    content: String!
   }
 
-  # input UpdatePostInput {
-  #   title: String
-  #   body: String
-  #   published: Boolean
-  # }
+  input DeleteStoryInput {
+    storyId: ID!
+  }
 
-  type Post {
+  input UpdateStoryInput {
+    storyId: ID!
+    title: String
+    content: String
+  }
+
+  type Story {
     id: ID!
     title: String!
     createdAt: String!
     updatedAt: String!
-    points: Int!
+    content: String!
+    # points: Int!
     # comments: [Comment!]!
 
     userId: User!
-    image: Image!
   }
 `;
 
-export default postDefs;
+export default storyDefs;
