@@ -6,7 +6,8 @@ const imageDefs = gql`
   }
 
   # extend type Mutation {
-  #   createImage(data: CreateImageInput!): Image!
+  #   # createImage
+  #   deleteAllImage: DeleteAllReturnType!
   # }
 
   type Image {
@@ -14,6 +15,7 @@ const imageDefs = gql`
     url: String!
     hash: String!
     createdAt: String!
+    updatedAt: String!
 
     postId: Post!
     imageInfoId: ImageInfo!

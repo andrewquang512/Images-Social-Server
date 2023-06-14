@@ -1,28 +1,15 @@
-const postMutation = {
-  createPost: async (parent, args, { prisma }, info) => {
-    let post;
+import { Prisma } from '@prisma/client';
+
+const storyMutation = {
+  createStory: async (parent, args, { prisma }, info) => {
+    let story;
     try {
-      post = await prisma.post.create({
+      story = await prisma.story.create({
         data: {
-          title: args.data.title,
           userId: args.data.userId,
+          title: args.data.title,
+          content: args.data.content,
           points: 0,
-          image: {
-            create: {
-              url: args.data.imageURL,
-              hash: args.data.imageHash,
-              imageInfoId: {
-                create: {
-                  camera: 'Canon',
-                  lens: 'Canon',
-                  aperture: 'Canon',
-                  focalLength: 'Canon',
-                  shutterSpeed: 'Canon',
-                  ISO: 'Canon',
-                },
-              },
-            },
-          },
         },
       });
     } catch (e) {
@@ -32,38 +19,38 @@ const postMutation = {
       throw e;
     }
 
-    return post;
+    return story;
   },
-  // deletePost: async (parent, args, { prisma }, info) => {
-  //   let post;
-  //   try {
-  //     post = await prisma.post.delete({
-  //       where: {
-  //         id: args.data.postId,
-  //       },
-  //     });
-  //   } catch (e) {
-  //     if (e instanceof Prisma.PrismaClientKnownRequestError) {
-  //       console.log(e);
-  //     }
-  //     throw e;
-  //   }
+  deleteStory: async (parent, args, { prisma }, info) => {
+    let story;
+    try {
+      story = await prisma.story.delete({
+        where: {
+          id: args.data.storyId,
+        },
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        console.log(e);
+      }
+      throw e;
+    }
 
-  //   return post;
-  // },
-  // deleteAllPost: async (parent, args, { prisma }, info) => {
-  //   let result;
-  //   try {
-  //     result = await prisma.post.deleteMany({});
-  //   } catch (e) {
-  //     if (e instanceof Prisma.PrismaClientKnownRequestError) {
-  //       console.log(e);
-  //     }
-  //     throw e;
-  //   }
+    return story;
+  },
+  deleteAllStory: async (parent, args, { prisma }, info) => {
+    let result;
+    try {
+      result = await prisma.story.deleteMany({});
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        console.log(e);
+      }
+      throw e;
+    }
 
-  //   return result;
-  // },
+    return result;
+  },
   // //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // updatePost: async (parent, args, { prisma }, info) => {
   //   const { updatedUser, ...updateInfo } = args.data;
@@ -89,4 +76,4 @@ const postMutation = {
   // },
 };
 
-export default postMutation;
+export default storyMutation;

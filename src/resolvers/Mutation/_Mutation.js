@@ -4,6 +4,7 @@ import imageMutation from './image.js';
 import imageInfoMutation from './image_info.js';
 import postMutation from './post.js';
 import storyMutation from './story.js';
+import commentMutation from './comment.js';
 
 const Mutation = {
   // User
@@ -19,7 +20,7 @@ const Mutation = {
   // Story
   ...storyMutation,
   // Comment
-  // ...commentMutation,
+  ...commentMutation,
 };
 
 export default Mutation;

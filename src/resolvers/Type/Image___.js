@@ -2,12 +2,12 @@ const Image = {
   postId: async (parent, args, { prisma }, info) => {
     return await prisma.post.findUnique({
       where: {
-        id: parent.id,
+        id: parent.postId,
       },
     });
   },
   imageInfoId: async (parent, args, { prisma }, info) => {
-    return await prisma.imageinfo.findUnique({
+    return await prisma.imageInfo.findUnique({
       where: {
         imageId: parent.id,
       },

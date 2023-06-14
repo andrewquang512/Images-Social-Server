@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 const levelDefs = gql`
   extend type Query {
     allLevels: [Level]!
-    userLevel(userID: String!): Level!
+    userLevel(data: UserLevelInput!): Level!
   }
 
   extend type Mutation {
@@ -11,6 +11,10 @@ const levelDefs = gql`
     # src/resolvers/Mutation/user.js
     # createLevel(data: CreateLevelInput!): Level!
     updateLevel(data: UpdateLevelInput!): Level!
+  }
+
+  input UserLevelInput {
+    userId: ID!
   }
 
   input UpdateLevelInput {

@@ -1,7 +1,14 @@
 const commentQuery = {
-  comments(parent, args, { db }, info) {
-    return db.comments;
-  },
+  // postComments: async (parent, args, { prisma }, info) => {
+  //   return await prisma.level.findUnique({
+  //     where: {
+  //       userID: args.userID,
+  //     },
+  //   });
+  // },
+  // userComments: async (parent, args, { prisma }, info) => {
+  //   return await prisma.post.findMany();
+  // },
 };
 
-module.exports = commentQuery;
+export default commentQuery;

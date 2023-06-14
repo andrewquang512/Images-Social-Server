@@ -1,3 +1,5 @@
+import { Prisma } from '@prisma/client';
+
 const postMutation = {
   createPost: async (parent, args, { prisma }, info) => {
     let post;
@@ -11,14 +13,17 @@ const postMutation = {
             create: {
               url: args.data.imageURL,
               hash: args.data.imageHash,
+
               imageInfoId: {
                 create: {
-                  camera: 'Canon',
-                  lens: 'Canon',
-                  aperture: 'Canon',
-                  focalLength: 'Canon',
-                  shutterSpeed: 'Canon',
-                  ISO: 'Canon',
+                  camera: args.data.camera,
+                  lens: args.data.lens,
+                  aperture: args.data.aperture,
+                  focalLength: args.data.focalLength,
+                  shutterSpeed: args.data.shutterSpeed,
+                  ISO: args.data.ISO,
+                  takenWhen: args.data.takenWhen,
+                  copyRight: args.data.copyRight,
                 },
               },
             },
@@ -34,7 +39,6 @@ const postMutation = {
 
     return post;
   },
-
   deletePost: async (parent, args, { prisma }, info) => {
     let post;
     try {
@@ -62,6 +66,7 @@ const postMutation = {
       }
       throw e;
     }
+    console.log(result);
 
     return result;
   },

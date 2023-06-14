@@ -16,12 +16,15 @@ const imageDefs = gql`
 
   type ImageInfo {
     id: ID!
+
     camera: String
     lens: String
     aperture: String
     focalLength: String
     shutterSpeed: String
     ISO: String
+    takenWhen: String
+    copyRight: String
 
     imageId: Image!
   }

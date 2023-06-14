@@ -8,13 +8,13 @@ const storyDefs = gql`
   extend type Mutation {
     createStory(data: CreateStoryInput!): Story!
     deleteStory(data: DeleteStoryInput!): Story!
-    deleteAllStory()
+    deleteAllStory: DeleteAllReturnType!
     updateStory(data: UpdateStoryInput!): Story!
   }
 
   input CreateStoryInput {
-    title: String!
     userId: ID!
+    title: String!
     content: String!
   }
 
@@ -34,7 +34,7 @@ const storyDefs = gql`
     createdAt: String!
     updatedAt: String!
     content: String!
-    # points: Int!
+    points: Int!
     # comments: [Comment!]!
 
     userId: User!

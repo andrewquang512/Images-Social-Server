@@ -9,15 +9,26 @@ const postDefs = gql`
   extend type Mutation {
     createPost(data: CreatePostInput!): Post!
     deletePost(data: DeletePostInput!): Post!
-    deleteAllPost()
+    deleteAllPost: DeleteAllReturnType!
     updatePost(data: UpdatePostInput!): Post!
   }
 
   input CreatePostInput {
-    title: String!
     userId: ID!
+
+    title: String!
+
     imageURL: String!
     imageHash: String!
+
+    camera: String
+    lens: String
+    aperture: String
+    focalLength: String
+    shutterSpeed: String
+    ISO: String
+    takenWhen: String
+    copyRight: String
   }
 
   input DeletePostInput {

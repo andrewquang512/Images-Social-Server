@@ -6,14 +6,20 @@ import imageDefs from './Image_Image.js';
 import imageInfoDefs from './ImageInfo_ImageInfo.js';
 import postDefs from './Post_Post.js';
 import storyDefs from './Story_Story.js';
+import cmtDefs from './Cmt_Cmt.js';
 
 const baseDefs = gql`
   type Query {
-    _TEST_QUERY: Int
+    _TEST_QUERY: String
   }
 
   type Mutation {
-    _TEST_MUTATION
+    _TEST_MUTATION: Int!
+  }
+
+  type DeleteAllReturnType {
+    count: Int!
+    message: String
   }
 `;
 
@@ -25,6 +31,7 @@ const typeDefs = [
   imageInfoDefs,
   postDefs,
   storyDefs,
+  cmtDefs,
 ];
 
 export default typeDefs;

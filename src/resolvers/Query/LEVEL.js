@@ -5,7 +5,7 @@ const levelQuery = {
   userLevel: async (parent, args, { prisma }, info) => {
     return await prisma.level.findUnique({
       where: {
-        userID: args.userID,
+        userId: args.data.userId,
       },
     });
   },

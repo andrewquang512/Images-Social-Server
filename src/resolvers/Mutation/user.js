@@ -63,8 +63,9 @@ const userMutation = {
       throw e;
     }
 
-    return result;
+    return ReadableStreamDefaultReader;
   },
+  //!!!!!!!!!!!!!!!!!!!!!!!
   updateUser: async (parent, args, { prisma }, info) => {
     const { userId, ...updateInfo } = args.data;
     let updatedUser;

@@ -35,7 +35,7 @@ model User {
   posts         Post[] 
   stories       Story[] 
   comments      Comment[]
-  replyComments ReplyComment[]
+  // replyComments ReplyComment[]
   followers     Follower?
   followings    Following?
   messages      Message[]
@@ -112,9 +112,10 @@ model Image {
   url       String
   hash      String
   createdAt DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   postId        String @unique @db.ObjectId
-  image_to_post Post   @relation(fields: [postId], references: [id])
+  image_to_post Post   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   tagIDs       String[] @db.ObjectId
   image_to_tag Tag[]    @relation(fields: [tagIDs], references: [id])
@@ -124,15 +125,18 @@ model Image {
 
 model ImageInfo {
   id           String @id @default(auto()) @map("_id") @db.ObjectId
+
   camera       String
   lens         String
   aperture     String
   focalLength  String
   shutterSpeed String
   ISO          String
+  takenWhen    String
+  copyRight    String
 
   imageId            String @unique @db.ObjectId
-  imageInfo_to_image Image  @relation(fields: [imageId], references: [id])
+  imageInfo_to_image Image  @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Tag {
@@ -168,33 +172,33 @@ model Story {
   // cmts      Comment[]
 
   userId       String @db.ObjectId
-  story_to_user User   @relation(fields: [userId], references: [id])
+  story_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Comment {
   id            String         @id @default(auto()) @map("_id") @db.ObjectId
   content       String?
   createdAt     DateTime       @default(now())
-  replyComments ReplyComment[]
+  // replyComments ReplyComment[]
 
   userId      String @db.ObjectId
-  cmt_to_user User   @relation(fields: [userId], references: [id])
+  cmt_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   postId      String @db.ObjectId
-  cmt_to_post Post   @relation(fields: [postId], references: [id])
+  cmt_to_post Post   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
-model ReplyComment {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  content   String?
-  createdAt DateTime @default(now())
+// model ReplyComment {
+//   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+//   content   String?
+//   createdAt DateTime @default(now())
 
-  userId        String @db.ObjectId
-  reply_to_user User   @relation(fields: [userId], references: [id])
+//   userId        String @db.ObjectId
+//   reply_to_user User   @relation(fields: [userId], references: [id])
 
-  commentId    String  @db.ObjectId
-  reply_to_cmt Comment @relation(fields: [commentId], references: [id])
-}
+//   commentId    String  @db.ObjectId
+//   reply_to_cmt Comment @relation(fields: [commentId], references: [id])
+// }
 
 model Course {
   id      String   @id @default(auto()) @map("_id") @db.ObjectId

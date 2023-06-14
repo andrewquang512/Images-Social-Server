@@ -23,7 +23,7 @@ const levelMutation = {
           },
           data: {
             currentXP: 0,
-            currentXP: {
+            currentLevel: {
               increment: 1,
             },
           },

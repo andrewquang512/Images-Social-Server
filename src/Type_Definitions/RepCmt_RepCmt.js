@@ -1,14 +1,15 @@
 import gql from 'graphql-tag';
 
-const cmtDefs = gql`
-  # extend type Query {
-  #   postComments: [Comment]!
-  #   userComments: [Comment]!
-  # }
+const repCmtDefs = gql`
+  extend type Query {
+    postComments: [Comment]!
+    userComments: [Comment]!
+  }
 
   extend type Mutation {
     createComment(data: CreateCommentInput!): Comment!
-    deleteComment(data: DeleteCommentInput!): Comment!
+    createReplyComment(data: CreateReplyCommentInput!): Comment!
+    deleteComment(data: DeleteCommentInput!)
     updateComment(data: UpdateCommentInput!): Comment!
   }
 
@@ -19,15 +20,14 @@ const cmtDefs = gql`
   }
 
   input DeleteCommentInput {
-    cmtId: ID!
+    userId: ID!
   }
 
   input UpdateCommentInput {
-    cmtId: ID!
-    content: String!
+    text: String
   }
 
-  type Comment {
+  type ReplyComment {
     id: ID!
     content: String!
 
@@ -36,4 +36,4 @@ const cmtDefs = gql`
   }
 `;
 
-export default cmtDefs;
+export default repCmtDefs;

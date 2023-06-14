@@ -6,15 +6,18 @@ const userDefs = gql`
     userInfo(data: UserInfoInput!): User!
   }
 
+  input UserInfoInput {
+    userId: ID!
+  }
+
+  # _______________________________________________________
+  # _______________________________________________________
+
   extend type Mutation {
     createUser(data: CreateUserInput!): User!
     deleteUser(data: DeleteUserInput!): User!
-    deleteAllUser()
+    deleteAllUser: DeleteAllReturnType!
     updateUser(id: ID!, data: UpdateUserInput!): User!
-  }
-
-  input UserInfoInput {
-    userId: ID!
   }
 
   input CreateUserInput {
@@ -42,7 +45,6 @@ const userDefs = gql`
     birthday: String
   }
 
-  
   type User {
     id: ID!
     email: String!
