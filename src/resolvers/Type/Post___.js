@@ -13,6 +13,18 @@ const Post = {
       },
     });
   },
+  comments: async (parent, args, { prisma }, info) => {
+    return await prisma.comment.findMany({
+      where: {
+        postId: parent.id,
+      },
+      orderBy: [
+        {
+          createdAt: 'desc',
+        },
+      ],
+    });
+  },
 };
 
 export default Post;

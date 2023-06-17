@@ -30,6 +30,8 @@ const cmtDefs = gql`
   type Comment {
     id: ID!
     content: String!
+    createdAt: String!
+    # updatedAt: String!
 
     userId: User!
     postId: Post!

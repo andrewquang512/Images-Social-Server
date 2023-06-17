@@ -5,7 +5,7 @@ const userQuery = {
   userInfo: async (parent, args, { prisma }, info) => {
     return await prisma.user.findUnique({
       where: {
-        id: args.data.id,
+        id: args.data.userId,
       },
       include: {
         posts: true,

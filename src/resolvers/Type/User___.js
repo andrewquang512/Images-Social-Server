@@ -11,6 +11,11 @@ const User = {
       where: {
         userId: parent.id,
       },
+      orderBy: [
+        {
+          createdAt: 'desc',
+        },
+      ],
     });
   },
 };

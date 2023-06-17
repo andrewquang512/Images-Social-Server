@@ -3,7 +3,11 @@ import gql from 'graphql-tag';
 const postDefs = gql`
   extend type Query {
     allPosts: Post
-    # posts(query: String): [Post!]!
+    postInfo(data: PostInfoInput!): Post!
+  }
+
+  input PostInfoInput {
+    postId: ID!
   }
 
   extend type Mutation {
@@ -48,7 +52,7 @@ const postDefs = gql`
     createdAt: String!
     updatedAt: String!
     points: Int!
-    # comments: [Comment!]!
+    comments: [Comment]!
 
     userId: User!
     image: Image!

@@ -7,6 +7,7 @@ import imageInfoDefs from './ImageInfo_ImageInfo.js';
 import postDefs from './Post_Post.js';
 import storyDefs from './Story_Story.js';
 import cmtDefs from './Cmt_Cmt.js';
+import tagDefs from './Tag_Tag.js';
 
 const baseDefs = gql`
   type Query {
@@ -32,6 +33,7 @@ const typeDefs = [
   postDefs,
   storyDefs,
   cmtDefs,
+  tagDefs,
 ];
 
 export default typeDefs;

@@ -17,7 +17,7 @@ const userDefs = gql`
     createUser(data: CreateUserInput!): User!
     deleteUser(data: DeleteUserInput!): User!
     deleteAllUser: DeleteAllReturnType!
-    updateUser(id: ID!, data: UpdateUserInput!): User!
+    updateUser(data: UpdateUserInput!): User!
   }
 
   input CreateUserInput {
