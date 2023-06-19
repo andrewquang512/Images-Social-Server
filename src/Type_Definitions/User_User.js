@@ -4,6 +4,12 @@ const userDefs = gql`
   extend type Query {
     allUsers: [User]!
     userInfo(data: UserInfoInput!): User!
+    verifyUser(data: VerifyUserInput!): User!
+  }
+
+  input VerifyUserInput {
+    hashPassword: String!
+    email: String!
   }
 
   input UserInfoInput {
@@ -47,6 +53,7 @@ const userDefs = gql`
 
   type User {
     id: ID!
+    isAdmin: Int!
     email: String!
     hashPassword: String!
     name: String!

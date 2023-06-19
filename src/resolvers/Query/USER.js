@@ -12,6 +12,16 @@ const userQuery = {
       },
     });
   },
+  verifyUser: async (parent, args, { prisma }, info) => {
+    return await prisma.user.findFirst({
+      where: {
+        AND: [
+          { hashPassword: args.data.hashPassword },
+          { email: args.data.email },
+        ],
+      },
+    });
+  },
 };
 
 export default userQuery;

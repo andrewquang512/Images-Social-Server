@@ -11,6 +11,7 @@ const userMutation = {
             'https://bku-profile-pic.s3.ap-southeast-1.amazonaws.com/images.jpg',
           birthday: '2000-01-01',
           phoneNumber: '',
+          isAdmin: 0,
           age: new Date().getFullYear() - 2000,
           level: {
             create: {
@@ -18,13 +19,7 @@ const userMutation = {
               currentLevel: 1,
             },
           },
-          // posts: {
-          //   create: [],
-          // },
         },
-        // include: {
-        //   posts: true, // Include all posts in the returned object
-        // },
       });
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
