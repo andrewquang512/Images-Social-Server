@@ -9,6 +9,7 @@ const storyMutation = {
           userId: args.data.userId,
           title: args.data.title,
           content: args.data.content,
+          images: args.data.images,
           points: 0,
         },
       });

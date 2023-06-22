@@ -1,38 +1,38 @@
 import gql from 'graphql-tag';
 
 const tagDefs = gql`
-  # extend type Query {
-  #   postComments: [Comment]!
-  #   userComments: [Comment]!
-  # }
+  extend type Query {
+    allTags: Tag
+    tagInfo(data: TagInfoInput!): Tag!
+  }
+
+  input TagInfoInput {
+    tagId: ID!
+  }
 
   extend type Mutation {
-    createComment(data: CreateCommentInput!): Comment!
-    deleteComment(data: DeleteCommentInput!): Comment!
-    updateComment(data: UpdateCommentInput!): Comment!
+    createTag(data: CreateTagData!): Tag!
+    # deleteComment(data: DeleteCommentInput!): Comment!
+    # updateComment(data: UpdateCommentInput!): Comment!
   }
 
-  input CreateCommentInput {
-    content: String!
-    userId: ID!
-    postId: ID!
+  input CreateTagData {
+    name: String!
   }
 
-  input DeleteCommentInput {
-    cmtId: ID!
-  }
+  # input DeleteCommentInput {
+  #   cmtId: ID!
+  # }
 
-  input UpdateCommentInput {
-    cmtId: ID!
-    content: String!
-  }
+  # input UpdateCommentInput {
+  #   cmtId: ID!
+  #   content: String!
+  # }
 
   type Tag {
     id: ID!
-    content: String!
-
-    userId: User!
-    postId: Post!
+    name: String!
+    postIDs: [Post]!
   }
 `;
 

@@ -31,17 +31,18 @@ model User {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  sessions      Session[]
   level         Level?
-  posts         Post[] 
-  stories       Story[] 
+  categories    Category[]
+  posts         Post[]
+  stories       Story[]
   comments      Comment[]
-  // replyComments ReplyComment[]
+
   followers     Follower?
   followings    Following?
+  
   messages      Message[]
   courses       Course[]
-  notifications Notification[]
+  // notifications Notification[]
 
   reportIDs      String[] @db.ObjectId
   user_to_report Report[] @relation(fields: [reportIDs], references: [id])
@@ -54,14 +55,14 @@ model Admin {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 }
 
-model Notification {
-  id      String  @id @default(auto()) @map("_id") @db.ObjectId
-  content String
-  isRead  Boolean
+// model Notification {
+//   id      String  @id @default(auto()) @map("_id") @db.ObjectId
+//   content String
+//   isRead  Boolean
 
-  userId               String @db.ObjectId
-  notification_to_user User   @relation(fields: [userId], references: [id])
-}
+//   userId               String @db.ObjectId
+//   notification_to_user User   @relation(fields: [userId], references: [id])
+// }
 
 model Report {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
@@ -69,18 +70,6 @@ model Report {
 
   userIDs        String[] @db.ObjectId
   report_to_user User[]   @relation(fields: [userIDs], references: [id])
-
-
-}
-
-model Session {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  sessionToken String   @unique
-  createdAt    DateTime @default(now())
-  expires      DateTime
-
-  userId          String @db.ObjectId
-  session_to_user User   @relation(fields: [userId], references: [id])
 }
 
 model Follower {
@@ -113,19 +102,16 @@ model Image {
   url       String
   hash      String
   createdAt DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  updatedAt DateTime @updatedAt
 
   postId        String @unique @db.ObjectId
   image_to_post Post   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  tagIDs       String[] @db.ObjectId
-  image_to_tag Tag[]    @relation(fields: [tagIDs], references: [id])
 
   imageInfoId ImageInfo?
 }
 
 model ImageInfo {
-  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   camera       String
   lens         String
@@ -140,12 +126,27 @@ model ImageInfo {
   imageInfo_to_image Image  @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
-model Tag {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
+model Category {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  imageIDs     String[] @db.ObjectId
-  tag_to_image Image[]  @relation(fields: [imageIDs], references: [id])
+  userId           String @db.ObjectId
+  category_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  postIDs           String[]  @db.ObjectId
+  category_to_post  Post[]    @relation(fields: [postIDs], references: [id])
+}
+
+model Tag {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  postIDs     String[] @db.ObjectId
+  tag_to_post Post[]   @relation(fields: [postIDs], references: [id])
 }
 
 model Post {
@@ -159,47 +160,44 @@ model Post {
   userId       String @db.ObjectId
   post_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  image     Image?
+  categoryIDs       String[]   @db.ObjectId
+  post_to_category  Category[] @relation(fields: [categoryIDs], references: [id])
+
+  tagIDs       String[] @db.ObjectId
+  post_to_tag  Tag[]    @relation(fields: [tagIDs], references: [id])
+
+  image Image?
 }
 
 model Story {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   title     String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   points    Int
-  content   String
-  // images    Image[]
-  // cmts      Comment[]
 
-  userId       String @db.ObjectId
+  content String
+  images  String[]
+  cmts    Comment[]
+
+  userId        String @db.ObjectId
   story_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Comment {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  content       String?
-  createdAt     DateTime       @default(now())
-  // replyComments ReplyComment[]
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String?
+  createdAt DateTime @default(now())
 
   userId      String @db.ObjectId
   cmt_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   postId      String @db.ObjectId
   cmt_to_post Post   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  storyId      String @db.ObjectId
+  cmt_to_story Story  @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
-
-// model ReplyComment {
-//   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-//   content   String?
-//   createdAt DateTime @default(now())
-
-//   userId        String @db.ObjectId
-//   reply_to_user User   @relation(fields: [userId], references: [id])
-
-//   commentId    String  @db.ObjectId
-//   reply_to_cmt Comment @relation(fields: [commentId], references: [id])
-// }
 
 model Course {
   id      String   @id @default(auto()) @map("_id") @db.ObjectId

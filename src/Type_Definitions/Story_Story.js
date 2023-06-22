@@ -16,6 +16,7 @@ const storyDefs = gql`
     userId: ID!
     title: String!
     content: String!
+    images: [String]!
   }
 
   input DeleteStoryInput {
@@ -35,7 +36,9 @@ const storyDefs = gql`
     updatedAt: String!
     content: String!
     points: Int!
-    # comments: [Comment!]!
+
+    images: [String]!
+    cmts: [Comment]!
 
     userId: User!
   }

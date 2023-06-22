@@ -12,11 +12,16 @@ const userMutation = {
           birthday: '2000-01-01',
           phoneNumber: '',
           isAdmin: 0,
-          age: new Date().getFullYear() - 2000,
+          age: 18,
           level: {
             create: {
               currentXP: 0,
               currentLevel: 1,
+            },
+          },
+          categories: {
+            create: {
+              name: 'Posts',
             },
           },
         },

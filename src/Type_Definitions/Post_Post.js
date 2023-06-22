@@ -33,17 +33,19 @@ const postDefs = gql`
     ISO: String
     takenWhen: String
     copyRight: String
+
+    categoryIDs: [String]!
   }
 
   input DeletePostInput {
     postId: ID!
   }
 
+  # !!!!!!
   input UpdatePostInput {
     postId: ID!
     title: String
     body: String
-    published: Boolean
   }
 
   type Post {
@@ -52,7 +54,10 @@ const postDefs = gql`
     createdAt: String!
     updatedAt: String!
     points: Int!
+
     comments: [Comment]!
+    categoryIDs: [Category]!
+    tagIDs: [Tag]!
 
     userId: User!
     image: Image!

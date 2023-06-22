@@ -66,6 +66,7 @@ const userDefs = gql`
 
     level: Level!
     posts: [Post]!
+    categories: [Category]!
     stories: [Story]!
   }
 `;

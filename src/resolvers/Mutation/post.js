@@ -9,6 +9,7 @@ const postMutation = {
           title: args.data.title,
           userId: args.data.userId,
           points: 0,
+          categoryIDs: args.data.categoryIDs,
           image: {
             create: {
               url: args.data.imageURL,
