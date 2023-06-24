@@ -29,6 +29,7 @@ const userDefs = gql`
   input CreateUserInput {
     name: String!
     profileImageURL: String
+    backgroundImageURL: String
     email: String!
     hashPassword: String!
     phoneNumber: String
@@ -44,6 +45,7 @@ const userDefs = gql`
     userId: ID!
     name: String
     profileImageURL: String
+    backgroundImageURL: String
     email: String
     hashPassword: String
     phoneNumber: String
@@ -61,6 +63,7 @@ const userDefs = gql`
     birthday: String!
     phoneNumber: String!
     profileImageURL: String!
+    backgroundImageURL: String!
     createdAt: String!
     updatedAt: String
 

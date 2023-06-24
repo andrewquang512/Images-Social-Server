@@ -25,6 +25,7 @@ model User {
   hashPassword    String
   name            String
   profileImageURL String
+  backgroundImageURL String
   age             Int      @default(18)
   birthday        String
   isAdmin         Int      @default(0)

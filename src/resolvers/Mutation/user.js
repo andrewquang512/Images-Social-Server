@@ -9,6 +9,8 @@ const userMutation = {
           ...args.data,
           profileImageURL:
             'https://bku-profile-pic.s3.ap-southeast-1.amazonaws.com/images.jpg',
+          backgroundImageURL:
+            'https://bku-profile-pic.s3.ap-southeast-1.amazonaws.com/background.png',
           birthday: '2000-01-01',
           phoneNumber: '',
           isAdmin: 0,
