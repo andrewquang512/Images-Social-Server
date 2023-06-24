@@ -26,10 +26,10 @@ const Mutation = {
   ...commentMutation,
   // Category
   ...categoryMutation,
-  // // Follower
-  // ...followerMutation,
-  // // Following
-  // ...followingMutation,
+  // Follower
+  ...followerMutation,
+  // Following
+  ...followingMutation,
 };
 
 export default Mutation;

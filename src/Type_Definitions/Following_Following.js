@@ -16,9 +16,15 @@ const followingDefs = gql`
   extend type Mutation {
     # createUser(data: CreateUserInput!): User!
     updateFollowing(data: UpdateFollowingInput!): Following!
+    unfollowUser(data: UnfollowInput!): Following!
   }
 
   input UpdateFollowingInput {
+    userId: ID!
+    followingId: ID!
+  }
+
+  input UnfollowInput {
     userId: ID!
     followingId: ID!
   }

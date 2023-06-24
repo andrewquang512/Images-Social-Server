@@ -38,8 +38,8 @@ const typeDefs = [
   cmtDefs,
   tagDefs,
   categoryDefs,
-  // followingDefs,
-  // followerDefs,
+  followingDefs,
+  followerDefs,
 ];
 
 export default typeDefs;
