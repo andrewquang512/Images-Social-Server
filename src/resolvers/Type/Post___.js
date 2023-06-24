@@ -13,6 +13,13 @@ const Post = {
       },
     });
   },
+  categoryId: async (parent, args, { prisma }, info) => {
+    return await prisma.category.findUnique({
+      where: {
+        id: parent.categoryId,
+      },
+    });
+  },
   comments: async (parent, args, { prisma }, info) => {
     return await prisma.comment.findMany({
       where: {

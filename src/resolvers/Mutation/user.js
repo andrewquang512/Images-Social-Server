@@ -19,11 +19,6 @@ const userMutation = {
               currentLevel: 1,
             },
           },
-          categories: {
-            create: {
-              name: 'Posts',
-            },
-          },
         },
       });
     } catch (e) {

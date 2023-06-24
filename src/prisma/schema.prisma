@@ -32,7 +32,7 @@ model User {
   updatedAt       DateTime @updatedAt
 
   level         Level?
-  categories    Category[]
+
   posts         Post[]
   stories       Story[]
   comments      Comment[]
@@ -132,11 +132,8 @@ model Category {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  userId           String @db.ObjectId
-  category_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  posts     Post[]
 
-  postIDs           String[]  @db.ObjectId
-  category_to_post  Post[]    @relation(fields: [postIDs], references: [id])
 }
 
 model Tag {
@@ -160,8 +157,8 @@ model Post {
   userId       String @db.ObjectId
   post_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  categoryIDs       String[]   @db.ObjectId
-  post_to_category  Category[] @relation(fields: [categoryIDs], references: [id])
+  categoryId      String   @db.ObjectId
+  post_to_category  Category @relation(fields: [categoryId], references: [id])
 
   tagIDs       String[] @db.ObjectId
   post_to_tag  Tag[]    @relation(fields: [tagIDs], references: [id])

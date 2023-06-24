@@ -34,7 +34,7 @@ const postDefs = gql`
     takenWhen: String
     copyRight: String
 
-    categoryIDs: [String]!
+    categoryId: ID!
   }
 
   input DeletePostInput {
@@ -56,11 +56,12 @@ const postDefs = gql`
     points: Int!
 
     comments: [Comment]!
-    categoryIDs: [Category]!
+
     tagIDs: [Tag]!
 
     userId: User!
     image: Image!
+    categoryId: Category!
   }
 `;
 

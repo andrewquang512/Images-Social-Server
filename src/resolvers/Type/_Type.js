@@ -5,6 +5,7 @@ import ImageInfo from './ImageInfo___.js';
 import Post from './Post___.js';
 import Story from './Story___.js';
 import Comment from './Comment___.js';
+import Category from './Category___.js';
 
 const Type = {
   User,
@@ -14,6 +15,7 @@ const Type = {
   Post,
   Story,
   Comment,
+  Category,
 };
 
 export default Type;

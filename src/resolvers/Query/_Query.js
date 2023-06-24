@@ -5,6 +5,7 @@ import imageInfoQuery from './IMAGE_INFO.js';
 import postQuery from './POST.js';
 import storyQuery from './STORY.js';
 import commentQuery from './COMMENT.js';
+import categoryQuery from './CATEGORY.js';
 
 const Query = {
   // User
@@ -21,6 +22,8 @@ const Query = {
   ...storyQuery,
   // Comment
   ...commentQuery,
+  // Category
+  ...categoryQuery,
 };
 
 export default Query;

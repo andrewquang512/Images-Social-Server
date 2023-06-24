@@ -5,6 +5,7 @@ import imageInfoMutation from './image_info.js';
 import postMutation from './post.js';
 import storyMutation from './story.js';
 import commentMutation from './comment.js';
+import categoryMutation from './category.js';
 
 const Mutation = {
   // User
@@ -21,6 +22,8 @@ const Mutation = {
   ...storyMutation,
   // Comment
   ...commentMutation,
+  // Category
+  ...categoryMutation,
 };
 
 export default Mutation;

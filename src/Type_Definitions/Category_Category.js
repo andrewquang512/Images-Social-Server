@@ -3,7 +3,6 @@ import gql from 'graphql-tag';
 const categoryDefs = gql`
   extend type Query {
     allCategories: Category
-    userAllCategory(data: UserAllCategoryInput!): Category!
     categoryInfo(data: CategoryInfoInput!): Category!
   }
 
@@ -16,14 +15,10 @@ const categoryDefs = gql`
   }
 
   extend type Mutation {
-    createCategory(data: CreateCategoryInput!): Post!
-    # deletePost(data: DeletePostInput!): Post!
-    # deleteAllPost: DeleteAllReturnType!
-    # updatePost(data: UpdatePostInput!): Post!
+    createCategory(data: CreateCategoryInput!): Category!
   }
 
   input CreateCategoryInput {
-    userId: ID!
     name: String!
   }
 
@@ -44,8 +39,7 @@ const categoryDefs = gql`
     createdAt: String!
     updatedAt: String!
 
-    postIDs: [Post]!
-    userId: User!
+    posts: [Post]!
   }
 `;
 
