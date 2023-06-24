@@ -13,6 +13,13 @@ const Comment = {
       },
     });
   },
+  storyId: async (parent, args, { prisma }, info) => {
+    return await prisma.story.findUnique({
+      where: {
+        id: parent.storyId,
+      },
+    });
+  },
 };
 
 export default Comment;

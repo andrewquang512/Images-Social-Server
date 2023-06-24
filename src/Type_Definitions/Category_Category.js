@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 
 const categoryDefs = gql`
   extend type Query {
-    allCategories: Category
+    allCategories: [Category]!
     categoryInfo(data: CategoryInfoInput!): Category!
   }
 

@@ -2,7 +2,12 @@ import gql from 'graphql-tag';
 
 const storyDefs = gql`
   extend type Query {
-    allStories: Story
+    allStories: [Story]!
+    storyInfo(data: StoryInfoInput!): Story!
+  }
+
+  input StoryInfoInput {
+    storyId: ID!
   }
 
   extend type Mutation {
@@ -38,7 +43,7 @@ const storyDefs = gql`
     points: Int!
 
     images: [String]!
-    cmts: [Comment]!
+    comments: [Comment]!
 
     userId: User!
   }

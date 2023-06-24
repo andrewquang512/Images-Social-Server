@@ -6,6 +6,8 @@ import postMutation from './post.js';
 import storyMutation from './story.js';
 import commentMutation from './comment.js';
 import categoryMutation from './category.js';
+import followerMutation from './follower.js';
+import followingMutation from './following.js';
 
 const Mutation = {
   // User
@@ -24,6 +26,10 @@ const Mutation = {
   ...commentMutation,
   // Category
   ...categoryMutation,
+  // // Follower
+  // ...followerMutation,
+  // // Following
+  // ...followingMutation,
 };
 
 export default Mutation;

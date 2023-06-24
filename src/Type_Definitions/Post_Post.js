@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 
 const postDefs = gql`
   extend type Query {
-    allPosts: Post
+    allPosts: [Post]!
     postInfo(data: PostInfoInput!): Post!
   }
 
@@ -55,11 +55,10 @@ const postDefs = gql`
     updatedAt: String!
     points: Int!
 
-    comments: [Comment]!
-
     tagIDs: [Tag]!
 
     userId: User!
+    comments: [Comment]!
     image: Image!
     categoryId: Category!
   }

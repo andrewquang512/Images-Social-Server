@@ -19,6 +19,16 @@ const userMutation = {
               currentLevel: 1,
             },
           },
+          followers: {
+            create: {
+              userFollower: [],
+            },
+          },
+          followings: {
+            create: {
+              userFollowing: [],
+            },
+          },
         },
       });
     } catch (e) {
@@ -58,7 +68,7 @@ const userMutation = {
       throw e;
     }
 
-    return ReadableStreamDefaultReader;
+    return result;
   },
   //!!!!!!!!!!!!!!!!!!!!!!!
   updateUser: async (parent, args, { prisma }, info) => {

@@ -6,6 +6,8 @@ import postQuery from './POST.js';
 import storyQuery from './STORY.js';
 import commentQuery from './COMMENT.js';
 import categoryQuery from './CATEGORY.js';
+// import followerQuery from './FOLLOWER.js';
+// import followingQuery from './FOLLOWING.js';
 
 const Query = {
   // User
@@ -24,6 +26,10 @@ const Query = {
   ...commentQuery,
   // Category
   ...categoryQuery,
+  // // Follower
+  // ...followerQuery,
+  // // Following
+  // ...followingQuery,
 };
 
 export default Query;

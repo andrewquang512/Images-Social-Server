@@ -51,9 +51,7 @@ model User {
   user_to_chat Chat[]   @relation(fields: [chatIDs], references: [id])
 }
 
-model Admin {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-}
+
 
 // model Notification {
 //   id      String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -128,12 +126,11 @@ model ImageInfo {
 
 model Category {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
+  name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   posts     Post[]
-
 }
 
 model Tag {
@@ -152,18 +149,20 @@ model Post {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   points    Int
+  image Image?
   cmts      Comment[]
 
   userId       String @db.ObjectId
   post_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   categoryId      String   @db.ObjectId
-  post_to_category  Category @relation(fields: [categoryId], references: [id])
+  post_to_category  Category @relation(fields: [categoryId], references: [id], onUpdate: Cascade)
 
   tagIDs       String[] @db.ObjectId
   post_to_tag  Tag[]    @relation(fields: [tagIDs], references: [id])
 
-  image Image?
+  // contestId      String   @db.ObjectId
+  // post_to_contest  Contest @relation(fields: [contestId], references: [id])
 }
 
 model Story {
@@ -175,7 +174,7 @@ model Story {
 
   content String
   images  String[]
-  cmts    Comment[]
+  comments    Comment[]
 
   userId        String @db.ObjectId
   story_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -194,6 +193,15 @@ model Comment {
 
   storyId      String @db.ObjectId
   cmt_to_story Story  @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Contest {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // posts     Post[]
 }
 
 model Course {
