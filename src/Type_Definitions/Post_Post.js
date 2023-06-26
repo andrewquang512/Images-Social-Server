@@ -15,6 +15,7 @@ const postDefs = gql`
     deletePost(data: DeletePostInput!): Post!
     deleteAllPost: DeleteAllReturnType!
     updatePost(data: UpdatePostInput!): Post!
+    interactPost(data: InteractPostInput!): Post!
   }
 
   input CreatePostInput {
@@ -39,6 +40,11 @@ const postDefs = gql`
 
   input DeletePostInput {
     postId: ID!
+  }
+
+  input InteractPostInput {
+    postId: ID!
+    isLike: Int!
   }
 
   # !!!!!!

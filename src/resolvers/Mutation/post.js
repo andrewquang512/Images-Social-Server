@@ -67,7 +67,6 @@ const postMutation = {
       }
       throw e;
     }
-    console.log(result);
 
     return result;
   },
@@ -93,6 +92,39 @@ const postMutation = {
     }
 
     return updatedUser;
+  },
+  interactPost: async (parent, args, { prisma }, info) => {
+    let post;
+    try {
+      post = await prisma.post.update({
+        where: {
+          id: args.data.postId,
+        },
+        data: {
+          points: {
+            increment: args.data.isLike ? 1 : -1,
+          },
+        },
+      });
+
+      if (post.points == -1) {
+        post = await prisma.post.update({
+          where: {
+            id: args.data.postId,
+          },
+          data: {
+            points: 0,
+          },
+        });
+      }
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        console.log(e);
+      }
+      throw e;
+    }
+
+    return post;
   },
 };
 
