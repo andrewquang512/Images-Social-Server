@@ -1,7 +1,3 @@
-const imageQuery = {
-  //   allImageInfo: async (parent, args, { prisma }, info) => {
-  //     return await prisma.imageinfo.findMany();
-  //   },
-};
+const imageQuery = {};
 
 export default imageQuery;

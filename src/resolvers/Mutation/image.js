@@ -1,6 +1,3 @@
-const imageMutation = {
-  // ! Ko can dung, da lam trong create post
-  // createImage
-};
+const imageMutation = {};
 
 export default imageMutation;
