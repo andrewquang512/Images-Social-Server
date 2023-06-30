@@ -16,6 +16,7 @@ const cmtDefs = gql`
     content: String!
     userId: ID!
     postId: ID!
+    storyId: ID!
   }
 
   input DeleteCommentInput {

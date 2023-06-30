@@ -9,6 +9,7 @@ const commentMutation = {
           content: args.data.content,
           userId: args.data.userId,
           postId: args.data.postId,
+          storyId: args.data.storyId,
         },
       });
     } catch (e) {
