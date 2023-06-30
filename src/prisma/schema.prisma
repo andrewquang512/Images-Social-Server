@@ -79,7 +79,7 @@ model Follower {
   userFollower String[] @db.ObjectId
   userId       String   @unique @db.ObjectId
 
-  follower_to_user User @relation(fields: [userId], references: [id])
+  follower_to_user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Following {
@@ -87,7 +87,7 @@ model Following {
   userFollowing String[] @db.ObjectId
 
   userId            String @unique @db.ObjectId
-  following_to_user User   @relation(fields: [userId], references: [id])
+  following_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Level {
