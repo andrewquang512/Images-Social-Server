@@ -9,6 +9,7 @@ import storyDefs from './Story_Story.js';
 import cmtDefs from './Cmt_Cmt.js';
 import tagDefs from './Tag_Tag.js';
 import categoryDefs from './Category_Category.js';
+import albumDefs from './Album_Album.js';
 import followingDefs from './Following_Following.js';
 import followerDefs from './Follower_Follower.js';
 
@@ -38,6 +39,7 @@ const typeDefs = [
   cmtDefs,
   tagDefs,
   categoryDefs,
+  albumDefs,
   followingDefs,
   followerDefs,
 ];

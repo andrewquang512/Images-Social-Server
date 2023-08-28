@@ -20,6 +20,20 @@ const Post = {
       },
     });
   },
+  albumId: async (parent, args, { prisma }, info) => {
+    return await prisma.album.findUnique({
+      where: {
+        id: parent.albumId,
+      },
+    });
+  },
+  tagId: async (parent, args, { prisma }, info) => {
+    return await prisma.tag.findUnique({
+      where: {
+        id: parent.tagId,
+      },
+    });
+  },
   comments: async (parent, args, { prisma }, info) => {
     return await prisma.comment.findMany({
       where: {
