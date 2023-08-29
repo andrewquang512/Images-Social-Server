@@ -34,6 +34,7 @@ model User {
 
   level         Level?
 
+  albums        Album[]
   posts         Post[]
   stories       Story[]
   comments      Comment[]
@@ -77,8 +78,8 @@ model Report {
 model Follower {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   userFollower String[] @db.ObjectId
-  userId       String   @unique @db.ObjectId
 
+  userId       String   @unique @db.ObjectId
   follower_to_user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
@@ -134,7 +135,22 @@ model Category {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  posts     Post[]
+  posts     String[] @db.ObjectId
+  category_to_post Post[]   @relation(fields: [posts], references: [id])
+}
+
+model Album {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId       String @db.ObjectId
+  album_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  posts     String[] @db.ObjectId
+  album_to_post Post[]   @relation(fields: [posts], references: [id])
+
 }
 
 model Tag {
@@ -143,9 +159,11 @@ model Tag {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  postIDs     String[] @db.ObjectId
-  tag_to_post Post[]   @relation(fields: [postIDs], references: [id])
+  posts     String[] @db.ObjectId
+  tag_to_post Post[]   @relation(fields: [posts], references: [id])
 }
+
+
 
 model Post {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
@@ -159,11 +177,14 @@ model Post {
   userId       String @db.ObjectId
   post_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  categoryId      String   @db.ObjectId
-  post_to_category  Category @relation(fields: [categoryId], references: [id], onUpdate: Cascade)
+  categoryId      String[]   @db.ObjectId
+  post_to_category  Category[] @relation(fields: [categoryId], references: [id])
+  
+  albumId       String[]   @db.ObjectId
+  post_to_album  Album[] @relation(fields: [albumId], references: [id])
 
-  tagIDs       String[] @db.ObjectId
-  post_to_tag  Tag[]    @relation(fields: [tagIDs], references: [id])
+  tagId       String[] @db.ObjectId
+  post_to_tag  Tag[]    @relation(fields: [tagId], references: [id])
 
   // contestId      String   @db.ObjectId
   // post_to_contest  Contest @relation(fields: [contestId], references: [id])

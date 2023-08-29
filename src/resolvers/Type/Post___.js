@@ -14,9 +14,23 @@ const Post = {
     });
   },
   categoryId: async (parent, args, { prisma }, info) => {
-    return await prisma.category.findUnique({
+    return await prisma.category.findMany({
       where: {
-        id: parent.categoryId,
+        id: { in: parent.categoryId },
+      },
+    });
+  },
+  albumId: async (parent, args, { prisma }, info) => {
+    return await prisma.album.findMany({
+      where: {
+        id: { in: parent.albumId },
+      },
+    });
+  },
+  tagId: async (parent, args, { prisma }, info) => {
+    return await prisma.tag.findMany({
+      where: {
+        id: { in: parent.tagId },
       },
     });
   },

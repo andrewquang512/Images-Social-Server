@@ -9,7 +9,11 @@ const postMutation = {
           title: args.data.title,
           userId: args.data.userId,
           points: 0,
-          categoryId: args.data.categoryId,
+
+          categoryId: args.data.categoryId ? args.data.categoryId : [],
+          albumId: args.data.albumId ? args.data.albumId : [],
+          tagId: args.data.tagId ? args.data.tagId : [],
+
           image: {
             create: {
               url: args.data.imageURL,
@@ -102,7 +106,7 @@ const postMutation = {
         },
         data: {
           points: {
-            increment: args.data.isLike ? 1 : -1,
+            increment: args.data.qisLike ? 1 : -1,
           },
         },
       });

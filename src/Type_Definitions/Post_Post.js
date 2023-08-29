@@ -26,6 +26,10 @@ const postDefs = gql`
     imageURL: String!
     imageHash: String!
 
+    categoryId: [String]
+    albumId: [String]
+    tagId: [String]
+
     camera: String
     lens: String
     aperture: String
@@ -34,8 +38,6 @@ const postDefs = gql`
     ISO: String
     takenWhen: String
     copyRight: String
-
-    categoryId: ID!
   }
 
   input DeletePostInput {
@@ -61,12 +63,13 @@ const postDefs = gql`
     updatedAt: String!
     points: Int!
 
-    tagIDs: [Tag]!
+    tagId: [Tag]!
+    albumId: [Album]!
+    categoryId: [Category]!
 
     userId: User!
     comments: [Comment]!
     image: Image!
-    categoryId: Category!
   }
 `;
 
