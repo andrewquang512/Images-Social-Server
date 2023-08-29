@@ -22,17 +22,6 @@ const categoryDefs = gql`
     name: String!
   }
 
-  #   input DeletePostInput {
-  #     postId: ID!
-  #   }
-
-  #   input UpdatePostInput {
-  #     postId: ID!
-  #     title: String
-  #     body: String
-  #     published: Boolean
-  #   }
-
   type Category {
     id: ID!
     name: String!
