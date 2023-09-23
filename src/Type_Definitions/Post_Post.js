@@ -4,7 +4,37 @@ const postDefs = gql`
   extend type Query {
     allPosts: [Post]!
     postInfo(data: PostInfoInput!): Post!
+
+    getNewFeed(data: NewFeedInput!): PostConnection!
   }
+
+  input NewFeedInput {
+    userId: ID!
+    first: Int
+    after: String
+    last: Int
+    before: String
+    offset: Int
+  }
+
+  type PostConnection {
+    edges: [PostEdge!]!
+    pageInfo: PageInfo!
+  }
+
+  type PostEdge {
+    node: Post
+    cursor: String!
+  }
+
+  type PageInfo {
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+    startCursor: String
+    endCursor: String
+  }
+
+  #
 
   input PostInfoInput {
     postId: ID!
