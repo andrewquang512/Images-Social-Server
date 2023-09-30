@@ -2,7 +2,7 @@ const Album = {
   posts: async (parent, args, { prisma }, info) => {
     return await prisma.post.findMany({
       where: {
-        albumId: parent.id,
+        albumId: { has: parent.id },
       },
     });
   },

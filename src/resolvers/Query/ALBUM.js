@@ -9,8 +9,8 @@ const albumQuery = {
       },
     });
   },
-  userAllAlbumInfo: async (parent, args, { prisma }, info) => {
-    return await prisma.album.findUnique({
+  userAllAlbum: async (parent, args, { prisma }, info) => {
+    return await prisma.album.findMany({
       where: {
         userId: args.data.userId,
       },

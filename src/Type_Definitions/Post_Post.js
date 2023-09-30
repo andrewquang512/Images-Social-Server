@@ -5,17 +5,14 @@ const postDefs = gql`
     allPosts: [Post]!
     postInfo(data: PostInfoInput!): Post!
 
-    getNewFeed(data: NewFeedInput!): PostConnection!
+    getNewFeed(userId: String, after: String): PostConnection!
   }
 
-  input NewFeedInput {
-    userId: ID!
-    first: Int
-    after: String
-    last: Int
-    before: String
-    offset: Int
-  }
+  # input NewFeedInput {
+  #   userId: ID
+  #   begin: String
+  #   after: String
+  # }
 
   type PostConnection {
     edges: [PostEdge!]!

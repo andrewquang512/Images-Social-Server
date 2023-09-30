@@ -10,52 +10,52 @@ const postQuery = {
     });
   },
   getNewFeed: async (parent, args, { prisma }, info) => {
-    let nodes, startCursor, endCursor;
-    const offset = args.data.offset;
-    console.log({ offset });
+    let nodes;
+    const after = args.after;
+    console.log({ after });
 
-    if (offset === 0) {
-      let a = await prisma.post.findMany({
-        where: {
-          userId: args.data.userId,
-        },
-        orderBy: {
-          createdAt: 'desc',
-        },
-      });
+    let a = await prisma.post.findMany({
+      where: {
+        userId: args.userId,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
 
-      nodes = a.slice(0, 2).map((post, idx, array) => ({
+    if (!after) {
+      nodes = a.slice(0, 2).map((post) => ({
         node: post,
-        cursor: array[idx + 1] ? array[idx + 1].id : '64ec7d0450f027476c9df225',
+        cursor: post.id,
       }));
 
       console.log({ nodes });
+
+      // startCursor = nodes[0].cursor;
     } else {
-      let a = await prisma.post.findMany({
-        where: {
-          userId: args.data.userId,
-        },
-        orderBy: {
-          createdAt: 'desc',
-        },
-      });
-
-      nodes = a.slice(offset, offset + 2).map((post, idx, array) => ({
-        // nodes = a.slice(2, 4).map((post, idx, array) => ({
+      console.log('in after');
+      const index = a.findIndex((post) => post.id === after);
+      nodes = a.slice(index + 1, index + 3).map((post) => ({
         node: post,
-        cursor: array[idx + 1] ? array[idx + 1].id : 'end',
+        cursor: post.id,
       }));
 
       console.log({ nodes });
+
+      // startCursor = args.data.begin;
     }
+
+    const hasNextPage = nodes.slice(-1)[0].cursor !== a.slice(-1)[0].id;
+    console.log(nodes.slice(-1));
 
     return {
       edges: nodes,
       pageInfo: {
-        hasNextPage: offset ? false : true,
-        hasPreviousPage: offset ? true : false,
-        startCursor: nodes[0].node.id,
-        endCursor: nodes.slice(-1)[0].node.id,
+        hasNextPage,
+        hasPreviousPage: after ? true : false,
+        // startCursor,
+        startCursor: nodes[0].cursor,
+        endCursor: nodes.slice(-1)[0].cursor,
       },
     };
   },

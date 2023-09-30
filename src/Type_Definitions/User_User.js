@@ -70,6 +70,7 @@ const userDefs = gql`
     level: Level!
     posts: [Post]!
     stories: [Story]!
+    albums: [Album]!
 
     # followers: Follower!
     # followings: Following!

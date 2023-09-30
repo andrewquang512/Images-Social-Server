@@ -3,11 +3,11 @@ import gql from 'graphql-tag';
 const albumDefs = gql`
   extend type Query {
     allAlbums: [Album]!
-    userAllAlbumInfo(data: UserAllAlbumInfoInput!): Album!
+    userAllAlbum(data: UserAllAlbumInput!): [Album]!
     albumInfo(data: AlbumInfoInput!): Album!
   }
 
-  input UserAllAlbumInfoInput {
+  input UserAllAlbumInput {
     userId: ID!
   }
 
@@ -17,16 +17,26 @@ const albumDefs = gql`
 
   extend type Mutation {
     createAlbum(data: CreateAlbumInput!): Album!
+
+    deleteAlbum(data: DeleteAlbumInput!): Album!
+    deleteAllAlbum: DeleteAllReturnType!
+
+    updateAlbum(data: UpdateAlbumInput!): Album!
   }
 
   input CreateAlbumInput {
-    name: String!
     userId: ID!
+    name: String!
   }
 
-  #   input DeletePostInput {
-  #     postId: ID!
-  #   }
+  input DeleteAlbumInput {
+    albumId: ID!
+  }
+
+  input UpdateAlbumInput {
+    albumId: ID!
+    name: String!
+  }
 
   #   input UpdatePostInput {
   #     postId: ID!
