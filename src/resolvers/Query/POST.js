@@ -12,7 +12,7 @@ const postQuery = {
   getNewFeed: async (parent, args, { prisma }, info) => {
     let nodes;
     const after = args.after;
-    console.log({ after });
+    // console.log({ after });
 
     let a = await prisma.post.findMany({
       where: {
@@ -30,8 +30,6 @@ const postQuery = {
       }));
 
       console.log({ nodes });
-
-      // startCursor = nodes[0].cursor;
     } else {
       console.log('in after');
       const index = a.findIndex((post) => post.id === after);
@@ -41,12 +39,14 @@ const postQuery = {
       }));
 
       console.log({ nodes });
-
-      // startCursor = args.data.begin;
     }
 
-    const hasNextPage = nodes.slice(-1)[0].cursor !== a.slice(-1)[0].id;
-    console.log(nodes.slice(-1));
+    const hasNextPage =
+      nodes.length === 0
+        ? false
+        : nodes.slice(-1)[0].cursor !== a.slice(-1)[0].id;
+    // console.log(nodes.slice(-1));
+    console.log({ hasNextPage });
 
     return {
       edges: nodes,
@@ -54,8 +54,8 @@ const postQuery = {
         hasNextPage,
         hasPreviousPage: after ? true : false,
         // startCursor,
-        startCursor: nodes[0].cursor,
-        endCursor: nodes.slice(-1)[0].cursor,
+        startCursor: nodes.length === 0 ? '' : nodes[0].cursor,
+        endCursor: nodes.length === 0 ? '' : nodes.slice(-1)[0].cursor,
       },
     };
   },
