@@ -186,6 +186,8 @@ model Post {
   tagId       String[] @db.ObjectId
   post_to_tag  Tag[]    @relation(fields: [tagId], references: [id])
 
+  userLikedPost  String[]
+
   // contestId      String   @db.ObjectId
   // post_to_contest  Contest @relation(fields: [contestId], references: [id])
 }

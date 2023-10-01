@@ -99,33 +99,67 @@ const postMutation = {
   },
   interactPost: async (parent, args, { prisma }, info) => {
     let post;
-    try {
-      post = await prisma.post.update({
-        where: {
-          id: args.data.postId,
-        },
-        data: {
-          points: {
-            increment: args.data.qisLike ? 1 : -1,
-          },
-        },
-      });
 
-      if (post.points == -1) {
+    if (args.data.isLiked) {
+      try {
         post = await prisma.post.update({
           where: {
             id: args.data.postId,
           },
           data: {
-            points: 0,
+            points: {
+              increment: 1,
+            },
+            userLikedPost: {
+              push: args.data.likedUserId,
+            },
           },
         });
+      } catch (e) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+          console.log(e);
+        }
+        throw e;
       }
-    } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        console.log(e);
+    } else {
+      try {
+        const { userLikedPost } = await prisma.post.findUnique({
+          where: {
+            id: args.data.postId,
+          },
+        });
+        console.log(userLikedPost);
+
+        post = await prisma.post.update({
+          where: {
+            id: args.data.postId,
+          },
+          data: {
+            points: {
+              increment: -1,
+            },
+            userLikedPost: {
+              set: userLikedPost.filter((id) => id !== args.data.likedUserId),
+            },
+          },
+        });
+
+        if (post.points == -1) {
+          post = await prisma.post.update({
+            where: {
+              id: args.data.postId,
+            },
+            data: {
+              points: 0,
+            },
+          });
+        }
+      } catch (e) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+          console.log(e);
+        }
+        throw e;
       }
-      throw e;
     }
 
     return post;

@@ -73,7 +73,8 @@ const postDefs = gql`
 
   input InteractPostInput {
     postId: ID!
-    isLike: Int!
+    likedUserId: ID!
+    isLiked: Boolean!
   }
 
   # !!!!!!
@@ -97,6 +98,8 @@ const postDefs = gql`
     userId: User!
     comments: [Comment]!
     image: Image!
+
+    userLikedPost: [String]!
   }
 `;
 
