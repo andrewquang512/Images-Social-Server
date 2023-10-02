@@ -7,32 +7,22 @@ const tagDefs = gql`
   }
 
   input TagInfoInput {
-    tagId: ID!
+    tag: String!
   }
 
   extend type Mutation {
-    createTag(data: CreateTagData!): Tag!
-    # deleteComment(data: DeleteCommentInput!): Comment!
-    # updateComment(data: UpdateCommentInput!): Comment!
+    createTag(data: CreateTagData!): [Tag]!
+    deleteAllTag: DeleteAllReturnType!
   }
 
   input CreateTagData {
-    name: String!
+    name: [String]!
   }
-
-  # input DeleteCommentInput {
-  #   cmtId: ID!
-  # }
-
-  # input UpdateCommentInput {
-  #   cmtId: ID!
-  #   content: String!
-  # }
 
   type Tag {
     id: ID!
     name: String!
-    postIDs: [Post]!
+    posts: [Post]!
   }
 `;
 

@@ -7,6 +7,7 @@ import storyMutation from './story.js';
 import commentMutation from './comment.js';
 import categoryMutation from './category.js';
 import albumMutation from './album.js';
+// import tagMutation from './tag.js';
 import followerMutation from './follower.js';
 import followingMutation from './following.js';
 
@@ -29,6 +30,8 @@ const Mutation = {
   ...categoryMutation,
   // Album
   ...albumMutation,
+  // Tag
+  // ...tagMutation,
   // Follower
   ...followerMutation,
   // Following

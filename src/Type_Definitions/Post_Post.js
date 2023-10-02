@@ -55,7 +55,7 @@ const postDefs = gql`
 
     categoryId: [String]
     albumId: [String]
-    tagId: [String]
+    tag: [String]
 
     camera: String
     lens: String
@@ -91,7 +91,7 @@ const postDefs = gql`
     updatedAt: String!
     points: Int!
 
-    tagId: [Tag]!
+    tag: [String]!
     albumId: [Album]!
     categoryId: [Category]!
 

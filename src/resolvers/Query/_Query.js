@@ -7,6 +7,7 @@ import storyQuery from './STORY.js';
 import commentQuery from './COMMENT.js';
 import categoryQuery from './CATEGORY.js';
 import albumQuery from './ALBUM.js';
+// import tagQuery from './TAG.js';
 import followerQuery from './FOLLOWER.js';
 import followingQuery from './FOLLOWING.js';
 
@@ -29,6 +30,8 @@ const Query = {
   ...categoryQuery,
   // ALbum
   ...albumQuery,
+  // Tag
+  // ...tagQuery,
   // Follower
   ...followerQuery,
   // Following

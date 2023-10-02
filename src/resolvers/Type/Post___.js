@@ -27,13 +27,13 @@ const Post = {
       },
     });
   },
-  tagId: async (parent, args, { prisma }, info) => {
-    return await prisma.tag.findMany({
-      where: {
-        id: { in: parent.tagId },
-      },
-    });
-  },
+  // tagId: async (parent, args, { prisma }, info) => {
+  //   return await prisma.tag.findMany({
+  //     where: {
+  //       name: { in: parent.tagId },
+  //     },
+  //   });
+  // },
   comments: async (parent, args, { prisma }, info) => {
     return await prisma.comment.findMany({
       where: {

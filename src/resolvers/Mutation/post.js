@@ -12,7 +12,7 @@ const postMutation = {
 
           categoryId: args.data.categoryId ? args.data.categoryId : [],
           albumId: args.data.albumId ? args.data.albumId : [],
-          tagId: args.data.tagId ? args.data.tagId : [],
+          tag: args.data.tag ? args.data.tag : [],
 
           image: {
             create: {

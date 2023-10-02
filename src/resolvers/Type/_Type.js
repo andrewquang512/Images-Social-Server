@@ -7,6 +7,7 @@ import Story from './Story___.js';
 import Comment from './Comment___.js';
 import Category from './Category___.js';
 import Album from './Album___.js';
+// import Tag from './Tag___.js';
 import Follower from './Follower___.js';
 import Following from './Following___.js';
 
@@ -20,6 +21,7 @@ const Type = {
   Comment,
   Category,
   Album,
+  // Tag,
   Follower,
   Following,
 };
