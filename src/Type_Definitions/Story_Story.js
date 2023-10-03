@@ -15,6 +15,7 @@ const storyDefs = gql`
     deleteStory(data: DeleteStoryInput!): Story!
     deleteAllStory: DeleteAllReturnType!
     updateStory(data: UpdateStoryInput!): Story!
+    interactStory(data: InteractStoryInput!): Story!
   }
 
   input CreateStoryInput {
@@ -34,6 +35,12 @@ const storyDefs = gql`
     content: String
   }
 
+  input InteractStoryInput {
+    storyId: ID!
+    likedUserId: ID!
+    isLiked: Boolean!
+  }
+
   type Story {
     id: ID!
     title: String!
@@ -46,6 +53,8 @@ const storyDefs = gql`
     comments: [Comment]!
 
     userId: User!
+
+    userLikedStory: [String]!
   }
 `;
 

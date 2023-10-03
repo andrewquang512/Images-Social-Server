@@ -204,6 +204,8 @@ model Story {
 
   userId        String @db.ObjectId
   story_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  userLikedStory  String[]
 }
 
 model Comment {

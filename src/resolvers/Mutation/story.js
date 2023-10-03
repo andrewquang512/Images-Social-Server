@@ -75,6 +75,73 @@ const storyMutation = {
 
   //   return updatedUser;
   // },
+  interactStory: async (parent, args, { prisma }, info) => {
+    let story;
+
+    if (args.data.isLiked) {
+      try {
+        story = await prisma.story.update({
+          where: {
+            id: args.data.storyId,
+          },
+          data: {
+            points: {
+              increment: 1,
+            },
+            userLikedStory: {
+              push: args.data.likedUserId,
+            },
+          },
+        });
+      } catch (e) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+          console.log(e);
+        }
+        throw e;
+      }
+    } else {
+      try {
+        const { userLikedStory } = await prisma.story.findUnique({
+          where: {
+            id: args.data.storyId,
+          },
+        });
+        console.log(userLikedStory);
+
+        story = await prisma.story.update({
+          where: {
+            id: args.data.storyId,
+          },
+          data: {
+            points: {
+              increment: -1,
+            },
+            userLikedStory: {
+              set: userLikedStory.filter((id) => id !== args.data.likedUserId),
+            },
+          },
+        });
+
+        if (story.points == -1) {
+          story = await prisma.post.update({
+            where: {
+              id: args.data.storyId,
+            },
+            data: {
+              points: 0,
+            },
+          });
+        }
+      } catch (e) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+          console.log(e);
+        }
+        throw e;
+      }
+    }
+
+    return story;
+  },
 };
 
 export default storyMutation;
