@@ -4,7 +4,6 @@ const postDefs = gql`
   extend type Query {
     allPosts: [Post]!
     postInfo(data: PostInfoInput!): Post!
-
     getNewFeed(userId: String, after: String): PostConnection!
   }
 

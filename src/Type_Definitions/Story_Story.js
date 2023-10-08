@@ -4,6 +4,7 @@ const storyDefs = gql`
   extend type Query {
     allStories: [Story]!
     storyInfo(data: StoryInfoInput!): Story!
+    getNewStories(limit: Int, after: String): [Story]!
   }
 
   input StoryInfoInput {

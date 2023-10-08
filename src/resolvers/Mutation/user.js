@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import * as Prisma from '@prisma/client';
 
 const userMutation = {
   createUser: async (parent, args, { prisma }, info) => {

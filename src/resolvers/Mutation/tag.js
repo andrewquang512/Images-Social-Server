@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import * as Prisma from '@prisma/client';
 
 const tagMutation = {
   createTag: async (parent, args, { prisma }, info) => {
