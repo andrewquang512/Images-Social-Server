@@ -30,9 +30,9 @@ const levelMutation = {
         });
       }
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        console.log(e);
-      }
+      // if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      //   console.log(e);
+      // }
       throw e;
     }
 

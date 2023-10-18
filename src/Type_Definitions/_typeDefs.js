@@ -21,6 +21,11 @@ const baseDefs = gql`
     _TEST_MUTATION: Int!
   }
 
+  type SearchReturnType {
+    tags: [String]
+    users: [User]
+  }
+
   type DeleteAllReturnType {
     count: Int!
     message: String

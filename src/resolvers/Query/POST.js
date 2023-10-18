@@ -1,3 +1,6 @@
+import _ from 'lodash';
+import Jimp from 'jimp';
+
 const postQuery = {
   allPosts: async (parent, args, { prisma }, info) => {
     return await prisma.post.findMany();
@@ -59,6 +62,58 @@ const postQuery = {
       },
     };
   },
+  searchQuery: async (parent, args, { prisma }, info) => {},
+  similarImages: async (parent, args, { prisma }, info) => {
+    let result = [];
+
+    // const currentImage = await prisma.post.findUnique({
+    //   where: {
+    //     id: args.data.postId,
+    //   },
+    // });
+
+    const currentImage = await prisma.image.findUnique({
+      where: {
+        postId: args.data.postId,
+      },
+    });
+
+    let allImages = await prisma.image.findMany();
+
+    allImages = _.filter(allImages, (o) => o.id != currentImage.id);
+
+    allImages.map(async (img) => {
+      if (compareImages(currentImage.url, img.url)) {
+        result.push(img);
+      }
+    });
+
+    console.log(result);
+    return result;
+  },
 };
 
 export default postQuery;
+
+async function compareImages(image1Url, image2Url) {
+  const image1 = await Jimp.read(image1Url);
+  const image2 = await Jimp.read(image2Url);
+  // Perceived distance
+  const distance = Jimp.distance(image1, image2);
+  // Pixel difference
+  const diff = Jimp.diff(image1, image2);
+
+  // console.log(
+  //   `compareImages: distance: ${distance.toFixed(
+  //     3,
+  //   )}, diff.percent: ${diff.percent.toFixed(3)}`,
+  // );
+
+  if (distance < 0.15 || diff.percent < 0.15) {
+    console.log('compareImages: Images match!');
+    return true;
+  } else {
+    console.log('compareImages: Images do NOT match!');
+    return false;
+  }
+}

@@ -170,6 +170,7 @@ model Post {
   title     String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  isVisible Boolean
   points    Int
   image     Image?
   cmts      Comment[]

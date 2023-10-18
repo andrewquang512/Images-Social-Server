@@ -8,6 +8,7 @@ const postMutation = {
         data: {
           title: args.data.title,
           userId: args.data.userId,
+          isVisible: true,
           points: 0,
 
           categoryId: args.data.categoryId ? args.data.categoryId : [],

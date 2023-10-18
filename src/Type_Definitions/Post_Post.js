@@ -5,6 +5,10 @@ const postDefs = gql`
     allPosts: [Post]!
     postInfo(data: PostInfoInput!): Post!
     getNewFeed(userId: String, after: String): PostConnection!
+
+    searchQuery(data: SearchQueryInput!): SearchReturnType!
+
+    similarImages(data: SimilarImagesInput!): [Image]!
   }
 
   # input NewFeedInput {
@@ -12,6 +16,15 @@ const postDefs = gql`
   #   begin: String
   #   after: String
   # }
+
+  input SimilarImagesInput {
+    postId: ID!
+  }
+
+  input SearchQueryInput {
+    userId: ID
+    searchString: String
+  }
 
   type PostConnection {
     edges: [PostEdge!]!
@@ -29,8 +42,6 @@ const postDefs = gql`
     startCursor: String
     endCursor: String
   }
-
-  #
 
   input PostInfoInput {
     postId: ID!
@@ -88,6 +99,7 @@ const postDefs = gql`
     title: String!
     createdAt: String!
     updatedAt: String!
+    isVisible: Boolean!
     points: Int!
 
     tag: [String]!

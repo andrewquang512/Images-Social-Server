@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const userQuery = {
   allUsers: async (parent, args, { prisma }, info) => {
     return await prisma.user.findMany();
@@ -21,6 +23,33 @@ const userQuery = {
         ],
       },
     });
+  },
+  suggestUserToFollow: async (parent, args, { prisma }, info) => {
+    const a = await prisma.user.findMany({
+      where: {
+        id: { not: args.data.userId },
+        isAdmin: 0,
+      },
+    });
+
+    const b = await prisma.following.findUnique({
+      where: {
+        userId: args.data.userId,
+      },
+    });
+
+    // console.log({ a });
+    // console.log({ b });
+
+    const c = a.filter((elem) => !b.userFollowing.find((id) => elem.id === id));
+
+    console.log({ c });
+
+    if (c.length > 3) {
+      return _.sampleSize(c, 3);
+    } else {
+      return c;
+    }
   },
 };
 

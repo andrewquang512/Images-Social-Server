@@ -1,3 +1,5 @@
+import * as Prisma from '@prisma/client';
+
 const followingMutation = {
   updateFollowing: async (parent, args, { prisma }, info) => {
     let user;
