@@ -62,7 +62,51 @@ const postQuery = {
       },
     };
   },
-  searchQuery: async (parent, args, { prisma }, info) => {},
+  searchQuery: async (parent, args, { prisma }, info) => {
+    let tags = [],
+      users = [];
+
+    users = await prisma.user.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              startsWith: args.data.searchString,
+            },
+          },
+          {
+            name: {
+              contains: args.data.searchString,
+            },
+          },
+        ],
+      },
+      orderBy: [
+        {
+          name: 'asc',
+        },
+      ],
+    });
+
+    tags = await prisma.tag.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              startsWith: args.data.searchString,
+            },
+          },
+          {
+            name: {
+              contains: args.data.searchString,
+            },
+          },
+        ],
+      },
+    });
+
+    return { tags, users };
+  },
   similarImages: async (parent, args, { prisma }, info) => {
     let result = [];
 

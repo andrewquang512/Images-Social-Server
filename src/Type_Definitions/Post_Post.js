@@ -22,8 +22,8 @@ const postDefs = gql`
   }
 
   input SearchQueryInput {
-    userId: ID
-    searchString: String
+    userId: ID!
+    searchString: String!
   }
 
   type PostConnection {

@@ -3,7 +3,7 @@ const tagQuery = {
     return await prisma.tag.findMany();
   },
   tagInfo: async (parent, args, { prisma }, info) => {
-    return await prisma.category.findUnique({
+    return await prisma.tag.findUnique({
       where: {
         id: args.data.tag.toLowerCase(),
       },

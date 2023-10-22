@@ -153,15 +153,15 @@ model Album {
 
 }
 
-// model Tag {
-//   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-//   name      String
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
+model Tag {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-//   posts     String[] @db.ObjectId
-//   tag_to_post Post[]   @relation(fields: [posts], references: [id])
-// }
+  // posts     String[] @db.ObjectId
+  // tag_to_post Post[]   @relation(fields: [posts], references: [id])
+}
 
 
 
