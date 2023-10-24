@@ -59,6 +59,7 @@ const postDefs = gql`
     userId: ID!
 
     title: String!
+    caption: String!
 
     imageURL: String!
     imageHash: String!
@@ -97,6 +98,7 @@ const postDefs = gql`
   type Post {
     id: ID!
     title: String!
+    caption: String!
     createdAt: String!
     updatedAt: String!
     isVisible: Boolean!

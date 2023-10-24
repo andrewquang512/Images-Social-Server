@@ -7,6 +7,7 @@ const postMutation = {
       post = await prisma.post.create({
         data: {
           title: args.data.title,
+          caption: args.data.caption,
           userId: args.data.userId,
           isVisible: true,
           points: 0,
