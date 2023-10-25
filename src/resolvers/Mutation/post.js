@@ -9,7 +9,7 @@ const postMutation = {
           title: args.data.title,
           caption: args.data.caption,
           userId: args.data.userId,
-          isVisible: true,
+          isVisible: args.data.isVisible,
           points: 0,
 
           categoryId: args.data.categoryId ? args.data.categoryId : [],

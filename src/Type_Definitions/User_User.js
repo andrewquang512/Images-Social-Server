@@ -76,9 +76,6 @@ const userDefs = gql`
     posts: [Post]!
     stories: [Story]!
     albums: [Album]!
-
-    # followers: Follower!
-    # followings: Following!
   }
 `;
 

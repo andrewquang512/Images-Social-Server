@@ -60,6 +60,7 @@ const postDefs = gql`
 
     title: String!
     caption: String!
+    isVisible: Boolean!
 
     imageURL: String!
     imageHash: String!

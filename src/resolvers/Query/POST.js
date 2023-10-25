@@ -80,6 +80,11 @@ const postQuery = {
             },
           },
         ],
+        AND: [
+          {
+            isAdmin: 0,
+          },
+        ],
       },
       orderBy: [
         {
