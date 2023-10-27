@@ -20,6 +20,7 @@ const postQuery = {
     let a = await prisma.post.findMany({
       where: {
         userId: args.userId,
+        isVisible: true,
       },
       orderBy: {
         createdAt: 'desc',
@@ -57,6 +58,52 @@ const postQuery = {
         hasNextPage,
         hasPreviousPage: after ? true : false,
         // startCursor,
+        startCursor: nodes.length === 0 ? '' : nodes[0].cursor,
+        endCursor: nodes.length === 0 ? '' : nodes.slice(-1)[0].cursor,
+      },
+    };
+  },
+  getAllUserPosts: async (parent, args, { prisma }, info) => {
+    let nodes;
+    const after = args.after;
+
+    let a = await prisma.post.findMany({
+      where: {
+        userId: args.userId,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    if (!after) {
+      nodes = a.slice(0, 2).map((post) => ({
+        node: post,
+        cursor: post.id,
+      }));
+
+      // console.log({ nodes });
+    } else {
+      // console.log('in after');
+      const index = a.findIndex((post) => post.id === after);
+      nodes = a.slice(index + 1, index + 3).map((post) => ({
+        node: post,
+        cursor: post.id,
+      }));
+
+      console.log({ nodes });
+    }
+
+    const hasNextPage =
+      nodes.length === 0
+        ? false
+        : nodes.slice(-1)[0].cursor !== a.slice(-1)[0].id;
+
+    return {
+      edges: nodes,
+      pageInfo: {
+        hasNextPage,
+        hasPreviousPage: after ? true : false,
         startCursor: nodes.length === 0 ? '' : nodes[0].cursor,
         endCursor: nodes.length === 0 ? '' : nodes.slice(-1)[0].cursor,
       },
