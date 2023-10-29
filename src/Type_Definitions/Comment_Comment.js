@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-const cmtDefs = gql`
+const commentDefs = gql`
   # extend type Query {
   #   postComments: [Comment]!
   #   userComments: [Comment]!
@@ -10,6 +10,25 @@ const cmtDefs = gql`
     createComment(data: CreateCommentInput!): Comment!
     deleteComment(data: DeleteCommentInput!): Comment!
     updateComment(data: UpdateCommentInput!): Comment!
+    voteCommand(data: VoteCommentInput!): Comment!
+  }
+
+  extend type Query {
+    getCommentsByPostId(data: GetCommentsByPostIdInput): [Comment]!
+  }
+
+  input GetCommentsByPostIdInput {
+    postId: ID!
+  }
+
+  enum voteCommentAction {
+    UPVOTE
+    DOWNVOTE
+  }
+
+  input VoteCommentInput {
+    commentId: ID!
+    action: voteCommentAction!
   }
 
   input CreateCommentInput {
@@ -20,11 +39,11 @@ const cmtDefs = gql`
   }
 
   input DeleteCommentInput {
-    cmtId: ID!
+    commentId: ID!
   }
 
   input UpdateCommentInput {
-    cmtId: ID!
+    commentId: ID!
     content: String!
   }
 
@@ -36,7 +55,9 @@ const cmtDefs = gql`
     userId: User!
     postId: Post!
     storyId: Story!
+
+    votes: Int!
   }
 `;
 
-export default cmtDefs;
+export default commentDefs;
