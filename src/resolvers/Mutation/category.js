@@ -1,7 +1,7 @@
-import * as Prisma from '@prisma/client';
+import { prisma } from '../../prisma/database.js';
 
 const categoryMutation = {
-  createCategory: async (parent, args, { prisma }, info) => {
+  createCategory: async (parent, args, info) => {
     let category;
     try {
       category = await prisma.category.create({

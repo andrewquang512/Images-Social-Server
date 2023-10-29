@@ -1,17 +1,13 @@
-import _ from 'lodash';
+import { prisma } from '../../prisma/database.js';
 
 const tagQuery = {
-  allTags: async (parent, args, { prisma }, info) => {
+  allTags: async (parent, args, info) => {
     return await prisma.tag.findMany();
   },
-  suggestTags: async (parent, args, { prisma }, info) => {
-    const a = await prisma.tag.findMany();
-    return a.slice(0, 10);
-  },
-  tagInfo: async (parent, args, { prisma }, info) => {
-    return await prisma.tag.findUnique({
+  tagInfo: async (parent, args, info) => {
+    return await prisma.category.findUnique({
       where: {
-        name: args.data.tag.toLowerCase(),
+        id: args.data.tag.toLowerCase(),
       },
     });
   },

@@ -4,23 +4,14 @@ const postDefs = gql`
   extend type Query {
     allPosts: [Post]!
     postInfo(data: PostInfoInput!): Post!
-
     getNewFeed(userId: String, after: String): PostConnection!
-    getAllUserPosts(userId: String, after: String): PostConnection!
-
-    searchQuery(data: SearchQueryInput!): SearchReturnType!
-
-    similarImages(data: SimilarImagesInput!): [Image]!
   }
 
-  input SimilarImagesInput {
-    postId: ID!
-  }
-
-  input SearchQueryInput {
-    userId: ID!
-    searchString: String!
-  }
+  # input NewFeedInput {
+  #   userId: ID
+  #   begin: String
+  #   after: String
+  # }
 
   type PostConnection {
     edges: [PostEdge!]!
@@ -39,6 +30,8 @@ const postDefs = gql`
     endCursor: String
   }
 
+  #
+
   input PostInfoInput {
     postId: ID!
   }
@@ -55,8 +48,6 @@ const postDefs = gql`
     userId: ID!
 
     title: String!
-    caption: String!
-    isVisible: Boolean!
 
     imageURL: String!
     imageHash: String!
@@ -89,17 +80,14 @@ const postDefs = gql`
   input UpdatePostInput {
     postId: ID!
     title: String
-    # caption: String
-    isVisible: Boolean
+    body: String
   }
 
   type Post {
     id: ID!
     title: String!
-    caption: String!
     createdAt: String!
     updatedAt: String!
-    isVisible: Boolean!
     points: Int!
 
     tag: [String]!

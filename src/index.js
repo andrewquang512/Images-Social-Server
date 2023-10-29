@@ -1,21 +1,15 @@
 // Apollo
-import { ApolloServer } from 'apollo-server';
-// import { makeExecutableSchema } from '@graphql-tools/schema';
-// import { WebSocketServer } from 'ws';
-// import { useServer } from 'graphql-ws/lib/use/ws';
+import { ApolloServer } from '@apollo/server';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import { startStandaloneServer } from '@apollo/server/standalone';
+
 // Prisma
-import { PrismaClient } from '@prisma/client';
+import { prisma } from './prisma/database.js';
+
 // Type definitions and resolvers
 import typeDefs from './Type_Definitions/_typeDefs.js';
 import resolvers from './resolvers/resolvers.js';
 import { loggingPlugin } from './logging.js';
-
-// Connect to MongoDB
-export const prisma = new PrismaClient({
-  ...(parseInt(process.env.IS_LOGGING) && {
-    log: ['query', 'info', 'warn', 'error'],
-  }),
-});
 
 const connectToDatabase = async () => {
   try {
@@ -40,12 +34,16 @@ const server = new ApolloServer({
     origin: '*', // <- allow request from all domains
     credentials: true, // <- enable CORS response for requests with credentials (cookies, http authentication)
   },
-  plugins: [loggingPlugin],
-  plugins: [...(parseInt(process.env.IS_LOGGING) ? [loggingPlugin] : [])],
+  plugins: [
+    ApolloServerPluginLandingPageLocalDefault,
+    ...(parseInt(process.env.IS_LOGGING) ? [loggingPlugin] : []),
+  ],
   logger: console,
   // csrfPrevention: true,
 });
 
-server.listen().then(({ url }) => {
-  console.log(`Server ready on ${url}`);
+const { url } = await startStandaloneServer(server, {
+  listen: { port: 4000 },
 });
+
+console.log(`Server ready at: ${url}`);

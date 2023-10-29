@@ -4,24 +4,7 @@ const storyDefs = gql`
   extend type Query {
     allStories: [Story]!
     storyInfo(data: StoryInfoInput!): Story!
-    getNewStories(limit: Int, after: String): StoryConnection!
-  }
-
-  type StoryConnection {
-    edges: [StoryEdge!]!
-    pageInfo: PageInfo!
-  }
-
-  type StoryEdge {
-    node: Story
-    cursor: String!
-  }
-
-  type PageInfo {
-    hasNextPage: Boolean!
-    hasPreviousPage: Boolean!
-    startCursor: String
-    endCursor: String
+    getNewStories(limit: Int, after: String): [Story]!
   }
 
   input StoryInfoInput {
