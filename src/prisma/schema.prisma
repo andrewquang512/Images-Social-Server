@@ -227,6 +227,8 @@ model Comment {
 
   storyId      String @db.ObjectId
   cmt_to_story Story  @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  votes    Int @default(0)
 }
 
 model Contest {

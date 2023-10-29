@@ -5,7 +5,7 @@ import imageDefs from './Image_Image.js';
 import imageInfoDefs from './ImageInfo_ImageInfo.js';
 import postDefs from './Post_Post.js';
 import storyDefs from './Story_Story.js';
-import cmtDefs from './Cmt_Cmt.js';
+import commentDefs from './Comment_Comment.js';
 import tagDefs from './Tag_Tag.js';
 import categoryDefs from './Category_Category.js';
 import albumDefs from './Album_Album.js';
@@ -35,7 +35,7 @@ const typeDefs = [
   imageInfoDefs,
   postDefs,
   storyDefs,
-  cmtDefs,
+  commentDefs,
   tagDefs,
   categoryDefs,
   albumDefs,
