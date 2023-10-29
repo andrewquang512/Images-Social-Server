@@ -15,10 +15,14 @@ const commentDefs = gql`
 
   extend type Query {
     getCommentsByPostId(data: GetCommentsByPostIdInput): [Comment]!
+    getCommentsByStoryId(data: GetCommentsByStoryIdInput): [Comment]!
   }
 
   input GetCommentsByPostIdInput {
     postId: ID!
+  }
+  input GetCommentsByStoryIdInput {
+    storyId: ID!
   }
 
   enum voteCommentAction {
