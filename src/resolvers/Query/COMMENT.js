@@ -8,14 +8,19 @@ const commentQuery = {
    */
   getCommentsByPostId: async (parent, args, { prisma }, info) => {
     const { postId } = args.data;
-    return await prisma.comment.findMany({
+    const result = await prisma.comment.findMany({
       where: {
         postId: postId,
       },
-      orderBy: {
-        votes: 'desc',
-      },
+      // Wrong
+      // orderBy: {
+      //   votes: 'desc',
+      // },
     });
+
+    // Sort By Desc
+    const sorted = result.sort((before, after) => after.votes - before.votes);
+    return sorted;
   },
   // userComments: async (parent, args, { prisma }, info) => {
   //   return await prisma.post.findMany();
