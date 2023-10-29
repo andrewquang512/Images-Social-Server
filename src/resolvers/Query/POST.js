@@ -13,44 +13,92 @@ const postQuery = {
     });
   },
   getNewFeed: async (parent, args, { prisma }, info) => {
-    let nodes;
+    let a, nodes;
     const after = args.after;
-    // console.log({ after });
-
-    let a = await prisma.post.findMany({
-      where: {
-        userId: args.userId,
-        isVisible: true,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
 
     if (!after) {
+      a = await prisma.post.findMany({
+        where: {
+          userId: args.userId,
+          postViewStatus: 'PUBLIC',
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+
       nodes = a.slice(0, 2).map((post) => ({
         node: post,
         cursor: post.id,
       }));
 
-      console.log({ nodes });
+      // console.log({ nodes });
     } else {
-      console.log('in after');
-      const index = a.findIndex((post) => post.id === after);
-      nodes = a.slice(index + 1, index + 3).map((post) => ({
-        node: post,
-        cursor: post.id,
-      }));
+      const b = await prisma.following.findUnique({
+        where: {
+          userId: args.userId,
+        },
+      });
 
-      console.log({ nodes });
+      console.log({ b });
+      console.log(args);
+
+      console.log(args.timeCall);
+
+      if (args.timeCall % 2 === 1) {
+        a = await prisma.post.findMany({
+          where: {
+            userId: { in: b.userFollowing },
+            OR: [
+              { postViewStatus: 'PUBLIC' },
+              { postViewStatus: 'ONLY_FOLLOWERS' },
+            ],
+          },
+          orderBy: [
+            {
+              createdAt: 'desc',
+            },
+            { points: 'desc' },
+          ],
+          skip: (args.timeCall - 1) * 6,
+          take: 6,
+        });
+
+        nodes = _.shuffle(a).map((post) => ({
+          node: post,
+          cursor: post.id,
+        }));
+        console.log({ nodes });
+      } else {
+        a = await prisma.post.findMany({
+          where: {
+            userId: { notIn: b.userFollowing },
+            postViewStatus: 'PUBLIC',
+          },
+          orderBy: [
+            {
+              createdAt: 'desc',
+            },
+            { points: 'desc' },
+          ],
+          skip: (args.timeCall - 2) * 3,
+          take: 3,
+        });
+
+        nodes = _.shuffle(a).map((post) => ({
+          node: post,
+          cursor: post.id,
+        }));
+        console.log({ nodes });
+      }
     }
 
-    const hasNextPage =
-      nodes.length === 0
-        ? false
-        : nodes.slice(-1)[0].cursor !== a.slice(-1)[0].id;
-    // console.log(nodes.slice(-1));
-    console.log({ hasNextPage });
+    const hasNextPage = true;
+    //   nodes.length === 0
+    //     ? false
+    //     : nodes.slice(-1)[0].cursor !== a.slice(-1)[0].id;
+    // // console.log(nodes.slice(-1));
+    // console.log({ hasNextPage });
 
     return {
       edges: nodes,
@@ -67,14 +115,51 @@ const postQuery = {
     let nodes;
     const after = args.after;
 
-    let a = await prisma.post.findMany({
-      where: {
-        userId: args.userId,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
+    let a;
+
+    if (args.currentUserId === args.userId) {
+      a = await prisma.post.findMany({
+        where: {
+          userId: args.userId,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+    } else {
+      console.log(2);
+      const follower = await prisma.follower.findUnique({
+        where: {
+          userId: args.userId,
+        },
+      });
+
+      if (follower.userFollower.contains(currentUserId)) {
+        console.log(3);
+        a = await prisma.post.findMany({
+          where: {
+            userId: args.userId,
+            OR: [
+              { postViewStatus: 'PUBLIC' },
+              { postViewStatus: 'ONLY_FOLLOWERS' },
+            ],
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        });
+      } else {
+        a = await prisma.post.findMany({
+          where: {
+            userId: args.userId,
+            postViewStatus: 'PUBLIC',
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        });
+      }
+    }
 
     if (!after) {
       nodes = a.slice(0, 2).map((post) => ({

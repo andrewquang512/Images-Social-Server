@@ -163,7 +163,11 @@ model Tag {
   // tag_to_post Post[]   @relation(fields: [posts], references: [id])
 }
 
-
+enum ViewStatus {
+    PUBLIC
+    ONLY_FOLLOWERS
+    PRIVATE
+  }
 
 model Post {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
@@ -171,7 +175,7 @@ model Post {
   caption   String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  isVisible Boolean
+  postViewStatus ViewStatus @default(PUBLIC)
   points    Int
   image     Image?
   cmts      Comment[]
@@ -196,6 +200,7 @@ model Post {
 model Story {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   title     String
+  storyViewStatus ViewStatus @default(PUBLIC)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   points    Int

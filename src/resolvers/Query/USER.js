@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 const userQuery = {
   allUsers: async (parent, args, { prisma }, info) => {
-    return await prisma.user.findMany();
+    return await prisma.user.findMany({});
   },
   userInfo: async (parent, args, { prisma }, info) => {
     return await prisma.user.findUnique({

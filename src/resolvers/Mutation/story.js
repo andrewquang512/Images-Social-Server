@@ -8,6 +8,7 @@ const storyMutation = {
         data: {
           userId: args.data.userId,
           title: args.data.title,
+          storyViewStatus: args.data.storyViewStatus,
           content: args.data.content,
           images: args.data.images,
           points: 0,

@@ -22,6 +22,7 @@ const storyDefs = gql`
   input CreateStoryInput {
     userId: ID!
     title: String!
+    storyViewStatus: ViewStatus!
     content: String!
     images: [String]!
   }
@@ -45,6 +46,8 @@ const storyDefs = gql`
   type Story {
     id: ID!
     title: String!
+    storyViewStatus: ViewStatus!
+
     createdAt: String!
     updatedAt: String!
     content: String!

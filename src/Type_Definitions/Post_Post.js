@@ -5,8 +5,12 @@ const postDefs = gql`
     allPosts: [Post]!
     postInfo(data: PostInfoInput!): Post!
 
-    getNewFeed(userId: String, after: String): PostConnection!
-    getAllUserPosts(userId: String, after: String): PostConnection!
+    getNewFeed(userId: String, after: String, timeCall: Int): PostConnection!
+    getAllUserPosts(
+      userId: String
+      currentUserId: String
+      after: String
+    ): PostConnection!
 
     searchQuery(data: SearchQueryInput!): SearchReturnType!
 
@@ -51,12 +55,18 @@ const postDefs = gql`
     interactPost(data: InteractPostInput!): Post!
   }
 
+  enum ViewStatus {
+    PUBLIC
+    ONLY_FOLLOWERS
+    PRIVATE
+  }
+
   input CreatePostInput {
     userId: ID!
 
     title: String!
     caption: String!
-    isVisible: Boolean!
+    postViewStatus: ViewStatus!
 
     imageURL: String!
     imageHash: String!
@@ -90,7 +100,7 @@ const postDefs = gql`
     postId: ID!
     title: String
     # caption: String
-    isVisible: Boolean
+    postViewStatus: Boolean
   }
 
   type Post {
@@ -99,7 +109,7 @@ const postDefs = gql`
     caption: String!
     createdAt: String!
     updatedAt: String!
-    isVisible: Boolean!
+    postViewStatus: ViewStatus!
     points: Int!
 
     tag: [String]!
