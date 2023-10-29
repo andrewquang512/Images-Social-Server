@@ -93,17 +93,10 @@ const postQuery = {
       }
     }
 
-    const hasNextPage = true;
-    //   nodes.length === 0
-    //     ? false
-    //     : nodes.slice(-1)[0].cursor !== a.slice(-1)[0].id;
-    // // console.log(nodes.slice(-1));
-    // console.log({ hasNextPage });
-
     return {
       edges: nodes,
       pageInfo: {
-        hasNextPage,
+        hasNextPage: nodes.length ? true : false,
         hasPreviousPage: after ? true : false,
         // startCursor,
         startCursor: nodes.length === 0 ? '' : nodes[0].cursor,
