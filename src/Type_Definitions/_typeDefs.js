@@ -5,8 +5,8 @@ import imageDefs from './Image_Image.js';
 import imageInfoDefs from './ImageInfo_ImageInfo.js';
 import postDefs from './Post_Post.js';
 import storyDefs from './Story_Story.js';
-import commentDefs from './Comment_Comment.js';
-import tagDefs from './Tag_Tag.js';
+import cmtDefs from './Cmt_Cmt.js';
+// import tagDefs from './Tag_Tag.js';
 import categoryDefs from './Category_Category.js';
 import albumDefs from './Album_Album.js';
 import followingDefs from './Following_Following.js';
@@ -19,11 +19,6 @@ const baseDefs = gql`
 
   type Mutation {
     _TEST_MUTATION: Int!
-  }
-
-  type SearchReturnType {
-    tags: [Tag]
-    users: [User]
   }
 
   type DeleteAllReturnType {
@@ -40,8 +35,8 @@ const typeDefs = [
   imageInfoDefs,
   postDefs,
   storyDefs,
-  commentDefs,
-  tagDefs,
+  cmtDefs,
+  // tagDefs,
   categoryDefs,
   albumDefs,
   followingDefs,

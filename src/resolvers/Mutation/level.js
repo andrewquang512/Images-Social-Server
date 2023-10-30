@@ -1,5 +1,10 @@
+import { prisma } from '../../prisma/database.js';
+
 const levelMutation = {
-  updateLevel: async (parent, args, { prisma }, info) => {
+  // ! Ko can dung, da lam trong create user
+  // createLevel
+  //!!!
+  updateLevel: async (parent, args, info) => {
     let userLevel;
     try {
       userLevel = await prisma.level.update({
@@ -27,6 +32,9 @@ const levelMutation = {
         });
       }
     } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        console.log(e);
+      }
       throw e;
     }
 

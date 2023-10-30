@@ -1,18 +1,19 @@
 import _ from 'lodash';
 import Jimp from 'jimp';
+import { prisma } from '../../prisma/database.js';
 
 const postQuery = {
-  allPosts: async (parent, args, { prisma }, info) => {
+  allPosts: async (parent, args, info) => {
     return await prisma.post.findMany();
   },
-  postInfo: async (parent, args, { prisma }, info) => {
+  postInfo: async (parent, args, info) => {
     return await prisma.post.findUnique({
       where: {
         id: args.data.postId,
       },
     });
   },
-  getNewFeed: async (parent, args, { prisma }, info) => {
+  getNewFeed: async (parent, args, info) => {
     let a, nodes;
     const after = args.after;
 
@@ -111,7 +112,7 @@ const postQuery = {
       },
     };
   },
-  getAllUserPosts: async (parent, args, { prisma }, info) => {
+  getAllUserPosts: async (parent, args, info) => {
     let nodes;
     const after = args.after;
 
@@ -194,7 +195,7 @@ const postQuery = {
       },
     };
   },
-  searchQuery: async (parent, args, { prisma }, info) => {
+  searchQuery: async (parent, args, info) => {
     let tags = [],
       users = [];
 
@@ -244,7 +245,7 @@ const postQuery = {
 
     return { tags, users };
   },
-  similarImages: async (parent, args, { prisma }, info) => {
+  similarImages: async (parent, args, info) => {
     let result = [];
 
     // const currentImage = await prisma.post.findUnique({

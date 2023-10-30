@@ -1,0 +1,258 @@
+# name: Deploy to AWS Lambda
+#
+# on:
+#   push:
+#     branches: [experiment_deploy_apollo]
+#   pull_request:
+#     branches: [experiment_deploy_apollo]
+#   workflow_dispatch:
+# jobs:
+#   build-node_modules-lambda-layer:
+#     name: Bld. node_modules layer
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Check out repository
+#         uses: actions/checkout@v2
+#
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: 16
+#
+#       - name: Install PROD packages
+#         run: npm install --omit=dev
+#
+#       - name: Prepare lambda layer
+#         run: ./scripts/ci/prepare-node-modules-lambda-layer.sh
+#
+#       - uses: actions/upload-artifact@v2
+#         with:
+#           name: lambda-layers-node_modules
+#           path: ./lambda-layers-node_modules
+#
+#   build-prisma-client-lambda-layer:
+#     name: Bld. @prisma/client layer
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Check out repository
+#         uses: actions/checkout@v2
+#
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: 16
+#
+#       - name: Install ALL packages
+#         run: npm install
+#
+#       - name: Prepare prisma client
+#         run: npx run prisma:generate:prod --schema=./src/prisma/schema.prisma
+#
+#       - name: Prepare "@prisma/client" lambda layer
+#         run: ./scripts/ci/prepare-prisma-client-lambda-layer.sh
+#
+#       - uses: actions/upload-artifact@v2
+#         with:
+#           name: lambda-layers-prisma-client
+#           path: ./lambda-layers-prisma-client
+#
+#   build-libs-lambda-layers:
+#     name: Bld. @libs layer
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Check out repository
+#         uses: actions/checkout@v2
+#
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: 16
+#
+#       - name: Install ALL packages
+#         run: npm install
+#
+#       - name: Prepare prisma client
+#         run: npx run prisma:generate:prod --schema=./src/prisma/schema.prisma
+#
+#       - name: Build assets
+#         run: npm run build
+#
+#       - name: Prepare "@libs/*"" lambda layer
+#         run: ./scripts/ci/prepare-libs-lambda-layer.sh
+#
+#       - uses: actions/upload-artifact@v2
+#         with:
+#           name: lambda-layers-libs
+#           path: ./lambda-layers-libs
+#
+#   build-lambdas:
+#     name: Build lambdas
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Check out repository
+#         uses: actions/checkout@v2
+#
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: 16
+#
+#       - name: Install ALL packages
+#         run: npm install
+#
+#       - name: Prepare prisma client
+#         run: npx run prisma:generate:prod --schema=./src/prisma/schema.prisma
+#
+#       - name: Build lambdas
+#         run: npm run build
+#
+#       - uses: actions/upload-artifact@v2
+#         with:
+#           name: build-lambdas
+#           path: ./build/lambdas
+#
+#   deploy-lambdas:
+#     name: Deploy lambdas
+#     needs:
+#       [
+#         build-node_modules-lambda-layer,
+#         build-prisma-client-lambda-layer,
+#         build-libs-lambda-layers,
+#         build-lambdas,
+#       ]
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Check out repository
+#         uses: actions/checkout@v2
+#
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: 16
+#
+#       - uses: actions/download-artifact@v2
+#         with:
+#           name: build-lambdas
+#           path: ./build/lambdas
+#
+#       - uses: actions/download-artifact@v2
+#         with:
+#           name: lambda-layers-node_modules
+#           path: ./build/lambdas/lambda-layers-node_modules
+#
+#       - uses: actions/download-artifact@v2
+#         with:
+#           name: lambda-layers-libs
+#           path: ./build/lambdas/lambda-layers-libs
+#
+#       - uses: actions/download-artifact@v2
+#         with:
+#           name: lambda-layers-prisma-client
+#           path: ./build/lambdas/lambda-layers-prisma-client
+#
+#       - name: Unzip layers
+#         run: |
+#           tar -C ./build/lambdas/lambda-layers-node_modules -xf ./build/lambdas/lambda-layers-node_modules/nodejs.tar.gz
+#           rm -rf ./build/lambdas/lambda-layers-node_modules/nodejs.tar.gz
+#           tar -C ./build/lambdas/lambda-layers-libs -xf ./build/lambdas/lambda-layers-libs/nodejs.tar.gz
+#           rm -rf ./build/lambdas/lambda-layers-libs/nodejs.tar.gz
+#           tar -C ./build/lambdas/lambda-layers-prisma-client -xf ./build/lambdas/lambda-layers-prisma-client/nodejs.tar.gz
+#           rm -rf ./build/lambdas/lambda-layers-prisma-client/nodejs.tar.gz
+#
+#       - name: Deploy lambdas and layers
+#         uses: aaronpanch/action-serverless@master
+#         with:
+#           args: deploy --debug
+#         env:
+#           SERVICE_ROOT: ./build/lambdas
+#           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_CI }}
+#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_CI }}
+#           AWS_REGION: ${{ secrets.AWS_REGION }}
+#           PRISMA_DATABASE_URL: ${{ secrets.PRISMA_DATABASE_URL }}
+#           PRISMA_BINARY_TARGET: rhel-openssl-1.0.x
+#
+#       - name: Configure AWS Credentials
+#         uses: aws-actions/configure-aws-credentials@v1
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           aws-region: ap-southeast-1
+#
+#       - name: Update Code
+#         run: |
+#           aws lambda update-function-code --function-name images-social-backend-service --zip-file fileb://code.zip
+#
+#       - name: Update Node Modules
+#         run: |
+#           mkdir nodejs
+#           cp package.json nodejs/package.json
+#           cd nodejs
+#           npm install --omit=dev
+#           cp -TRv ../node_modules/.prisma/ node_modules/.prisma/
+#           rm package.json package-lock.json
+#           cd ..
+#           zip -r ${GITHUB_WORKSPACE}/package-layer.zip nodejs
+#           aws lambda publish-layer-version --layer-name arn:aws:lambda:ap-southeast-1:${OWNER_LAYER_ACCOUNT_ID}:layer:images-social-backend-service-package-layer --zip-file fileb://${GITHUB_WORKSPACE}/package-layer.zip --compatible-runtimes nodejs16.x --compatible-architectures "arm64" "x86_64"
+#           maxLayerVersion=$(aws lambda list-layer-versions --layer-name arn:aws:lambda:ap-southeast-1:${OWNER_LAYER_ACCOUNT_ID}:layer:images-social-backend-service-package-layer --query 'max_by(LayerVersions, &Version).LayerVersionArn' | sed 's/"//g')
+#           aws lambda wait function-updated --function-name images-social-backend-service
+#           aws lambda update-function-configuration --function-name images-social-backend-service --layers $maxLayerVersion
+
+name: Deploy to AWS Lambda
+
+on:
+  push:
+    branches: [deploy]
+  pull_request:
+    branches: [deploy]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_IAM_ROLE_ARN: ${{ secrets.AWS_IAM_ROLE_ARN }}
+      OWNER_LAYER_ACCOUNT_ID: ${{ secrets.OWNER_LAYER_ACCOUNT_ID }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-southeast-1
+
+      - name: Update Code
+        run: |
+          npm install
+          npm run prisma_gen
+          npm run build
+          cp src/prisma/ERD.svg dist/ERD.svg
+          cp src/prisma/schema.prisma dist/schema.prisma
+          cp src/libquery_engine-rhel-openssl-1.0.x.so.node dist/libquery_engine-rhel-openssl-1.0.x.so.node
+          zip -r code.zip dist
+          aws lambda update-function-code --function-name images-social-backend-service --zip-file fileb://code.zip
+
+      - name: Update Node Modules
+        run: |
+          mkdir nodejs
+          cp package.json nodejs/package.json
+          cd nodejs
+          npm install --omit=dev
+          rm package.json package-lock.json
+          cd ..
+          zip -r ${GITHUB_WORKSPACE}/package-layer.zip nodejs
+          aws lambda publish-layer-version --layer-name arn:aws:lambda:ap-southeast-1:${OWNER_LAYER_ACCOUNT_ID}:layer:images-social-backend-service-package-layer --zip-file fileb://${GITHUB_WORKSPACE}/package-layer.zip --compatible-runtimes nodejs16.x --compatible-architectures "arm64" "x86_64"
+          maxLayerVersion=$(aws lambda list-layer-versions --layer-name arn:aws:lambda:ap-southeast-1:${OWNER_LAYER_ACCOUNT_ID}:layer:images-social-backend-service-package-layer --query 'max_by(LayerVersions, &Version).LayerVersionArn' | sed 's/"//g')
+          aws lambda wait function-updated --function-name images-social-backend-service
+          aws lambda update-function-configuration --function-name images-social-backend-service --layers $maxLayerVersion

@@ -1,10 +1,10 @@
-import _ from 'lodash';
+import { prisma } from '../../prisma/database.js';
 
 const userQuery = {
-  allUsers: async (parent, args, { prisma }, info) => {
-    return await prisma.user.findMany({});
+  allUsers: async (parent, args, info) => {
+    return await prisma.user.findMany();
   },
-  userInfo: async (parent, args, { prisma }, info) => {
+  userInfo: async (parent, args, info) => {
     return await prisma.user.findUnique({
       where: {
         id: args.data.userId,
@@ -14,7 +14,7 @@ const userQuery = {
       },
     });
   },
-  verifyUser: async (parent, args, { prisma }, info) => {
+  verifyUser: async (parent, args, info) => {
     return await prisma.user.findFirst({
       where: {
         AND: [
@@ -23,33 +23,6 @@ const userQuery = {
         ],
       },
     });
-  },
-  suggestUserToFollow: async (parent, args, { prisma }, info) => {
-    const a = await prisma.user.findMany({
-      where: {
-        id: { not: args.data.userId },
-        isAdmin: 0,
-      },
-    });
-
-    const b = await prisma.following.findUnique({
-      where: {
-        userId: args.data.userId,
-      },
-    });
-
-    // console.log({ a });
-    // console.log({ b });
-
-    const c = a.filter((elem) => !b.userFollowing.find((id) => elem.id === id));
-
-    console.log({ c });
-
-    if (c.length > 3) {
-      return _.sampleSize(c, 3);
-    } else {
-      return c;
-    }
   },
 };
 

@@ -2,8 +2,7 @@ import gql from 'graphql-tag';
 
 const tagDefs = gql`
   extend type Query {
-    allTags: [Tag]!
-    suggestTags: [Tag]!
+    allTags: Tag
     tagInfo(data: TagInfoInput!): Tag!
   }
 
@@ -23,6 +22,7 @@ const tagDefs = gql`
   type Tag {
     id: ID!
     name: String!
+    posts: [Post]!
   }
 `;
 

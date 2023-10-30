@@ -1,7 +1,7 @@
-import * as Prisma from '@prisma/client';
+import { prisma } from '../../prisma/database.js';
 
 const albumMutation = {
-  createAlbum: async (parent, args, { prisma }, info) => {
+  createAlbum: async (parent, args, info) => {
     let album;
     try {
       album = await prisma.album.create({
@@ -19,7 +19,7 @@ const albumMutation = {
 
     return album;
   },
-  deleteAlbum: async (parent, args, { prisma }, info) => {
+  deleteAlbum: async (parent, args, info) => {
     let album;
     try {
       album = await prisma.album.delete({
@@ -36,7 +36,7 @@ const albumMutation = {
 
     return album;
   },
-  deleteAllAlbum: async (parent, args, { prisma }, info) => {
+  deleteAllAlbum: async (parent, args, info) => {
     let result;
     try {
       result = await prisma.album.deleteMany({});
@@ -50,7 +50,7 @@ const albumMutation = {
     return result;
   },
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  updateAlbum: async (parent, args, { prisma }, info) => {
+  updateAlbum: async (parent, args, info) => {
     const { updatedUser, ...updateInfo } = args.data;
     let result;
     try {
