@@ -1,7 +1,7 @@
-import * as Prisma from '@prisma/client';
+import { prisma } from '../../prisma/database.js';
 
 const storyMutation = {
-  createStory: async (parent, args, { prisma }, info) => {
+  createStory: async (parent, args, info) => {
     let story;
     try {
       story = await prisma.story.create({
@@ -23,7 +23,7 @@ const storyMutation = {
 
     return story;
   },
-  deleteStory: async (parent, args, { prisma }, info) => {
+  deleteStory: async (parent, args, info) => {
     let story;
     try {
       story = await prisma.story.delete({
@@ -40,7 +40,7 @@ const storyMutation = {
 
     return story;
   },
-  deleteAllStory: async (parent, args, { prisma }, info) => {
+  deleteAllStory: async (parent, args, info) => {
     let result;
     try {
       result = await prisma.story.deleteMany({});
@@ -54,7 +54,7 @@ const storyMutation = {
     return result;
   },
   // //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  // updatePost: async (parent, args, { prisma }, info) => {
+  // updatePost: async (parent, args, info) => {
   //   const { updatedUser, ...updateInfo } = args.data;
   //   let result;
   //   try {
@@ -76,7 +76,7 @@ const storyMutation = {
 
   //   return updatedUser;
   // },
-  interactStory: async (parent, args, { prisma }, info) => {
+  interactStory: async (parent, args, info) => {
     let story;
 
     if (args.data.isLiked) {

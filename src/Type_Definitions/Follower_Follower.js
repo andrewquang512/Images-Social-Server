@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 const followerDefs = gql`
   extend type Query {
     allFollower: [Follower]!
-    userFollowerInfo(data: UserFollowerInfoInput!): Follower!
+    userFollowerInfo(data: UserFollowerInfoInput!): [Follower]!
   }
 
   input UserFollowerInfoInput {

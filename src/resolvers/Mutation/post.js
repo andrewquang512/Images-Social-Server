@@ -1,13 +1,12 @@
-import * as Prisma from '@prisma/client';
+import { prisma } from '../../prisma/database.js';
 
 const postMutation = {
-  createPost: async (parent, args, { prisma }, info) => {
+  createPost: async (parent, args, info) => {
     let post;
     try {
       post = await prisma.post.create({
         data: {
           title: args.data.title,
-          caption: args.data.caption,
           userId: args.data.userId,
           postViewStatus: args.data.postViewStatus,
           points: 0,
@@ -46,7 +45,7 @@ const postMutation = {
 
     return post;
   },
-  deletePost: async (parent, args, { prisma }, info) => {
+  deletePost: async (parent, args, info) => {
     let post;
     try {
       post = await prisma.post.delete({
@@ -63,7 +62,7 @@ const postMutation = {
 
     return post;
   },
-  deleteAllPost: async (parent, args, { prisma }, info) => {
+  deleteAllPost: async (parent, args, info) => {
     let result;
     try {
       result = await prisma.post.deleteMany({});
@@ -77,30 +76,29 @@ const postMutation = {
     return result;
   },
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  updatePost: async (parent, args, { prisma }, info) => {
+  updatePost: async (parent, args, info) => {
+    const { updatedUser, ...updateInfo } = args.data;
     let result;
-    console.log(args.data);
     try {
-      result = await prisma.post.update({
+      updatedUser = await prisma.user.update({
         where: {
-          id: args.data.postId,
+          id: userId,
         },
         data: {
-          title: args.data.title || undefined,
-          // caption: args.data.caption || undefined,
-          isVisible: args.data.hasOwnProperty('isVisible')
-            ? args.data.isVisible
-            : undefined,
+          ...updateInfo,
         },
       });
     } catch (e) {
-      console.log(e);
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        console.log(e);
+      }
+
       throw e;
     }
 
-    return result;
+    return updatedUser;
   },
-  interactPost: async (parent, args, { prisma }, info) => {
+  interactPost: async (parent, args, info) => {
     let post;
 
     if (args.data.isLiked) {

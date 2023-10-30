@@ -1,7 +1,7 @@
-import * as Prisma from '@prisma/client';
+import { prisma } from '../../prisma/database.js';
 
 const tagMutation = {
-  createTag: async (parent, args, { prisma }, info) => {
+  createTag: async (parent, args, info) => {
     let tag,
       result = [],
       newTag = args.data.name.map((element) => {
@@ -34,11 +34,11 @@ const tagMutation = {
         }
       }
     });
-    // console.log({ result });
+    console.log({ result });
 
     return result;
   },
-  deleteAllTag: async (parent, args, { prisma }, info) => {
+  deleteAllTag: async (parent, args, info) => {
     let result;
     try {
       result = await prisma.tag.deleteMany({});

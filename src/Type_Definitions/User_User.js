@@ -5,16 +5,11 @@ const userDefs = gql`
     allUsers: [User]!
     userInfo(data: UserInfoInput!): User!
     verifyUser(data: VerifyUserInput!): User!
-    suggestUserToFollow(data: SuggestUserToFollowInput!): [User]!
   }
 
   input VerifyUserInput {
     hashPassword: String!
     email: String!
-  }
-
-  input SuggestUserToFollowInput {
-    userId: ID!
   }
 
   input UserInfoInput {
@@ -76,6 +71,9 @@ const userDefs = gql`
     posts: [Post]!
     stories: [Story]!
     albums: [Album]!
+
+    # followers: Follower!
+    # followings: Following!
   }
 `;
 

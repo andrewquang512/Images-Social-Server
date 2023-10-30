@@ -1,7 +1,7 @@
-import * as Prisma from '@prisma/client';
+import { prisma } from '../../prisma/database.js';
 
 const userMutation = {
-  createUser: async (parent, args, { prisma }, info) => {
+  createUser: async (parent, args, info) => {
     let user;
     try {
       user = await prisma.user.create({
@@ -42,7 +42,7 @@ const userMutation = {
     }
     return user;
   },
-  deleteUser: async (parent, args, { prisma }, info) => {
+  deleteUser: async (parent, args, info) => {
     let user;
     try {
       user = await prisma.user.delete({
@@ -59,7 +59,7 @@ const userMutation = {
 
     return user;
   },
-  deleteAllUser: async (parent, args, { prisma }, info) => {
+  deleteAllUser: async (parent, args, info) => {
     let result;
     try {
       result = await prisma.user.deleteMany({});
@@ -73,7 +73,7 @@ const userMutation = {
     return result;
   },
   //!!!!!!!!!!!!!!!!!!!!!!!
-  updateUser: async (parent, args, { prisma }, info) => {
+  updateUser: async (parent, args, info) => {
     const { userId, ...updateInfo } = args.data;
     let updatedUser;
     try {

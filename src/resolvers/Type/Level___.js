@@ -1,5 +1,7 @@
+import { prisma } from '../../prisma/database.js';
+
 const Level = {
-  userId: async (parent, args, { prisma }, info) => {
+  userId: async (parent, args, info) => {
     return await prisma.user.findUnique({
       where: {
         id: parent.userId,

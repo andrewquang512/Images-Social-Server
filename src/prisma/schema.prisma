@@ -1,3 +1,4 @@
+
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
@@ -5,6 +6,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
 generator erd {
@@ -12,6 +14,7 @@ generator erd {
   output                    = "ERD.svg"
   theme                     = "forest"
   includeRelationFromFields = true
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
 // https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/mongodb/install-prisma-client-typescript-mongodb
@@ -153,15 +156,15 @@ model Album {
 
 }
 
-model Tag {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+// model Tag {
+//   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+//   name      String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
 
-  // posts     String[] @db.ObjectId
-  // tag_to_post Post[]   @relation(fields: [posts], references: [id])
-}
+//   posts     String[] @db.ObjectId
+//   tag_to_post Post[]   @relation(fields: [posts], references: [id])
+// }
 
 enum ViewStatus {
     PUBLIC
@@ -172,7 +175,6 @@ enum ViewStatus {
 model Post {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   title     String
-  caption   String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   postViewStatus ViewStatus @default(PUBLIC)
@@ -228,8 +230,6 @@ model Comment {
 
   storyId      String @db.ObjectId
   cmt_to_story Story  @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  votes    Int @default(0)
 }
 
 model Contest {
