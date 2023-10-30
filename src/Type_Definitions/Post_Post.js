@@ -1,4 +1,6 @@
 import gql from 'graphql-tag';
+import tagDefs from './Tag_Tag.js';
+import userDefs from './User_User.js';
 
 const postDefs = gql`
   extend type Query {
@@ -16,6 +18,13 @@ const postDefs = gql`
 
     similarImages(data: SimilarImagesInput!): [Image]!
   }
+
+  type SearchReturnType {
+    tags: [Tag]!
+    users: [User]!
+  }
+  ${tagDefs}
+  ${userDefs}
 
   input SimilarImagesInput {
     postId: ID!

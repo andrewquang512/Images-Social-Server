@@ -40,7 +40,7 @@ const storyQuery = {
     console.log('Result', result);
     console.log('count', count);
 
-    const hasNextPage = result.length !== 0 || result.length <= count;
+    const hasNextPage = result.length !== 0 && result.length <= count;
     // console.log(nodes.slice(-1));
     console.log({ hasNextPage });
 
