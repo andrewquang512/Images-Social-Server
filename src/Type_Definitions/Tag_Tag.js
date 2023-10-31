@@ -2,7 +2,8 @@ import gql from 'graphql-tag';
 
 const tagDefs = gql`
   extend type Query {
-    allTags: Tag
+    allTags: [Tag]!
+    suggestTags: [Tag]!
     tagInfo(data: TagInfoInput!): Tag!
   }
 

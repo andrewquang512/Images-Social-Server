@@ -156,15 +156,12 @@ model Album {
 
 }
 
-// model Tag {
-//   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-//   name      String
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-
-//   posts     String[] @db.ObjectId
-//   tag_to_post Post[]   @relation(fields: [posts], references: [id])
-// }
+model Tag {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
 enum ViewStatus {
     PUBLIC
@@ -194,9 +191,6 @@ model Post {
   tag       String[] 
 
   userLikedPost  String[]
-
-  // contestId      String   @db.ObjectId
-  // post_to_contest  Contest @relation(fields: [contestId], references: [id])
 }
 
 model Story {

@@ -6,7 +6,7 @@ import imageInfoDefs from './ImageInfo_ImageInfo.js';
 import postDefs from './Post_Post.js';
 import storyDefs from './Story_Story.js';
 import cmtDefs from './Cmt_Cmt.js';
-// import tagDefs from './Tag_Tag.js';
+import tagDefs from './Tag_Tag.js';
 import categoryDefs from './Category_Category.js';
 import albumDefs from './Album_Album.js';
 import followingDefs from './Following_Following.js';
@@ -36,7 +36,7 @@ const typeDefs = [
   postDefs,
   storyDefs,
   cmtDefs,
-  // tagDefs,
+  tagDefs,
   categoryDefs,
   albumDefs,
   followingDefs,

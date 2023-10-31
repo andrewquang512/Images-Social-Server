@@ -1,9 +1,7 @@
 import { prisma } from '../../prisma/database.js';
 
 const levelMutation = {
-  // ! Ko can dung, da lam trong create user
-  // createLevel
-  //!!!
+  // ! Ko can dung createLevel, da lam trong create user
   updateLevel: async (parent, args, info) => {
     let userLevel;
     try {
@@ -18,13 +16,13 @@ const levelMutation = {
         },
       });
 
-      if (userLevel.currentXP == 100) {
+      if (userLevel.currentXP >= 100) {
         userLevel = await prisma.level.update({
           where: {
             userId: args.data.userId,
           },
           data: {
-            currentXP: 0,
+            currentXP: userLevel.currentXP - 100,
             currentLevel: {
               increment: 1,
             },
@@ -32,9 +30,7 @@ const levelMutation = {
         });
       }
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        console.log(e);
-      }
+      console.log(e);
       throw e;
     }
 

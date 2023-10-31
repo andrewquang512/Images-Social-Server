@@ -2,50 +2,47 @@ import { prisma } from '../../prisma/database.js';
 
 const tagMutation = {
   createTag: async (parent, args, info) => {
-    let tag,
-      result = [],
-      newTag = args.data.name.map((element) => {
-        return element.toLowerCase();
-      });
-    newTag = [...new Set(newTag)];
+    let newTag = [
+      ...new Set(
+        args.data.name.map((element) => {
+          return element.toLowerCase();
+        }),
+      ),
+    ];
 
-    await newTag.map(async (tagName) => {
-      const a = await prisma.tag.count({
-        where: {
-          name: tagName,
-        },
-      });
+    await Promise.all(
+      newTag.map(async (tagName) => {
+        const a = await prisma.tag.count({
+          where: {
+            name: tagName,
+          },
+        });
 
-      if (!a) {
-        try {
-          tag = await prisma.tag.create({
-            data: {
-              name: tagName,
-            },
-          });
+        if (!a) {
+          try {
+            const tag = await prisma.tag.create({
+              data: {
+                name: tagName,
+              },
+            });
 
-          console.log({ tag });
-          result.push(tag);
-        } catch (e) {
-          if (e instanceof Prisma.PrismaClientKnownRequestError) {
+            // console.log({ tag });
+          } catch (e) {
             console.log(e);
+            throw e;
           }
-          throw e;
         }
-      }
-    });
-    console.log({ result });
+      }),
+    );
 
-    return result;
+    return [];
   },
   deleteAllTag: async (parent, args, info) => {
     let result;
     try {
       result = await prisma.tag.deleteMany({});
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        console.log(e);
-      }
+      console.log(e);
       throw e;
     }
 

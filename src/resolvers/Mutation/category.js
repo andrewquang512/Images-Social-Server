@@ -10,9 +10,7 @@ const categoryMutation = {
         },
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        console.log(e);
-      }
+      console.log(e);
       throw e;
     }
 
