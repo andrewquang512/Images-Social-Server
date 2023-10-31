@@ -112,51 +112,14 @@ const postQuery = {
     let nodes;
     const after = args.after;
 
-    let a;
-
-    if (args.currentUserId === args.userId) {
-      a = await prisma.post.findMany({
-        where: {
-          userId: args.userId,
-        },
-        orderBy: {
-          createdAt: 'desc',
-        },
-      });
-    } else {
-      console.log(2);
-      const follower = await prisma.follower.findUnique({
-        where: {
-          userId: args.userId,
-        },
-      });
-
-      if (follower.userFollower.contains(currentUserId)) {
-        console.log(3);
-        a = await prisma.post.findMany({
-          where: {
-            userId: args.userId,
-            OR: [
-              { postViewStatus: 'PUBLIC' },
-              { postViewStatus: 'ONLY_FOLLOWERS' },
-            ],
-          },
-          orderBy: {
-            createdAt: 'desc',
-          },
-        });
-      } else {
-        a = await prisma.post.findMany({
-          where: {
-            userId: args.userId,
-            postViewStatus: 'PUBLIC',
-          },
-          orderBy: {
-            createdAt: 'desc',
-          },
-        });
-      }
-    }
+    let a = await prisma.post.findMany({
+      where: {
+        userId: args.userId,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
 
     if (!after) {
       nodes = a.slice(0, 2).map((post) => ({
