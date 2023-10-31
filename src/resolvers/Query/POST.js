@@ -21,7 +21,10 @@ const postQuery = {
       a = await prisma.post.findMany({
         where: {
           userId: args.userId,
-          postViewStatus: 'PUBLIC',
+          OR: [
+            { postViewStatus: 'PUBLIC' },
+            { postViewStatus: 'ONLY_FOLLOWERS' },
+          ],
         },
         orderBy: {
           createdAt: 'desc',

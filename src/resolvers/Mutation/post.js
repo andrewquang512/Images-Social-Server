@@ -8,6 +8,7 @@ const postMutation = {
         data: {
           title: args.data.title,
           userId: args.data.userId,
+          caption: args.data.caption,
           postViewStatus: args.data.postViewStatus,
           points: 0,
 
@@ -77,26 +78,27 @@ const postMutation = {
   },
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   updatePost: async (parent, args, info) => {
-    const { updatedUser, ...updateInfo } = args.data;
     let result;
+    console.log(args.data);
     try {
-      updatedUser = await prisma.user.update({
+      result = await prisma.post.update({
         where: {
-          id: userId,
+          id: args.data.postId,
         },
         data: {
-          ...updateInfo,
+          title: args.data.title || undefined,
+          // caption: args.data.caption || undefined,
+          postViewStatus: args.data.hasOwnProperty('postViewStatus')
+            ? args.data.postViewStatus
+            : undefined,
         },
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        console.log(e);
-      }
-
+      console.log(e);
       throw e;
     }
 
-    return updatedUser;
+    return result;
   },
   interactPost: async (parent, args, info) => {
     let post;

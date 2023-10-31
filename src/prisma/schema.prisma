@@ -172,8 +172,11 @@ enum ViewStatus {
 model Post {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   title     String
+  caption   String
+
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  
   postViewStatus ViewStatus @default(PUBLIC)
   points    Int
   image     Image?

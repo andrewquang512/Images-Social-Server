@@ -104,22 +104,24 @@ const postDefs = gql`
     isLiked: Boolean!
   }
 
-  # !!!!!!
   input UpdatePostInput {
     postId: ID!
     title: String
-    # caption: String
-    postViewStatus: Boolean
+    caption: String
+    postViewStatus: ViewStatus
   }
 
   type Post {
     id: ID!
+
     title: String!
     caption: String!
-    createdAt: String!
-    updatedAt: String!
+
     postViewStatus: ViewStatus!
     points: Int!
+
+    createdAt: String!
+    updatedAt: String!
 
     tag: [String]!
     albumId: [Album]!

@@ -1,10 +1,11 @@
 import _ from 'lodash';
+import { prisma } from '../../prisma/database.js';
 
 const userQuery = {
-  allUsers: async (parent, args, { prisma }, info) => {
+  allUsers: async (parent, args, info) => {
     return await prisma.user.findMany();
   },
-  userInfo: async (parent, args, { prisma }, info) => {
+  userInfo: async (parent, args, info) => {
     return await prisma.user.findUnique({
       where: {
         id: args.data.userId,
@@ -14,7 +15,7 @@ const userQuery = {
       },
     });
   },
-  verifyUser: async (parent, args, { prisma }, info) => {
+  verifyUser: async (parent, args, info) => {
     return await prisma.user.findFirst({
       where: {
         AND: [
@@ -24,7 +25,7 @@ const userQuery = {
       },
     });
   },
-  suggestUserToFollow: async (parent, args, { prisma }, info) => {
+  suggestUserToFollow: async (parent, args, info) => {
     const a = await prisma.user.findMany({
       where: {
         id: { not: args.data.userId },
