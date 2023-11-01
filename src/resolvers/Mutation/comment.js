@@ -2,25 +2,34 @@ import { prisma } from '../../prisma/database.js';
 import { VOTE_COMMENT_ACTION } from '../../constants.js';
 
 const commentMutation = {
+  /**
+   * 
+   * @param {*} parent 
+   * @param {{data: {content: string, userId: string, postId: string, storyId: string, parentCommentId: string}}} args 
+   * @param {*} info 
+   * @returns 
+   */
   createComment: async (parent, args, info) => {
+    const { content, postId, storyId, userId, parentCommentId = null } = args.data
+
     let comment;
     try {
       comment = await prisma.comment.create({
         data: {
-          content: args.data.content,
-          userId: args.data.userId,
-          postId: args.data.postId,
-          storyId: args.data.storyId,
+          content: content,
+          userId: userId,
+          postId: postId,
+          storyId: storyId,
+          parentId: parentCommentId ? parentCommentId : null
         },
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        console.log(e);
-      }
+      console.log(e);
       throw e;
     }
     return comment;
   },
+
   deleteComment: async (parent, args, info) => {
     let comment;
     try {
@@ -30,9 +39,7 @@ const commentMutation = {
         },
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        console.log(e);
-      }
+      console.log(e);
       throw e;
     }
 

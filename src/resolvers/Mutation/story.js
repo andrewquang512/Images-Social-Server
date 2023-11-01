@@ -15,9 +15,7 @@ const storyMutation = {
         },
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        console.log(e);
-      }
+      console.log(e);
       throw e;
     }
 
@@ -32,9 +30,7 @@ const storyMutation = {
         },
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        console.log(e);
-      }
+      console.log(e);
       throw e;
     }
 
@@ -45,9 +41,7 @@ const storyMutation = {
     try {
       result = await prisma.story.deleteMany({});
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        console.log(e);
-      }
+      console.log(e);
       throw e;
     }
 

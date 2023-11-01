@@ -6,6 +6,7 @@
       "type": "module",
       "scripts": {
             "prisma_gen": "prisma generate --schema=./src/prisma/schema.prisma",
+            "prisma_format": "prisma format --schema=./src/prisma/schema.prisma",
             "prisma_db_push": "prisma db push --schema=./src/prisma/schema.prisma",
             "dev": "nodemon src/index",
             "start": "node src/index",

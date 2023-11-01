@@ -34,10 +34,7 @@ const userMutation = {
         },
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        console.log(e);
-      }
-
+      console.log(e);
       throw e;
     }
     return user;
@@ -51,9 +48,7 @@ const userMutation = {
         },
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        console.log(e);
-      }
+      console.log(e);
       throw e;
     }
 
@@ -64,9 +59,7 @@ const userMutation = {
     try {
       result = await prisma.user.deleteMany({});
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        console.log(e);
-      }
+      console.log(e);
       throw e;
     }
 
@@ -86,9 +79,7 @@ const userMutation = {
         },
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        console.log(e);
-      }
+      console.log(e);
       throw e;
     }
 

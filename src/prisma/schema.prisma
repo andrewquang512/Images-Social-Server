@@ -1,11 +1,10 @@
-
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
@@ -14,7 +13,7 @@ generator erd {
   output                    = "ERD.svg"
   theme                     = "forest"
   includeRelationFromFields = true
-  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+  binaryTargets             = ["native", "rhel-openssl-1.0.x"]
 }
 
 // https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/mongodb/install-prisma-client-typescript-mongodb
@@ -22,30 +21,30 @@ generator erd {
 // https://www.prisma.io/docs/concepts/components/prisma-schema/relations
 
 model User {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  email           String   @unique
-  phoneNumber     String
-  hashPassword    String
-  name            String
-  profileImageURL String
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  email              String   @unique
+  phoneNumber        String
+  hashPassword       String
+  name               String
+  profileImageURL    String
   backgroundImageURL String
-  age             Int      @default(18)
-  birthday        String
-  isAdmin         Int      @default(0)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  age                Int      @default(18)
+  birthday           String
+  isAdmin            Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
-  level         Level?
+  level Level?
 
-  albums        Album[]
-  posts         Post[]
-  stories       Story[]
-  comments      Comment[]
+  albums   Album[]
+  posts    Post[]
+  stories  Story[]
+  comments Comment[]
 
-  followers     Follower?
-  followings    Following?
-  
-  messages      Message[]
+  followers  Follower?
+  followings Following?
+
+  messages Message[]
   // courses       Course[]
   // notifications Notification[]
 
@@ -55,11 +54,9 @@ model User {
   chatIDs      String[] @db.ObjectId
   user_to_chat Chat[]   @relation(fields: [chatIDs], references: [id])
 
-  courseIDs       String[] @db.ObjectId
-  user_to_course  Course[]    @relation(fields: [courseIDs], references: [id])
+  courseIDs      String[] @db.ObjectId
+  user_to_course Course[] @relation(fields: [courseIDs], references: [id])
 }
-
-
 
 // model Notification {
 //   id      String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -82,8 +79,8 @@ model Follower {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   userFollower String[] @db.ObjectId
 
-  userId       String   @unique @db.ObjectId
-  follower_to_user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId           String @unique @db.ObjectId
+  follower_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Following {
@@ -138,7 +135,7 @@ model Category {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  posts     String[] @db.ObjectId
+  posts            String[] @db.ObjectId
   category_to_post Post[]   @relation(fields: [posts], references: [id])
 }
 
@@ -148,12 +145,11 @@ model Album {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  userId       String @db.ObjectId
+  userId        String @db.ObjectId
   album_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  posts     String[] @db.ObjectId
+  posts         String[] @db.ObjectId
   album_to_post Post[]   @relation(fields: [posts], references: [id])
-
 }
 
 model Tag {
@@ -164,54 +160,54 @@ model Tag {
 }
 
 enum ViewStatus {
-    PUBLIC
-    ONLY_FOLLOWERS
-    PRIVATE
-  }
+  PUBLIC
+  ONLY_FOLLOWERS
+  PRIVATE
+}
 
 model Post {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  title     String
-  caption   String
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  title   String
+  caption String
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   postViewStatus ViewStatus @default(PUBLIC)
-  points    Int
-  image     Image?
-  cmts      Comment[]
+  points         Int
+  image          Image?
+  cmts           Comment[]
 
   userId       String @db.ObjectId
   post_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  categoryId      String[]   @db.ObjectId
-  post_to_category  Category[] @relation(fields: [categoryId], references: [id])
-  
-  albumId       String[]   @db.ObjectId
-  post_to_album  Album[] @relation(fields: [albumId], references: [id])
+  categoryId       String[]   @db.ObjectId
+  post_to_category Category[] @relation(fields: [categoryId], references: [id])
 
-  tag       String[] 
+  albumId       String[] @db.ObjectId
+  post_to_album Album[]  @relation(fields: [albumId], references: [id])
 
-  userLikedPost  String[]
+  tag String[]
+
+  userLikedPost String[]
 }
 
 model Story {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  title     String
+  id              String     @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
   storyViewStatus ViewStatus @default(PUBLIC)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  points    Int
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  points          Int
 
-  content String
-  images  String[]
-  comments    Comment[]
+  content  String
+  images   String[]
+  comments Comment[]
 
   userId        String @db.ObjectId
   story_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  userLikedStory  String[]
+  userLikedStory String[]
 }
 
 model Comment {
@@ -226,9 +222,13 @@ model Comment {
   cmt_to_post Post   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   storyId      String @db.ObjectId
-  cmt_to_story Story  @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  cmt_to_story Story  @relation(fields: [storyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  votes    Int @default(0)
+  parentId String?   @db.ObjectId
+  parent   Comment?  @relation(name: "Comment_Children", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children Comment[] @relation(name: "Comment_Children")
+
+  votes Int @default(0)
 }
 
 model Contest {
@@ -244,8 +244,8 @@ model Course {
   id      String   @id @default(auto()) @map("_id") @db.ObjectId
   lessons Lesson[]
 
-  userIDs          String[] @db.ObjectId
-  course_to_user   User[]    @relation(fields: [userIDs], references: [id])
+  userIDs        String[] @db.ObjectId
+  course_to_user User[]   @relation(fields: [userIDs], references: [id])
 }
 
 model Lesson {

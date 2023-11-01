@@ -40,6 +40,7 @@ const commentDefs = gql`
     userId: ID!
     postId: ID!
     storyId: ID!
+    parentCommentId: ID
   }
 
   input DeleteCommentInput {
@@ -61,6 +62,7 @@ const commentDefs = gql`
     storyId: Story!
 
     votes: Int!
+    children: [Comment]
   }
 `;
 

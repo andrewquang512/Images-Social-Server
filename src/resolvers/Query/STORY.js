@@ -12,7 +12,6 @@ const storyQuery = {
   },
 
   /**
-   *
    * @param {*} parent
    * @param {{limit: number, after: string}} args
    * @param {*} info

@@ -14,6 +14,13 @@ const commentQuery = {
       where: {
         postId: postId,
       },
+      include: {
+        children: {
+          include: {
+            children: true,
+          },
+        },
+      },
       // Wrong
       // orderBy: {
       //   votes: 'desc',
@@ -38,6 +45,13 @@ const commentQuery = {
       where: {
         storyId: storyId,
       },
+      include: {
+        children: {
+          include: {
+            children: true,
+          },
+        },
+      },
       // Wrong
       // orderBy: {
       //   votes: 'desc',
@@ -48,7 +62,7 @@ const commentQuery = {
     const sorted = result.sort((before, after) => after.votes - before.votes);
     return sorted;
   },
-  // userComments: async (parent, args, { prisma }, info) => {
+  // userComments: async (parent, args, info) => {
   //   return await prisma.post.findMany();
   // },
 };
