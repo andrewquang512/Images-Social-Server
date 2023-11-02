@@ -224,7 +224,8 @@ const postQuery = {
     allImages = _.filter(allImages, (o) => o.id != currentImage.id);
 
     allImages.map(async (img) => {
-      if (compareImages(currentImage.url, img.url)) {
+      const isSimilar = await compareImages(currentImage.url, img.url)
+      if (isSimilar) {
         result.push(img);
       }
     });

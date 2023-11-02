@@ -40,8 +40,14 @@ const imageQuery = {
 
     allImages.map(async (img) => {
       for (const refImage of referenceImages) {
-        if (compareImages(refImage.url, img.url)) {
-          result.push(img);
+        try {
+          const isSimilar = await compareImages(refImage.url, img.url)
+          if (isSimilar) {
+            result.push(img);
+          }
+        } catch (error) {
+          console.error(error)
+          return
         }
       }
     });
