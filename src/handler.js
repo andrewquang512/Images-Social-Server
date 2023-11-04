@@ -1,11 +1,12 @@
 // Apollo
 import { ApolloServer } from '@apollo/server';
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import {
+  ApolloServerPluginLandingPageLocalDefault,
+} from '@apollo/server/plugin/landingPage/default';
 import {
   startServerAndCreateLambdaHandler,
   handlers,
 } from '@as-integrations/aws-lambda';
-
 // Prisma
 import { prisma } from './prisma/database.js';
 
@@ -35,8 +36,9 @@ const server = new ApolloServer({
   context: () => {
     return { prisma };
   },
+  introspection: true,
   plugins: [
-    ApolloServerPluginLandingPageLocalDefault,
+    ApolloServerPluginLandingPageLocalDefault({ embed: true }),
     ...(parseInt(process.env.IS_LOGGING) ? [loggingPlugin] : []),
   ],
   logger: console,

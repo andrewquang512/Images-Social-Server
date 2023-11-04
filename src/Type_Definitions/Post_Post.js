@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 import tagDefs from './Tag_Tag.js';
 import userDefs from './User_User.js';
+import commonDefs from './Common_Common.js'
 
 const postDefs = gql`
   extend type Query {
@@ -39,17 +40,11 @@ const postDefs = gql`
     edges: [PostEdge!]!
     pageInfo: PageInfo!
   }
-
+  ${commonDefs}
+  
   type PostEdge {
     node: Post
     cursor: String!
-  }
-
-  type PageInfo {
-    hasNextPage: Boolean!
-    hasPreviousPage: Boolean!
-    startCursor: String
-    endCursor: String
   }
 
   input PostInfoInput {

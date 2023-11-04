@@ -23,7 +23,7 @@
       },
       "homepage": "https://github.com/HUNG-rushb/Images-Social-Server#readme",
       "dependencies": {
-            "@apollo/server": "^4.9.4",
+            "@apollo/server": "^4.9.5",
             "@as-integrations/aws-lambda": "^3.1.0",
             "@graphql-tools/schema": "^9.0.10",
             "@prisma/client": "^5.5.2",

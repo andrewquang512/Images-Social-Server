@@ -45,6 +45,7 @@ const commentMutation = {
 
     return comment;
   },
+
   updateComment: async (parent, args, info) => {
     return await prisma.comment.update({
       where: {
@@ -63,7 +64,7 @@ const commentMutation = {
    * @param {*} info
    * @returns
    */
-  voteCommand: async (parent, args, info) => {
+  voteComment: async (parent, args, info) => {
     const { action, commentId } = args.data;
 
     const existedComment = await prisma.comment.findUnique({

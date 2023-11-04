@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import commonDefs from './Common_Common.js'
 
 const commentDefs = gql`
   # extend type Query {
@@ -10,17 +11,29 @@ const commentDefs = gql`
     createComment(data: CreateCommentInput!): Comment!
     deleteComment(data: DeleteCommentInput!): Comment!
     updateComment(data: UpdateCommentInput!): Comment!
-    voteCommand(data: VoteCommentInput!): Comment!
+    voteComment(data: VoteCommentInput!): Comment!
   }
 
   extend type Query {
-    getCommentsByPostId(data: GetCommentsByPostIdInput): [Comment]!
-    getCommentsByStoryId(data: GetCommentsByStoryIdInput): [Comment]!
+    getCommentsByPostId(data: GetCommentsByPostIdInput, limit: Int, after: String): CommentPagination!
+    getCommentsByStoryId(data: GetCommentsByStoryIdInput, limit: Int, after: String): CommentPagination!
+  }
+
+  type CommentPagination {
+    edges: [CommentEdge!]!
+    pageInfo: PageInfo!
+  }
+  ${commonDefs}
+  
+  type CommentEdge {
+    node: Comment
+    cursor: String!
   }
 
   input GetCommentsByPostIdInput {
     postId: ID!
   }
+
   input GetCommentsByStoryIdInput {
     storyId: ID!
   }

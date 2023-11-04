@@ -40,8 +40,7 @@ const storyQuery = {
     console.log('count', count);
 
     const hasNextPage = result.length !== 0 && result.length <= count;
-    // console.log(nodes.slice(-1));
-    console.log({ hasNextPage });
+    console.log('hasNextPage', hasNextPage);
 
     const nodes = result.map((each) => ({
       node: each,
@@ -58,7 +57,14 @@ const storyQuery = {
       },
     };
   },
-  storyInfo: async (parent, args, { prisma }, info) => {
+
+  /**
+   * @param {*} parent
+   * @param {{data: {storyId: string}}} args
+   * @param {*} info
+   * @returns
+   */
+  storyInfo: async (parent, args, info) => {
     return await prisma.story.findUnique({
       where: {
         id: args.data.storyId,
