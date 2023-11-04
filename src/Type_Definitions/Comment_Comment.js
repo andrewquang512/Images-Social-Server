@@ -15,8 +15,8 @@ const commentDefs = gql`
   }
 
   extend type Query {
-    getCommentsByPostId(data: GetCommentsByPostIdInput): CommentPagination!
-    getCommentsByStoryId(data: GetCommentsByStoryIdInput): CommentPagination!
+    getCommentsByPostId(data: GetCommentsByPostIdInput, limit: Int, after: String): CommentPagination!
+    getCommentsByStoryId(data: GetCommentsByStoryIdInput, limit: Int, after: String): CommentPagination!
   }
 
   type CommentPagination {
@@ -32,14 +32,10 @@ const commentDefs = gql`
 
   input GetCommentsByPostIdInput {
     postId: ID!
-    limit: Int
-    after: String
   }
 
   input GetCommentsByStoryIdInput {
     storyId: ID!
-    limit: Int
-    after: String
   }
 
   enum voteCommentAction {

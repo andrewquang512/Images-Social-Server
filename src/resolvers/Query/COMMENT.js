@@ -5,12 +5,13 @@ const commentQuery = {
   /**
    *
    * @param {*} parent
-   * @param {{data: {postId: string, limit: number, after: string}}} args
+   * @param {{data: {postId: string}, limit: number, after: string}} args
    * @param {*} info
    * @returns
    */
   getCommentsByPostId: async (parent, args, info) => {
-    const { postId, after, limit } = args.data;
+    const { postId } = args.data;
+    const { after, limit } = args;
 
     const [result, count] = await prisma.$transaction([
       prisma.comment.findMany({
@@ -61,19 +62,20 @@ const commentQuery = {
   /**
    *
    * @param {*} parent
-   * @param {{data: {storyId: string, limit: number, after: string}}} args
+   * @param {{data: {storyId: string}, limit: number, after: string}} args
    * @param {*} info
    * @returns
    */
   getCommentsByStoryId: async (parent, args, info) => {
-    const { postId, after, limit } = args.data;
+    const { storyId } = args.data;
+    const { after, limit } = args;
 
     const [result, count] = await prisma.$transaction([
       prisma.comment.findMany({
         take: limit || DEFAULT_LIMIT,
         skip: 1,
         where: {
-          storyId: postId,
+          storyId: storyId,
         },
         include: {
           children: {
