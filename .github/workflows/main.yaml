@@ -202,9 +202,9 @@ name: Deploy to AWS Lambda
 
 on:
   push:
-    branches: [deploy]
+    branches: [deploy, develop]
   pull_request:
-    branches: [deploy]
+    branches: [deploy, develop]
   workflow_dispatch:
 
 jobs:
