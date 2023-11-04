@@ -4,13 +4,6 @@ const tagQuery = {
   allTags: async (parent, args, info) => {
     return await prisma.tag.findMany();
   },
-
-  /**
- * @param {*} parent
- * @param {*} args
- * @param {*} info
- * @returns
- */
   suggestTags: async (parent, args, info) => {
     const a = await prisma.tag.findMany();
     return a.slice(0, 10);

@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 const followingDefs = gql`
   extend type Query {
     allFollowing: [Following]!
-    userFollowingInfo(data: UserFollowingInfoInput!): [Following]!
+    userFollowingInfo(data: UserFollowingInfoInput!): Following!
   }
 
   input UserFollowingInfoInput {

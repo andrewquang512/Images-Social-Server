@@ -10,6 +10,7 @@ import albumMutation from './album.js';
 import tagMutation from './tag.js';
 import followerMutation from './follower.js';
 import followingMutation from './following.js';
+import reportMutation from './report.js';
 
 const Mutation = {
   // User
@@ -36,6 +37,8 @@ const Mutation = {
   ...followerMutation,
   // Following
   ...followingMutation,
+  // Following
+  ...reportMutation,
 };
 
 export default Mutation;

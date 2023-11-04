@@ -10,6 +10,7 @@ import Album from './Album___.js';
 import Tag from './Tag___.js';
 import Follower from './Follower___.js';
 import Following from './Following___.js';
+import Report from './Report___.js';
 
 const Type = {
   User,
@@ -24,6 +25,7 @@ const Type = {
   Tag,
   Follower,
   Following,
+  Report,
 };
 
 export default Type;

@@ -158,6 +158,10 @@ const postQuery = {
     let tags = [],
       users = [];
 
+    if (!args.data.searchString) {
+      return { tags, users };
+    }
+
     users = await prisma.user.findMany({
       where: {
         OR: [
