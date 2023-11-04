@@ -9,18 +9,14 @@ const imageQuery = {
 
   /**
    * @param {*} parent
-   * @param {{data: {categoryId: string, limit: number, after: string}}} args
+   * @param {{data: {categoryId: string}, limit: number, after: string}} args
    * @param {*} info
    */
   exploreImages: async (parent, args, info) => {
     const { after, categoryId, limit = DEFAULT_LIMIT } = args.data;
 
-    const totalCounts = await prisma.image.count();
-    const randomSkip = Math.floor(Math.random() * totalCounts);
-
     const [referencePost, initImages] = await prisma.$transaction([
       prisma.post.findFirst({
-        skip: randomSkip,
         where: {
           categoryId: {
             has: categoryId,
@@ -51,17 +47,17 @@ const imageQuery = {
     const referenceImage = referencePost.image;
 
     const result = [];
+    const initImagesMap = []
     for (const img of initImages) {
-      try {
-        const isSimilar = await compareImages(referenceImage.url, img.url)
-        if (isSimilar) {
-          result.push(img);
-        }
-      } catch (error) {
-        console.error(error)
-        continue
-      }
+      initImagesMap.push(compareImages(referenceImage.url, img.url))
     };
+
+    const isSimilarImages = await Promise.allSettled(initImagesMap)
+    for (const imgIndex in initImages) {
+      if (isSimilarImages[imgIndex]?.value) {
+        result.push(initImages[imgIndex])
+      }
+    }
 
     let lastId = initImages[initImages.length - 1].id
     let nextItem = await prisma.image.count({
@@ -81,17 +77,17 @@ const imageQuery = {
         },
       })
 
+      const nextImagesMap = []
       for (const img of nextImages) {
-        try {
-          const isSimilar = await compareImages(referenceImage.url, img.url)
-          if (isSimilar) {
-            result.push(img);
-          }
-        } catch (error) {
-          console.error(error)
-          continue
-        }
+        nextImagesMap.push(compareImages(referenceImage.url, img.url))
       };
+
+      const isSimilarImages = await Promise.allSettled(nextImagesMap)
+      for (const imgIndex in nextImages) {
+        if (isSimilarImages[imgIndex]?.value) {
+          result.push(nextImages[imgIndex])
+        }
+      }
 
       lastId = nextImages[nextImages.length - 1].id
       nextItem = await prisma.image.count({
