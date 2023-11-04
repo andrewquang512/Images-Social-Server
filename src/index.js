@@ -1,7 +1,10 @@
 // Apollo
 import { ApolloServer } from '@apollo/server';
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { startStandaloneServer } from '@apollo/server/standalone';
+import {
+  ApolloServerPluginLandingPageLocalDefault,
+  ApolloServerPluginLandingPageProductionDefault
+} from '@apollo/server/plugin/landingPage/default';
 
 // Prisma
 import { prisma } from './prisma/database.js';
@@ -35,7 +38,7 @@ const server = new ApolloServer({
     credentials: true, // <- enable CORS response for requests with credentials (cookies, http authentication)
   },
   plugins: [
-    ApolloServerPluginLandingPageLocalDefault,
+    ApolloServerPluginLandingPageProductionDefault,
     ...(parseInt(process.env.IS_LOGGING) ? [loggingPlugin] : []),
   ],
   logger: console,

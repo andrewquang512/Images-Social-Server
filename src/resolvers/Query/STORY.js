@@ -58,7 +58,14 @@ const storyQuery = {
       },
     };
   },
-  storyInfo: async (parent, args, { prisma }, info) => {
+
+  /**
+   * @param {*} parent
+   * @param {{data: {storyId: string}}} args
+   * @param {*} info
+   * @returns
+   */
+  storyInfo: async (parent, args, info) => {
     return await prisma.story.findUnique({
       where: {
         id: args.data.storyId,
