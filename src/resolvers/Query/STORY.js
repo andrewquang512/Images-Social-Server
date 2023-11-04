@@ -23,7 +23,9 @@ const storyQuery = {
     const [result, count] = await prisma.$transaction([
       prisma.story.findMany({
         take: limit || DEFAULT_LIMIT,
-        skip: 1,
+        ...(after && {
+          skip: 1
+        }),
         orderBy: {
           createdAt: 'desc',
         },

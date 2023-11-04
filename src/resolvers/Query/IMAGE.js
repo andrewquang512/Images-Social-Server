@@ -15,10 +15,12 @@ const imageQuery = {
   exploreImages: async (parent, args, info) => {
     const { after, categoryId, limit = DEFAULT_LIMIT } = args.data;
 
-    const result = [];
-    const [referencePosts, allImages] = await Promise.all([
-      prisma.post.findMany({
-        take: limit / 2,
+    const totalCounts = await prisma.image.count();
+    const randomSkip = Math.floor(Math.random() * totalCounts);
+
+    const [referencePost, initImages] = await prisma.$transaction([
+      prisma.post.findFirst({
+        skip: randomSkip,
         where: {
           categoryId: {
             has: categoryId,
@@ -33,24 +35,93 @@ const imageQuery = {
           },
         },
       }),
-      prisma.image.findMany(),
+      prisma.image.findMany({
+        take: limit,
+        ...(after && {
+          skip: 1
+        }),
+        ...(after && {
+          cursor: {
+            id: after,
+          },
+        }),
+      }),
     ]);
 
-    const referenceImages = referencePosts.map((each) => each.image);
+    const referenceImage = referencePost.image;
 
-    allImages.map(async (img) => {
-      for (const refImage of referenceImages) {
+    const result = [];
+    for (const img of initImages) {
+      try {
+        const isSimilar = await compareImages(referenceImage.url, img.url)
+        if (isSimilar) {
+          result.push(img);
+        }
+      } catch (error) {
+        console.error(error)
+        continue
+      }
+    };
+
+    let lastId = initImages[initImages.length - 1].id
+    let nextItem = await prisma.image.count({
+      take: 1,
+      skip: 1,
+      cursor: {
+        id: lastId,
+      },
+    })
+    while (result.length !== limit && nextItem) {
+
+      const nextImages = await prisma.image.findMany({
+        take: limit,
+        skip: 1,
+        cursor: {
+          id: lastId,
+        },
+      })
+
+      for (const img of nextImages) {
         try {
-          const isSimilar = await compareImages(refImage.url, img.url)
+          const isSimilar = await compareImages(referenceImage.url, img.url)
           if (isSimilar) {
             result.push(img);
           }
         } catch (error) {
           console.error(error)
-          return
+          continue
         }
-      }
-    });
+      };
+
+      lastId = nextImages[nextImages.length - 1].id
+      nextItem = await prisma.image.count({
+        take: 1,
+        skip: 1,
+        cursor: {
+          id: lastId,
+        },
+      })
+    }
+
+    console.log('Result', result);
+
+    const hasNextPage = result.length !== 0 && nextItem;
+    console.log('hasNextPage', hasNextPage);
+
+    const nodes = result.map((each) => ({
+      node: each,
+      cursor: each.id,
+    }));
+    return {
+      edges: nodes,
+      pageInfo: {
+        hasNextPage,
+        hasPreviousPage: after ? true : false,
+        // startCursor,
+        startCursor: nodes.length === 0 ? '' : nodes[0].cursor,
+        endCursor: nodes.length === 0 ? '' : nodes.slice(-1)[0].cursor,
+      },
+    };
 
     return result;
   },
