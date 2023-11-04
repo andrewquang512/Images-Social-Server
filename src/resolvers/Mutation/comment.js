@@ -12,6 +12,10 @@ const commentMutation = {
   createComment: async (parent, args, info) => {
     const { content, postId, storyId, userId, parentCommentId = null } = args.data
 
+    if (!storyId && !postId) {
+      throw Error('At least storyId or postId provided')
+    }
+
     let comment;
     try {
       comment = await prisma.comment.create({

@@ -4,7 +4,7 @@ import commonDefs from './Common_Common.js'
 const imageDefs = gql`
   extend type Query {
     allImages: [Image]!
-    exploreImages(data: ExploreImagesInput): ImagePagination!
+    exploreImages(data: ExploreImagesInput, limit: Int, after: String): ImagePagination!
   }
 
  type ImagePagination {
@@ -25,8 +25,6 @@ const imageDefs = gql`
 
   input ExploreImagesInput{
     categoryId: String!
-    limit: Int
-    after: String
   }
 
   type Image {
