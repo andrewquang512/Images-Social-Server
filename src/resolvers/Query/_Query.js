@@ -10,6 +10,7 @@ import albumQuery from './ALBUM.js';
 import tagQuery from './TAG.js';
 import followerQuery from './FOLLOWER.js';
 import followingQuery from './FOLLOWING.js';
+import reportQuery from './REPORT.js';
 
 const Query = {
   // User
@@ -36,6 +37,8 @@ const Query = {
   ...followerQuery,
   // Following
   ...followingQuery,
+  // Report
+  ...reportQuery,
 };
 
 export default Query;

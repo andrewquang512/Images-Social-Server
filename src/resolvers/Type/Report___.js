@@ -1,5 +1,5 @@
 import { prisma } from '../../prisma/database.js';
 
-const Contest = {};
+const Report = {};
 
-export default Contest;
+export default Report;

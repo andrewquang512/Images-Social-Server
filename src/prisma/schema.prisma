@@ -48,9 +48,6 @@ model User {
   // courses       Course[]
   // notifications Notification[]
 
-  reportIDs      String[] @db.ObjectId
-  user_to_report Report[] @relation(fields: [reportIDs], references: [id])
-
   chatIDs      String[] @db.ObjectId
   user_to_chat Chat[]   @relation(fields: [chatIDs], references: [id])
 
@@ -69,10 +66,13 @@ model User {
 
 model Report {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
-  reason String
 
-  userIDs        String[] @db.ObjectId
-  report_to_user User[]   @relation(fields: [userIDs], references: [id])
+  isFinished Boolean
+  reason String
+  postId String
+  userId String
+
+  userReported String
 }
 
 model Follower {
