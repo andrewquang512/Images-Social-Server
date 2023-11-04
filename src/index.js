@@ -3,7 +3,6 @@ import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import {
   ApolloServerPluginLandingPageLocalDefault,
-  ApolloServerPluginLandingPageProductionDefault
 } from '@apollo/server/plugin/landingPage/default';
 
 // Prisma
@@ -33,12 +32,13 @@ const server = new ApolloServer({
   context: () => {
     return { prisma };
   },
+  introspection: true,
   cors: {
     origin: '*', // <- allow request from all domains
     credentials: true, // <- enable CORS response for requests with credentials (cookies, http authentication)
   },
   plugins: [
-    ApolloServerPluginLandingPageProductionDefault,
+    ApolloServerPluginLandingPageLocalDefault({ embed: true }),
     ...(parseInt(process.env.IS_LOGGING) ? [loggingPlugin] : []),
   ],
   logger: console,

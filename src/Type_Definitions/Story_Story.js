@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import commonDefs from './Common_Common.js'
 
 const storyDefs = gql`
   extend type Query {
@@ -11,17 +12,11 @@ const storyDefs = gql`
     edges: [StoryEdge!]!
     pageInfo: PageInfo!
   }
-
+  ${commonDefs}
+  
   type StoryEdge {
     node: Story
     cursor: String!
-  }
-
-  type PageInfo {
-    hasNextPage: Boolean!
-    hasPreviousPage: Boolean!
-    startCursor: String
-    endCursor: String
   }
 
   input StoryInfoInput {

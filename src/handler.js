@@ -2,7 +2,6 @@
 import { ApolloServer } from '@apollo/server';
 import {
   ApolloServerPluginLandingPageLocalDefault,
-  ApolloServerPluginLandingPageProductionDefault
 } from '@apollo/server/plugin/landingPage/default';
 import {
   startServerAndCreateLambdaHandler,
@@ -37,8 +36,9 @@ const server = new ApolloServer({
   context: () => {
     return { prisma };
   },
+  introspection: true,
   plugins: [
-    ApolloServerPluginLandingPageProductionDefault,
+    ApolloServerPluginLandingPageLocalDefault({ embed: true }),
     ...(parseInt(process.env.IS_LOGGING) ? [loggingPlugin] : []),
   ],
   logger: console,
