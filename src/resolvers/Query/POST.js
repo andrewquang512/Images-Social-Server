@@ -20,9 +20,7 @@ const postQuery = {
       nodes = [],
       timeCall = args.timeCall;
 
-    const after = args.after,
-      currentLength = args.currentLength;
-    console.log({ currentLength }, 'first from FE');
+    const after = args.after;
 
     if (!after) {
       timeCall += 1;

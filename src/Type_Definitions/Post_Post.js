@@ -8,14 +8,7 @@ const postDefs = gql`
     allPosts: [Post]!
     postInfo(data: PostInfoInput!): Post!
 
-    getNewFeed(
-      userId: String
-      after: String
-      timeCall: Int
-      currentLength: Int
-      onlyOneModeFromNow: Boolean
-      noMorePost: Int
-    ): PostConnection!
+    getNewFeed(userId: String, after: String, timeCall: Int): PostConnection!
     getAllUserPosts(
       userId: String
       currentUserId: String
@@ -47,8 +40,6 @@ const postDefs = gql`
     edges: [PostEdge!]!
     pageInfo: PageInfo!
     timeCall: Int!
-    onlyOneModeFromNow: Boolean!
-    noMorePost: Int!
   }
   ${commonDefs}
 
