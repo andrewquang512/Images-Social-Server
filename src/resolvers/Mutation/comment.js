@@ -21,11 +21,34 @@ const commentMutation = {
       comment = await prisma.comment.create({
         data: {
           content: content,
-          userId: userId,
-          postId: postId,
-          storyId: storyId,
-          parentId: parentCommentId ? parentCommentId : null
+          cmt_to_user: {
+            connect: {
+              id: userId
+            }
+          },
+          ...(parentCommentId && {
+            parent: {
+              connect: {
+                id: parentCommentId
+              }
+            },
+          }),
+          ...((postId || postId === '000000000000000000000000') && {
+            cmt_to_post: {
+              connect: {
+                id: postId
+              }
+            },
+          }),
+          ...((storyId || storyId === '000000000000000000000000') && {
+            cmt_to_story: {
+              connect: {
+                id: storyId
+              }
+            },
+          }),
         },
+
       });
     } catch (e) {
       console.log(e);

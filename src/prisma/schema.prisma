@@ -218,11 +218,11 @@ model Comment {
   userId      String @db.ObjectId
   cmt_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  postId      String @db.ObjectId
-  cmt_to_post Post   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  postId      String? @db.ObjectId
+  cmt_to_post Post?   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  storyId      String @db.ObjectId
-  cmt_to_story Story  @relation(fields: [storyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  storyId      String? @db.ObjectId
+  cmt_to_story Story?  @relation(fields: [storyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   parentId String?   @db.ObjectId
   parent   Comment?  @relation(name: "Comment_Children", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
