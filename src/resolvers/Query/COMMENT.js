@@ -141,10 +141,7 @@ const commentQuery = {
       },
     })
 
-    if (result.child === null || result.child.length === 0) {
-      return []
-    }
-    return result.child
+    return result
   }
 
 };

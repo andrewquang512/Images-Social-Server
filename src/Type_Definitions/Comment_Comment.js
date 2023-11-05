@@ -15,7 +15,7 @@ const commentDefs = gql`
   }
 
   extend type Query {
-    getCommentChild(id: ID!): [Comment]!
+    getCommentChild(id: ID!): Comment!
     getCommentsByPostId(data: GetCommentsByPostIdInput, limit: Int, after: String): CommentPagination!
     getCommentsByStoryId(data: GetCommentsByStoryIdInput, limit: Int, after: String): CommentPagination!
   }
