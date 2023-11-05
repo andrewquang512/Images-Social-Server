@@ -11,6 +11,7 @@ import Tag from './Tag___.js';
 import Follower from './Follower___.js';
 import Following from './Following___.js';
 import Report from './Report___.js';
+import Contest from './Contest___.js';
 
 const Type = {
   User,
@@ -26,6 +27,7 @@ const Type = {
   Follower,
   Following,
   Report,
+  Contest,
 };
 
 export default Type;

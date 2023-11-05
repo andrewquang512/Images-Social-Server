@@ -10,6 +10,7 @@ const postMutation = {
           userId: args.data.userId,
           caption: args.data.caption,
           postViewStatus: args.data.postViewStatus,
+          contestId: args.data.contestId,
           points: 0,
 
           categoryId: args.data.categoryId ? args.data.categoryId : [],
@@ -70,7 +71,6 @@ const postMutation = {
 
     return result;
   },
-  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   updatePost: async (parent, args, info) => {
     let result;
     console.log(args.data);
@@ -81,7 +81,7 @@ const postMutation = {
         },
         data: {
           title: args.data.title || undefined,
-          // caption: args.data.caption || undefined,
+          caption: args.data.caption || undefined,
           postViewStatus: args.data.hasOwnProperty('postViewStatus')
             ? args.data.postViewStatus
             : undefined,

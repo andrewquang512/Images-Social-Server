@@ -2,80 +2,49 @@ import gql from 'graphql-tag';
 
 const contestDefs = gql`
   extend type Query {
-    allUsers: [User]!
-    userInfo(data: UserInfoInput!): User!
-    verifyUser(data: VerifyUserInput!): User!
-    suggestUserToFollow(data: SuggestUserToFollowInput!): [User]!
+    allContests: [Contest]!
+    contestInfo(data: ContestInfoInput!): Contest!
   }
 
-  input VerifyUserInput {
-    hashPassword: String!
-    email: String!
-  }
-
-  input SuggestUserToFollowInput {
-    userId: ID!
-  }
-
-  input UserInfoInput {
-    userId: ID!
+  input ContestInfoInput {
+    contestId: ID!
   }
 
   # _______________________________________________________
   # _______________________________________________________
 
   extend type Mutation {
-    createUser(data: CreateUserInput!): User!
-    deleteUser(data: DeleteUserInput!): User!
-    deleteAllUser: DeleteAllReturnType!
-    updateUser(data: UpdateUserInput!): User!
+    createContest(data: CreateContestInput!): Contest!
+    deleteContest(data: DeleteContestInput!): Contest!
+    deleteAllContest: DeleteAllReturnType!
   }
 
-  input CreateUserInput {
+  input CreateContestInput {
     name: String!
-    profileImageURL: String
-    backgroundImageURL: String
-    email: String!
-    hashPassword: String!
-    phoneNumber: String
-    age: Int
-    birthday: String
+    contestImageURL: String!
+    description: String!
+
+    startDate: String!
+    endDate: String!
+    prize: String!
   }
 
-  input DeleteUserInput {
-    userId: ID!
+  input DeleteContestInput {
+    contestId: ID!
   }
 
-  input UpdateUserInput {
-    userId: ID!
-    name: String
-    profileImageURL: String
-    backgroundImageURL: String
-    email: String
-    hashPassword: String
-    phoneNumber: String
-    age: Int
-    birthday: String
-  }
-
-  type User {
+  type Contest {
     id: ID!
-    isAdmin: Int!
-    email: String!
-    hashPassword: String!
     name: String!
-    age: Int!
-    birthday: String!
-    phoneNumber: String!
-    profileImageURL: String!
-    backgroundImageURL: String!
+    contestImageURL: String!
+    description: String!
+
+    startDate: String!
+    endDate: String!
+    prize: String!
+
     createdAt: String!
     updatedAt: String
-
-    level: Level!
-    posts: [Post]!
-    stories: [Story]!
-    albums: [Album]!
   }
 `;
 

@@ -177,6 +177,7 @@ model Post {
   points         Int
   image          Image?
   cmts           Comment[]
+  contestId     String
 
   userId       String @db.ObjectId
   post_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -234,10 +235,17 @@ model Comment {
 model Contest {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
+
+  contestImageURL String
+  description String
+
+  startDate String
+  endDate String
+  prize String
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // posts     Post[]
 }
 
 model Course {

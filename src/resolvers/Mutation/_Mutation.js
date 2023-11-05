@@ -11,6 +11,7 @@ import tagMutation from './tag.js';
 import followerMutation from './follower.js';
 import followingMutation from './following.js';
 import reportMutation from './report.js';
+import contestMutation from './contest.js';
 
 const Mutation = {
   // User
@@ -37,8 +38,10 @@ const Mutation = {
   ...followerMutation,
   // Following
   ...followingMutation,
-  // Following
+  // Report
   ...reportMutation,
+  // Contest
+  ...contestMutation,
 };
 
 export default Mutation;

@@ -11,6 +11,7 @@ import tagQuery from './TAG.js';
 import followerQuery from './FOLLOWER.js';
 import followingQuery from './FOLLOWING.js';
 import reportQuery from './REPORT.js';
+import contestQuery from './CONTEST.js';
 
 const Query = {
   // User
@@ -39,6 +40,8 @@ const Query = {
   ...followingQuery,
   // Report
   ...reportQuery,
+  // Contest
+  ...contestQuery,
 };
 
 export default Query;

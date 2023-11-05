@@ -1,9 +1,7 @@
 // Apollo
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
-import {
-  ApolloServerPluginLandingPageLocalDefault,
-} from '@apollo/server/plugin/landingPage/default';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
 // Prisma
 import { prisma } from './prisma/database.js';
@@ -25,7 +23,7 @@ const connectToDatabase = async () => {
 };
 
 await connectToDatabase();
-// The server
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,

@@ -71,6 +71,7 @@ const postDefs = gql`
 
     title: String!
     caption: String!
+    contestId: String!
     postViewStatus: ViewStatus!
 
     imageURL: String!
