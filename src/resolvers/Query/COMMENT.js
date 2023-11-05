@@ -42,7 +42,7 @@ const commentQuery = {
     console.log('count', count);
 
     const sortedResult = result.sort((before, after) => after.votes - before.votes);
-    const hasNextPage = sortedResult.length !== 0 && sortedResult.length <= count;
+    const hasNextPage = sortedResult.length !== 0 && sortedResult.length < count;
     console.log('hasNextPage', hasNextPage);
 
     const nodes = sortedResult.map((each) => ({
@@ -101,7 +101,7 @@ const commentQuery = {
     console.log('count', count);
 
     const sortedResult = result.sort((before, after) => after.votes - before.votes);
-    const hasNextPage = sortedResult.length !== 0 && sortedResult.length <= count;
+    const hasNextPage = sortedResult.length !== 0 && sortedResult.length < count;
     console.log('hasNextPage', hasNextPage);
 
     const nodes = sortedResult.map((each) => ({
