@@ -46,6 +46,7 @@ const commentDefs = gql`
   input VoteCommentInput {
     commentId: ID!
     action: voteCommentAction!
+    userId: ID!
   }
 
   input CreateCommentInput {
@@ -77,7 +78,7 @@ const commentDefs = gql`
     votes: Int!
     children: [Comment]
 
-    userVotePost: [String]!
+    userVoteComment: [String]!
   }
 `;
 

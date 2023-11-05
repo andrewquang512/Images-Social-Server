@@ -87,12 +87,12 @@ const commentMutation = {
   /**
    *
    * @param {*} parent
-   * @param {{data: {commentId: string, action: UPVOTE | DOWNVOTE}}} args
+   * @param {{data: {commentId: string, userId: string, action: UPVOTE | DOWNVOTE}}} args
    * @param {*} info
    * @returns
    */
   voteComment: async (parent, args, info) => {
-    const { action, commentId } = args.data;
+    const { action, commentId, userId } = args.data;
 
     const existedComment = await prisma.comment.findUnique({
       where: {
@@ -104,6 +104,10 @@ const commentMutation = {
       throw Error('Comment Not Exsited');
     }
 
+    if (existedComment.userVoteComment.length > 0 && existedComment.userVoteComment.includes(userId)) {
+      throw Error('User has voted this comment already');
+    }
+
     switch (action) {
       case VOTE_COMMENT_ACTION.DOWNVOTE:
         return await prisma.comment.update({
@@ -112,6 +116,9 @@ const commentMutation = {
           },
           data: {
             votes: existedComment.votes - 1,
+            userVoteComment: {
+              push: userId
+            }
           },
         });
 
@@ -122,6 +129,9 @@ const commentMutation = {
           },
           data: {
             votes: existedComment.votes + 1,
+            userVoteComment: {
+              push: userId
+            }
           },
         });
       default:

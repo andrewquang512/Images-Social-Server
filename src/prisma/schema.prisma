@@ -229,6 +229,7 @@ model Comment {
   children Comment[] @relation(name: "Comment_Children")
 
   votes Int @default(0)
+  userVoteComment String[]
 }
 
 model Contest {
