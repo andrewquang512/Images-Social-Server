@@ -51,8 +51,8 @@ const commentDefs = gql`
   input CreateCommentInput {
     content: String!
     userId: ID!
-    postId: ID!
-    storyId: ID!
+    postId: ID
+    storyId: ID
     parentCommentId: ID
   }
 
@@ -76,6 +76,8 @@ const commentDefs = gql`
 
     votes: Int!
     children: [Comment]
+
+    userVotePost: [String]!
   }
 `;
 

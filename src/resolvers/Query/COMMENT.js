@@ -16,7 +16,9 @@ const commentQuery = {
     const [result, count] = await prisma.$transaction([
       prisma.comment.findMany({
         take: limit || DEFAULT_LIMIT,
-        skip: 1,
+        ...(after && {
+          skip: 1
+        }),
         where: {
           postId: postId,
         },
@@ -73,7 +75,9 @@ const commentQuery = {
     const [result, count] = await prisma.$transaction([
       prisma.comment.findMany({
         take: limit || DEFAULT_LIMIT,
-        skip: 1,
+        ...(after && {
+          skip: 1
+        }),
         where: {
           storyId: storyId,
         },

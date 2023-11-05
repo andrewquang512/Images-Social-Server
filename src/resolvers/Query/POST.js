@@ -18,9 +18,8 @@ const postQuery = {
 
     let a,
       nodes = [],
-      timeCall = args.timeCall,
-      onlyOneModeFromNow = args.onlyOneModeFromNow,
-      noMorePost = args.noMorePost;
+      timeCall = args.timeCall;
+
     const after = args.after,
       currentLength = args.currentLength;
     console.log({ currentLength }, 'first from FE');
@@ -173,8 +172,6 @@ const postQuery = {
         endCursor: nodes.length === 0 ? '' : nodes.slice(-1)[0].cursor,
       },
       timeCall,
-      onlyOneModeFromNow,
-      noMorePost,
     };
   },
   getAllUserPosts: async (parent, args, info) => {
@@ -334,12 +331,17 @@ const postQuery = {
 
     allImages = _.filter(allImages, (o) => o.id != currentImage.id);
 
-    allImages.map(async (img) => {
-      const isSimilar = await compareImages(currentImage.url, img.url);
-      if (isSimilar) {
-        result.push(img);
+    for (const img of allImages) {
+      try {
+        const isSimilar = await compareImages(currentImage.url, img.url);
+        if (isSimilar) {
+          result.push(img);
+        }
+      } catch (error) {
+        console.error(error);
+        continue;
       }
-    });
+    }
 
     console.log(result);
     return result;
