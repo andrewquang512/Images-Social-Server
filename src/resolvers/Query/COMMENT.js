@@ -119,9 +119,34 @@ const commentQuery = {
       },
     };
   },
-  // userComments: async (parent, args, info) => {
-  //   return await prisma.post.findMany();
-  // },
+
+  /**
+   * 
+   * @param {*} parent 
+   * @param {{id: string}} args 
+   * @param {*} info 
+   */
+  getCommentChild: async (parent, args, info) => {
+    const { id } = args
+    const result = await prisma.comment.findFirst({
+      where: {
+        id: id,
+      },
+      include: {
+        child: {
+          include: {
+            child: true,
+          },
+        },
+      },
+    })
+
+    if (result.child === null || result.child.length === 0) {
+      return []
+    }
+    return result.child
+  }
+
 };
 
 export default commentQuery;
