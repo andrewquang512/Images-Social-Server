@@ -1,14 +1,21 @@
 import gql from 'graphql-tag';
 import tagDefs from './Tag_Tag.js';
 import userDefs from './User_User.js';
-import commonDefs from './Common_Common.js'
+import commonDefs from './Common_Common.js';
 
 const postDefs = gql`
   extend type Query {
     allPosts: [Post]!
     postInfo(data: PostInfoInput!): Post!
 
-    getNewFeed(userId: String, after: String, timeCall: Int): PostConnection!
+    getNewFeed(
+      userId: String
+      after: String
+      timeCall: Int
+      currentLength: Int
+      onlyOneModeFromNow: Boolean
+      noMorePost: Int
+    ): PostConnection!
     getAllUserPosts(
       userId: String
       currentUserId: String
@@ -39,9 +46,12 @@ const postDefs = gql`
   type PostConnection {
     edges: [PostEdge!]!
     pageInfo: PageInfo!
+    timeCall: Int!
+    onlyOneModeFromNow: Boolean!
+    noMorePost: Int!
   }
   ${commonDefs}
-  
+
   type PostEdge {
     node: Post
     cursor: String!

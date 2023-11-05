@@ -14,10 +14,20 @@ const postQuery = {
     });
   },
   getNewFeed: async (parent, args, info) => {
-    let a, nodes;
-    const after = args.after;
+    console.log(args);
+
+    let a,
+      nodes = [],
+      timeCall = args.timeCall,
+      onlyOneModeFromNow = args.onlyOneModeFromNow,
+      noMorePost = args.noMorePost;
+    const after = args.after,
+      currentLength = args.currentLength;
+    console.log({ currentLength }, 'first from FE');
 
     if (!after) {
+      timeCall += 1;
+
       a = await prisma.post.findMany({
         where: {
           userId: args.userId,
@@ -43,60 +53,116 @@ const postQuery = {
           userId: args.userId,
         },
       });
-
       console.log({ b });
-      console.log(args);
 
-      console.log(args.timeCall);
+      // User not following anyone
+      if (!b.userFollowing.length) {
+        console.log('User not following anyone');
+        timeCall += 1;
+      }
 
-      if (args.timeCall % 2 === 1) {
-        a = await prisma.post.findMany({
-          where: {
-            userId: { in: b.userFollowing },
-            OR: [
-              { postViewStatus: 'PUBLIC' },
-              { postViewStatus: 'ONLY_FOLLOWERS' },
+      // console.log({ b });
+
+      let countEmpty = 0;
+      while (true) {
+        if (countEmpty === 2) break;
+
+        // Following
+        if (timeCall % 2 === 1) {
+          a = await prisma.post.findMany({
+            where: {
+              userId: { in: b.userFollowing },
+              OR: [
+                { postViewStatus: 'PUBLIC' },
+                { postViewStatus: 'ONLY_FOLLOWERS' },
+              ],
+            },
+            orderBy: [
+              {
+                createdAt: 'desc',
+              },
+              { points: 'desc' },
             ],
-          },
-          orderBy: [
-            {
-              createdAt: 'desc',
-            },
-            { points: 'desc' },
-          ],
-          skip: (args.timeCall - 1) * 6,
-          take: 6,
-        });
+            skip: Math.trunc(timeCall / 2) * 6,
+            take: 6,
+          });
 
-        nodes = _.shuffle(a).map((post) => ({
-          node: post,
-          cursor: post.id,
-        }));
-        console.log({ nodes });
-      } else {
-        a = await prisma.post.findMany({
-          where: {
-            userId: { notIn: b.userFollowing },
-            postViewStatus: 'PUBLIC',
-          },
-          orderBy: [
-            {
-              createdAt: 'desc',
-            },
-            { points: 'desc' },
-          ],
-          skip: (args.timeCall - 2) * 3,
-          take: 3,
-        });
+          nodes = _.shuffle(a).map((post) => ({
+            node: post,
+            cursor: post.id,
+          }));
+          console.log({ nodes }, 'in following');
 
-        nodes = _.shuffle(a).map((post) => ({
-          node: post,
-          cursor: post.id,
-        }));
-        console.log({ nodes });
+          timeCall += 1;
+
+          if (nodes.length === 0) {
+            timeCall += 1;
+            countEmpty += 1;
+            console.log({ countEmpty });
+          } else break;
+        }
+
+        // Not Following
+        if (timeCall % 2 === 0) {
+          console.log(
+            (
+              await prisma.post.findMany({
+                where: {
+                  AND: [
+                    { userId: { notIn: b.userFollowing } },
+                    { userId: { not: args.userId } },
+                  ],
+                  userId: { notIn: b.userFollowing },
+                  postViewStatus: 'PUBLIC',
+                },
+                orderBy: [
+                  {
+                    createdAt: 'desc',
+                  },
+                  { points: 'desc' },
+                ],
+              })
+            ).length,
+            'total not following',
+          );
+
+          a = await prisma.post.findMany({
+            where: {
+              AND: [
+                { userId: { notIn: b.userFollowing } },
+                { userId: { not: args.userId } },
+              ],
+              userId: { notIn: b.userFollowing },
+              postViewStatus: 'PUBLIC',
+            },
+            orderBy: [
+              {
+                createdAt: 'desc',
+              },
+              { points: 'desc' },
+            ],
+            skip: (timeCall / 2 - 1) * 3,
+            take: 3,
+          });
+
+          nodes = _.shuffle(a).map((post) => ({
+            node: post,
+            cursor: post.id,
+          }));
+          console.log({ nodes }, 'not in following');
+
+          timeCall += 1;
+
+          if (nodes.length === 0) {
+            timeCall += 1;
+            countEmpty += 1;
+            console.log({ countEmpty });
+          } else break;
+        }
       }
     }
 
+    console.log('return', { nodes, timeCall });
     return {
       edges: nodes,
       pageInfo: {
@@ -106,20 +172,61 @@ const postQuery = {
         startCursor: nodes.length === 0 ? '' : nodes[0].cursor,
         endCursor: nodes.length === 0 ? '' : nodes.slice(-1)[0].cursor,
       },
+      timeCall,
+      onlyOneModeFromNow,
+      noMorePost,
     };
   },
   getAllUserPosts: async (parent, args, info) => {
     let nodes;
     const after = args.after;
 
-    let a = await prisma.post.findMany({
-      where: {
-        userId: args.userId,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
+    let a;
+
+    if (args.currentUserId === args.userId) {
+      a = await prisma.post.findMany({
+        where: {
+          userId: args.userId,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+    } else {
+      // console.log(2);
+      const follower = await prisma.follower.findUnique({
+        where: {
+          userId: args.userId,
+        },
+      });
+      console.log({ follower });
+
+      if (follower.userFollower.includes(args.currentUserId)) {
+        // console.log(3);
+        a = await prisma.post.findMany({
+          where: {
+            userId: args.userId,
+            OR: [
+              { postViewStatus: 'PUBLIC' },
+              { postViewStatus: 'ONLY_FOLLOWERS' },
+            ],
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        });
+      } else {
+        a = await prisma.post.findMany({
+          where: {
+            userId: args.userId,
+            postViewStatus: 'PUBLIC',
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        });
+      }
+    }
 
     if (!after) {
       nodes = a.slice(0, 2).map((post) => ({
@@ -228,7 +335,7 @@ const postQuery = {
     allImages = _.filter(allImages, (o) => o.id != currentImage.id);
 
     allImages.map(async (img) => {
-      const isSimilar = await compareImages(currentImage.url, img.url)
+      const isSimilar = await compareImages(currentImage.url, img.url);
       if (isSimilar) {
         result.push(img);
       }

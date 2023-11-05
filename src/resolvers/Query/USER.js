@@ -44,7 +44,7 @@ const userQuery = {
 
     const c = a.filter((elem) => !b.userFollowing.find((id) => elem.id === id));
 
-    console.log({ c });
+    // console.log({ c });
 
     if (c.length > 3) {
       return _.sampleSize(c, 3);
