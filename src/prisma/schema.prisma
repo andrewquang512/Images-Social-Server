@@ -225,8 +225,8 @@ model Comment {
   cmt_to_story Story?  @relation(fields: [storyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   parentId String?   @db.ObjectId
-  parent   Comment?  @relation(name: "Comment_Children", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  children Comment[] @relation(name: "Comment_Children")
+  parent   Comment?  @relation(name: "Comment_Child", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  child Comment[] @relation(name: "Comment_Child")
 
   votes Int @default(0)
   userVoteComment String[]

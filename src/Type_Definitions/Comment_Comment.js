@@ -76,7 +76,7 @@ const commentDefs = gql`
     storyId: Story!
 
     votes: Int!
-    children: [Comment]
+    child: [Comment]
 
     userVoteComment: [String]!
   }

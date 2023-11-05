@@ -23,9 +23,9 @@ const commentQuery = {
           postId: postId,
         },
         include: {
-          children: {
+          child: {
             include: {
-              children: true,
+              child: true,
             },
           },
         },
@@ -82,9 +82,9 @@ const commentQuery = {
           storyId: storyId,
         },
         include: {
-          children: {
+          child: {
             include: {
-              children: true,
+              child: true,
             },
           },
         },

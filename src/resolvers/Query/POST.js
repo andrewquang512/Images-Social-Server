@@ -22,7 +22,7 @@ const postQuery = {
    * @returns
    */
   getNewFeed: async (parent, args, info) => {
-    const { userId, categoryIds } = args.data
+    const { userId, categoryIds = [] } = args.data
     console.log(args);
 
     let a,
