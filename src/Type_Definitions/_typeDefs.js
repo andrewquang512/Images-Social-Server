@@ -12,6 +12,7 @@ import albumDefs from './Album_Album.js';
 import followingDefs from './Following_Following.js';
 import followerDefs from './Follower_Follower.js';
 import reportDefs from './Report_Report.js';
+import profileDefs from './Profile_Profile.js'
 
 const baseDefs = gql`
   type Query {
@@ -38,6 +39,7 @@ const typeDefs = [
   storyDefs,
   commentDefs,
   tagDefs,
+  // profileDefs,
   categoryDefs,
   albumDefs,
   followingDefs,

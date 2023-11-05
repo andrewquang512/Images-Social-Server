@@ -17,12 +17,12 @@ const postQuery = {
   /**
    *
    * @param {*} parent
-   * @param {{data: {userId: string, categoryIds: String[]}, timeCall: number, after: string}} args
+   * @param {{userId: string, categoryIds: String[], timeCall: number, after: string}} args
    * @param {*} info
    * @returns
    */
   getNewFeed: async (parent, args, info) => {
-    const { userId, categoryIds = [] } = args.data
+    const { userId = undefined, categoryIds = [] } = args
     console.log(args);
 
     let a,
