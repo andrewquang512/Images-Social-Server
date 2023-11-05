@@ -15,6 +15,7 @@ const commentDefs = gql`
   }
 
   extend type Query {
+    getCommentChild(id: ID!): Comment!
     getCommentsByPostId(data: GetCommentsByPostIdInput, limit: Int, after: String): CommentPagination!
     getCommentsByStoryId(data: GetCommentsByStoryIdInput, limit: Int, after: String): CommentPagination!
   }
@@ -46,6 +47,7 @@ const commentDefs = gql`
   input VoteCommentInput {
     commentId: ID!
     action: voteCommentAction!
+    userId: ID!
   }
 
   input CreateCommentInput {
@@ -75,9 +77,9 @@ const commentDefs = gql`
     storyId: Story!
 
     votes: Int!
-    children: [Comment]
+    child: [Comment]
 
-    userVotePost: [String]!
+    userVoteComment: [String]!
   }
 `;
 

@@ -23,9 +23,9 @@ const commentQuery = {
           postId: postId,
         },
         include: {
-          children: {
+          child: {
             include: {
-              children: true,
+              child: true,
             },
           },
         },
@@ -42,7 +42,7 @@ const commentQuery = {
     console.log('count', count);
 
     const sortedResult = result.sort((before, after) => after.votes - before.votes);
-    const hasNextPage = sortedResult.length !== 0 && sortedResult.length <= count;
+    const hasNextPage = sortedResult.length !== 0 && sortedResult.length < count;
     console.log('hasNextPage', hasNextPage);
 
     const nodes = sortedResult.map((each) => ({
@@ -82,9 +82,9 @@ const commentQuery = {
           storyId: storyId,
         },
         include: {
-          children: {
+          child: {
             include: {
-              children: true,
+              child: true,
             },
           },
         },
@@ -101,7 +101,7 @@ const commentQuery = {
     console.log('count', count);
 
     const sortedResult = result.sort((before, after) => after.votes - before.votes);
-    const hasNextPage = sortedResult.length !== 0 && sortedResult.length <= count;
+    const hasNextPage = sortedResult.length !== 0 && sortedResult.length < count;
     console.log('hasNextPage', hasNextPage);
 
     const nodes = sortedResult.map((each) => ({
@@ -119,9 +119,31 @@ const commentQuery = {
       },
     };
   },
-  // userComments: async (parent, args, info) => {
-  //   return await prisma.post.findMany();
-  // },
+
+  /**
+   * 
+   * @param {*} parent 
+   * @param {{id: string}} args 
+   * @param {*} info 
+   */
+  getCommentChild: async (parent, args, info) => {
+    const { id } = args
+    const result = await prisma.comment.findFirst({
+      where: {
+        id: id,
+      },
+      include: {
+        child: {
+          include: {
+            child: true,
+          },
+        },
+      },
+    })
+
+    return result
+  }
+
 };
 
 export default commentQuery;

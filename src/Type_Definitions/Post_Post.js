@@ -8,7 +8,7 @@ const postDefs = gql`
     allPosts: [Post]!
     postInfo(data: PostInfoInput!): Post!
 
-    getNewFeed(userId: String, after: String, timeCall: Int): PostConnection!
+    getNewFeed(userId: String, categoryIds: [String], after: String, timeCall: Int): PostConnection!
     getAllUserPosts(
       userId: String
       currentUserId: String

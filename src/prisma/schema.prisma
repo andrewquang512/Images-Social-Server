@@ -33,6 +33,7 @@ model User {
   isAdmin            Int      @default(0)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
+  // biography          String
 
   level Level?
 
@@ -53,6 +54,8 @@ model User {
 
   courseIDs      String[] @db.ObjectId
   user_to_course Course[] @relation(fields: [courseIDs], references: [id])
+
+  // user_to_endorsement Endorsement[] 
 }
 
 // model Notification {
@@ -62,6 +65,23 @@ model User {
 
 //   userId               String @db.ObjectId
 //   notification_to_user User   @relation(fields: [userId], references: [id])
+// }
+// model Endorsement {
+//   id     String @id @default(auto()) @map("_id") @db.ObjectId
+// 
+//   endorser String[] @db.ObjectId
+// 
+//   userId      String @db.ObjectId
+//   user  User   @relation(fields: [userId], references: [id])
+//   
+//   skillId String @db.ObjectId
+//   skill  Skill   @relation(fields: [skillId], references: [id])
+// }
+// 
+// model Skill {
+//   id     String @id @default(auto()) @map("_id") @db.ObjectId
+//   name String
+//   endorsements Endorsement[]
 // }
 
 model Report {
@@ -219,17 +239,18 @@ model Comment {
   userId      String @db.ObjectId
   cmt_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  postId      String @db.ObjectId
-  cmt_to_post Post   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  postId      String? @db.ObjectId
+  cmt_to_post Post?   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  storyId      String @db.ObjectId
-  cmt_to_story Story  @relation(fields: [storyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  storyId      String? @db.ObjectId
+  cmt_to_story Story?  @relation(fields: [storyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   parentId String?   @db.ObjectId
-  parent   Comment?  @relation(name: "Comment_Children", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  children Comment[] @relation(name: "Comment_Children")
+  parent   Comment?  @relation(name: "Comment_Child", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  child Comment[] @relation(name: "Comment_Child")
 
   votes Int @default(0)
+  userVoteComment String[]
 }
 
 model Contest {
