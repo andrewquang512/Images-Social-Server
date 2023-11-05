@@ -13,7 +13,16 @@ const postQuery = {
       },
     });
   },
+
+  /**
+   *
+   * @param {*} parent
+   * @param {{data: {userId: string, categoryIds: String[]}, timeCall: number, after: string}} args
+   * @param {*} info
+   * @returns
+   */
   getNewFeed: async (parent, args, info) => {
+    const { userId, categoryIds } = args.data
     console.log(args);
 
     let a,
@@ -27,7 +36,10 @@ const postQuery = {
 
       a = await prisma.post.findMany({
         where: {
-          userId: args.userId,
+          userId: userId,
+          categoryId: {
+            hasEvery: categoryIds
+          },
           OR: [
             { postViewStatus: 'PUBLIC' },
             { postViewStatus: 'ONLY_FOLLOWERS' },
@@ -47,7 +59,7 @@ const postQuery = {
     } else {
       const b = await prisma.following.findUnique({
         where: {
-          userId: args.userId,
+          userId: userId,
         },
       });
       console.log({ b });
@@ -69,6 +81,9 @@ const postQuery = {
           a = await prisma.post.findMany({
             where: {
               userId: { in: b.userFollowing },
+              categoryId: {
+                hasEvery: categoryIds
+              },
               OR: [
                 { postViewStatus: 'PUBLIC' },
                 { postViewStatus: 'ONLY_FOLLOWERS' },
@@ -107,10 +122,13 @@ const postQuery = {
                 where: {
                   AND: [
                     { userId: { notIn: b.userFollowing } },
-                    { userId: { not: args.userId } },
+                    { userId: { not: userId } },
                   ],
                   userId: { notIn: b.userFollowing },
                   postViewStatus: 'PUBLIC',
+                  categoryId: {
+                    hasEvery: categoryIds
+                  },
                 },
                 orderBy: [
                   {
@@ -127,10 +145,13 @@ const postQuery = {
             where: {
               AND: [
                 { userId: { notIn: b.userFollowing } },
-                { userId: { not: args.userId } },
+                { userId: { not: userId } },
               ],
               userId: { notIn: b.userFollowing },
               postViewStatus: 'PUBLIC',
+              categoryId: {
+                hasEvery: categoryIds
+              },
             },
             orderBy: [
               {

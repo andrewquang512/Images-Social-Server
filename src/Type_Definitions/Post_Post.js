@@ -8,7 +8,7 @@ const postDefs = gql`
     allPosts: [Post]!
     postInfo(data: PostInfoInput!): Post!
 
-    getNewFeed(userId: String, after: String, timeCall: Int): PostConnection!
+    getNewFeed(data: getNewFeedInput, after: String, timeCall: Int): PostConnection!
     getAllUserPosts(
       userId: String
       currentUserId: String
@@ -18,6 +18,11 @@ const postDefs = gql`
     searchQuery(data: SearchQueryInput!): SearchReturnType!
 
     similarImages(data: SimilarImagesInput!): [Image]!
+  }
+
+  input getNewFeedInput {
+    categoryIds: [String]
+    userId: String
   }
 
   type SearchReturnType {
