@@ -55,7 +55,8 @@ model User {
   courseIDs      String[] @db.ObjectId
   user_to_course Course[] @relation(fields: [courseIDs], references: [id])
 
-  // user_to_endorsement Endorsement[] 
+  endorsementIds      String[] @db.ObjectId
+  user_to_endorsement Endorsement[] @relation(fields: [endorsementIds], references: [id])
 }
 
 // model Notification {
@@ -66,23 +67,22 @@ model User {
 //   userId               String @db.ObjectId
 //   notification_to_user User   @relation(fields: [userId], references: [id])
 // }
-// model Endorsement {
-//   id     String @id @default(auto()) @map("_id") @db.ObjectId
-// 
-//   endorser String[] @db.ObjectId
-// 
-//   userId      String @db.ObjectId
-//   user  User   @relation(fields: [userId], references: [id])
-//   
-//   skillId String @db.ObjectId
-//   skill  Skill   @relation(fields: [skillId], references: [id])
-// }
-// 
-// model Skill {
-//   id     String @id @default(auto()) @map("_id") @db.ObjectId
-//   name String
-//   endorsements Endorsement[]
-// }
+
+model Endorsement {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+
+  endorser User[] @relation( fields: [endorserIds], references: [id])
+  endorserIds String[] @db.ObjectId
+
+  skillId String @db.ObjectId
+  skill  Skill   @relation(fields: [skillId], references: [id])
+}
+
+model Skill {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  endorsements Endorsement[]
+}
 
 model Report {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
