@@ -1,12 +1,16 @@
 import gql from 'graphql-tag';
-import commonDefs from './Common_Common.js'
+import commonDefs from './Common_Common.js';
 
 const userDefs = gql`
   extend type Query {
     allUsers: [User]!
     userInfo(data: UserInfoInput!): User!
     verifyUser(data: VerifyUserInput!): User!
-    suggestUserToFollow(data: SuggestUserToFollowInput!, limit: Int, after: String): UserPagination!
+    suggestUserToFollow(
+      data: SuggestUserToFollowInput!
+      limit: Int
+      after: String
+    ): UserPagination!
   }
 
   type UserPagination {
@@ -14,7 +18,7 @@ const userDefs = gql`
     pageInfo: PageInfo!
   }
   ${commonDefs}
-  
+
   type UserEdge {
     node: User
     cursor: String!

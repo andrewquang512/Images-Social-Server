@@ -28,15 +28,15 @@ const userQuery = {
   },
 
   /**
- *
- * @param {*} parent
- * @param {{data: {userId: string}, limit: number, after: string}} args
- * @param {*} info
- * @returns
- */
+   *
+   * @param {*} parent
+   * @param {{data: {userId: string}, limit: number, after: string}} args
+   * @param {*} info
+   * @returns
+   */
   suggestUserToFollow: async (parent, args, info) => {
-    const { after, limit } = args
-    const { userId } = args.data
+    const { after, limit } = args;
+    const { userId } = args.data;
 
     const currentUser = await prisma.following.findUnique({
       where: {
@@ -50,12 +50,12 @@ const userQuery = {
           id: { not: userId },
           isAdmin: 0,
           NOT: {
-            id: { in: currentUser.userFollowing }
-          }
+            id: { in: currentUser.userFollowing },
+          },
         },
         take: limit || DEFAULT_LIMIT,
         ...(after && {
-          skip: 1
+          skip: 1,
         }),
         ...(after && {
           cursor: {
@@ -68,17 +68,17 @@ const userQuery = {
           id: { not: userId },
           isAdmin: 0,
           NOT: {
-            id: { in: currentUser.userFollowing }
-          }
+            id: { in: currentUser.userFollowing },
+          },
         },
       }),
     ]);
 
-    console.log('Result', result);
-    console.log('count', count);
+    // console.log('Result', result);
+    // console.log('count', count);
 
     const hasNextPage = result.length !== 0 && result.length < count;
-    console.log('hasNextPage', hasNextPage);
+    // console.log('hasNextPage', hasNextPage);
 
     const nodes = result.map((each) => ({
       node: each,
