@@ -12,6 +12,8 @@ import followerMutation from './follower.js';
 import followingMutation from './following.js';
 import reportMutation from './report.js';
 import contestMutation from './contest.js';
+import chatMutation from './chat.js';
+import messageMutation from './message.js';
 
 const Mutation = {
   // User
@@ -42,6 +44,10 @@ const Mutation = {
   ...reportMutation,
   // Contest
   ...contestMutation,
+  // Chat
+  ...chatMutation,
+  // Message
+  ...messageMutation,
 };
 
 export default Mutation;

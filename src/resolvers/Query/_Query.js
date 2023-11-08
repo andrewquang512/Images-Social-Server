@@ -12,6 +12,8 @@ import followerQuery from './FOLLOWER.js';
 import followingQuery from './FOLLOWING.js';
 import reportQuery from './REPORT.js';
 import contestQuery from './CONTEST.js';
+import chatQuery from './CHAT.js';
+import messageQuery from './MESSAGE.js';
 
 const Query = {
   // User
@@ -42,6 +44,10 @@ const Query = {
   ...reportQuery,
   // Contest
   ...contestQuery,
+  // Chat
+  ...chatQuery,
+  // Message
+  ...messageQuery,
 };
 
 export default Query;

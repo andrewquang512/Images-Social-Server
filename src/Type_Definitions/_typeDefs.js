@@ -14,6 +14,8 @@ import followerDefs from './Follower_Follower.js';
 import reportDefs from './Report_Report.js';
 import contestDefs from './Contest_Contest.js';
 import profileDefs from './Profile_Profile.js';
+import chatDefs from './Chat_Chat.js';
+import messageDefs from './Message_Message.js';
 
 const baseDefs = gql`
   type Query {
@@ -47,6 +49,8 @@ const typeDefs = [
   followerDefs,
   reportDefs,
   contestDefs,
+  chatDefs,
+  messageDefs,
 ];
 
 export default typeDefs;

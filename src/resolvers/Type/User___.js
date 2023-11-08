@@ -13,11 +13,34 @@ const User = {
       where: {
         userId: parent.id,
       },
-      orderBy: [
-        {
-          createdAt: 'desc',
-        },
-      ],
+    });
+  },
+  stories: async (parent, args, info) => {
+    return await prisma.story.findMany({
+      where: {
+        userId: parent.id,
+      },
+    });
+  },
+  albums: async (parent, args, info) => {
+    return await prisma.album.findMany({
+      where: {
+        userId: parent.id,
+      },
+    });
+  },
+  chatIDs: async (parent, args, info) => {
+    return await prisma.chat.findMany({
+      where: {
+        userIDs: { has: parent.id },
+      },
+    });
+  },
+  messages: async (parent, args, info) => {
+    return await prisma.chat.findMany({
+      where: {
+        userId: parent.id,
+      },
     });
   },
 };

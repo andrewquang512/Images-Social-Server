@@ -92,6 +92,9 @@ const userDefs = gql`
     posts: [Post]!
     stories: [Story]!
     albums: [Album]!
+
+    chatIDs: [Chat]!
+    messages: [Message]!
   }
 `;
 

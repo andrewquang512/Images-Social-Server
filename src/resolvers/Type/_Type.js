@@ -12,6 +12,8 @@ import Follower from './Follower___.js';
 import Following from './Following___.js';
 import Report from './Report___.js';
 import Contest from './Contest___.js';
+import Chat from './Chat___.js';
+import Message from './Message___.js';
 
 const Type = {
   User,
@@ -28,6 +30,8 @@ const Type = {
   Following,
   Report,
   Contest,
+  Chat,
+  Message,
 };
 
 export default Type;
