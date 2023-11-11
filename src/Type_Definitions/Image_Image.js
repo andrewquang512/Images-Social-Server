@@ -1,29 +1,33 @@
 import gql from 'graphql-tag';
-import commonDefs from './Common_Common.js'
+import commonDefs from './Common_Common.js';
 
 const imageDefs = gql`
   extend type Query {
     allImages: [Image]!
-    exploreImages(data: ExploreImagesInput, limit: Int, after: String): ImagePagination!
+    exploreImages(
+      data: ExploreImagesInput
+      limit: Int
+      after: String
+    ): ImagePagination!
   }
 
- type ImagePagination {
+  type ImagePagination {
     edges: [ImageEdge!]!
     pageInfo: PageInfo!
   }
   ${commonDefs}
-  
+
   type ImageEdge {
     node: Image
     cursor: String!
   }
-  
+
   # extend type Mutation {
   #   # createImage
   #   deleteAllImage: DeleteAllReturnType!
   # }
 
-  input ExploreImagesInput{
+  input ExploreImagesInput {
     categoryId: String!
   }
 

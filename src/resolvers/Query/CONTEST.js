@@ -12,14 +12,13 @@ const contestQuery = {
     });
   },
   contestPosts: async (parent, args, info) => {
-    let nodes;
-    const after = args.after;
-
-    let a;
+    const { contestId, after } = args;
+    console.log(args);
+    let nodes, a;
 
     a = await prisma.post.findMany({
       where: {
-        contestId: args.data.contestId,
+        contestId: contestId,
       },
       orderBy: [
         { points: 'desc' },
@@ -35,9 +34,8 @@ const contestQuery = {
         cursor: post.id,
       }));
 
-      // console.log({ nodes });
+      console.log({ nodes });
     } else {
-      // console.log('in after');
       const index = a.findIndex((post) => post.id === after);
       nodes = a.slice(index + 1, index + 3).map((post) => ({
         node: post,

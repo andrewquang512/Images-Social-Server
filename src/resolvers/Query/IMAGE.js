@@ -36,7 +36,7 @@ const imageQuery = {
       prisma.image.findMany({
         take: limit,
         ...(after && {
-          skip: 1
+          skip: 1,
         }),
         ...(after && {
           cursor: {
@@ -49,66 +49,63 @@ const imageQuery = {
     const referenceImage = referencePost.image;
 
     const result = [];
-    console.log('Init Stage')
-    const initImagesMap = []
+    console.log('Init Stage');
+    const initImagesMap = [];
     for (const img of initImages) {
-      initImagesMap.push(compareImages(referenceImage.url, img.url))
-    };
+      initImagesMap.push(compareImages(referenceImage.url, img.url));
+    }
 
-    const isSimilarImages = await Promise.allSettled(initImagesMap)
+    const isSimilarImages = await Promise.allSettled(initImagesMap);
     for (const imgIndex in initImages) {
       if (isSimilarImages[imgIndex]?.value) {
-        result.push(initImages[imgIndex])
-      }
-      else {
+        result.push(initImages[imgIndex]);
+      } else {
         // Error
-        console.log(isSimilarImages[imgIndex])
+        console.log(isSimilarImages[imgIndex]);
       }
     }
 
-    let lastId = initImages[initImages.length - 1].id
+    let lastId = initImages[initImages.length - 1].id;
     let nextItem = await prisma.image.count({
       take: 1,
       skip: 1,
       cursor: {
         id: lastId,
       },
-    })
-    console.log('Loop Stage')
+    });
+    console.log('Loop Stage');
     while (result.length !== limit && nextItem) {
-
       const nextImages = await prisma.image.findMany({
         take: limit,
         skip: 1,
         cursor: {
           id: lastId,
         },
-      })
+      });
 
-      const nextImagesMap = []
+      const nextImagesMap = [];
       for (const img of nextImages) {
-        nextImagesMap.push(compareImages(referenceImage.url, img.url))
-      };
+        nextImagesMap.push(compareImages(referenceImage.url, img.url));
+      }
 
-      const isSimilarImages = await Promise.allSettled(nextImagesMap)
+      const isSimilarImages = await Promise.allSettled(nextImagesMap);
       for (const imgIndex in nextImages) {
         if (isSimilarImages[imgIndex]?.value) {
-          result.push(nextImages[imgIndex])
-        }
-        else {
+          result.push(nextImages[imgIndex]);
+        } else {
           // Error
-          console.log(isSimilarImages[imgIndex])
+          console.log(isSimilarImages[imgIndex]);
         }
       }
 
-      lastId = nextImages[nextImages.length - 1].id
+      lastId = nextImages[nextImages.length - 1].id;
       nextItem = await prisma.image.count({
         take: 1,
         skip: 1,
         cursor: {
           id: lastId,
         },
-      })
+      });
     }
 
     console.log('Result', result);
@@ -120,6 +117,7 @@ const imageQuery = {
       node: each,
       cursor: each.id,
     }));
+
     return {
       edges: nodes,
       pageInfo: {
