@@ -1,13 +1,14 @@
 {
   "presets": [
-    ["@babel/env", {
+    ["@babel/preset-env", {
+      "modules": "commonjs",
       "targets": {
-        "node": "current"
-      }
+        "ie": 11,
+        "browsers": "last 5 versions"
+      },
     }]
   ],
   "plugins": [
-    "@babel/plugin-transform-class-properties",
-    "@babel/plugin-transform-object-rest-spread"
+    "@babel/plugin-transform-runtime"
   ]
 }

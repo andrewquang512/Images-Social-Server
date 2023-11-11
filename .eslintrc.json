@@ -7,7 +7,7 @@
         "eslint:recommended",
         "plugin:prettier/recommended"
       ],
-    "ignorePatterns": [".eslintrc.js", "____Legacy/**"],
+    "ignorePatterns": [".eslintrc.js", "____Legacy/**","dist/**", "node_modules/**"],
     "parserOptions": {
         "project": "jsconfig.json",
         "sourceType": "module",
