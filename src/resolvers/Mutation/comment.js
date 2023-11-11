@@ -3,17 +3,23 @@ import { VOTE_COMMENT_ACTION } from '../../constants.js';
 
 const commentMutation = {
   /**
-   * 
-   * @param {*} parent 
-   * @param {{data: {content: string, userId: string, postId: string, storyId: string, parentCommentId: string}}} args 
-   * @param {*} info 
-   * @returns 
+   *
+   * @param {*} parent
+   * @param {{data: {content: string, userId: string, postId: string, storyId: string, parentCommentId: string}}} args
+   * @param {*} info
+   * @returns
    */
   createComment: async (parent, args, info) => {
-    const { content, postId, storyId, userId, parentCommentId = null } = args.data
+    const {
+      content,
+      postId,
+      storyId,
+      userId,
+      parentCommentId = null,
+    } = args.data;
 
     if (!storyId && !postId) {
-      throw Error('At least storyId or postId provided')
+      throw Error('At least storyId or postId provided');
     }
 
     let comment;
@@ -23,32 +29,31 @@ const commentMutation = {
           content: content,
           cmt_to_user: {
             connect: {
-              id: userId
-            }
+              id: userId,
+            },
           },
           ...(parentCommentId && {
             parent: {
               connect: {
-                id: parentCommentId
-              }
+                id: parentCommentId,
+              },
             },
           }),
           ...((postId || postId === '000000000000000000000000') && {
             cmt_to_post: {
               connect: {
-                id: postId
-              }
+                id: postId,
+              },
             },
           }),
           ...((storyId || storyId === '000000000000000000000000') && {
             cmt_to_story: {
               connect: {
-                id: storyId
-              }
+                id: storyId,
+              },
             },
           }),
         },
-
       });
     } catch (e) {
       console.log(e);
@@ -104,11 +109,17 @@ const commentMutation = {
       throw Error('Comment Not Exsited');
     }
 
-    if (existedComment.upVoteUserlist.length > 0 && existedComment.upVoteUserlist.includes(userId)) {
+    if (
+      existedComment.upVoteUserlist.length > 0 &&
+      existedComment.upVoteUserlist.includes(userId)
+    ) {
       throw Error('User has upvoted this comment already');
     }
 
-    if (existedComment.downVoteUserlist.length > 0 && existedComment.downVoteUserlist.includes(userId)) {
+    if (
+      existedComment.downVoteUserlist.length > 0 &&
+      existedComment.downVoteUserlist.includes(userId)
+    ) {
       throw Error('User has downvoted this comment already');
     }
 
@@ -121,8 +132,8 @@ const commentMutation = {
           data: {
             votes: existedComment.votes - 1,
             downVoteUserlist: {
-              push: userId
-            }
+              push: userId,
+            },
           },
         });
 
@@ -134,8 +145,8 @@ const commentMutation = {
           data: {
             votes: existedComment.votes + 1,
             upVoteUserlist: {
-              push: userId
-            }
+              push: userId,
+            },
           },
         });
       default:

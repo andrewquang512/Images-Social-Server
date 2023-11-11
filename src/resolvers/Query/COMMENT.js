@@ -17,7 +17,7 @@ const commentQuery = {
       prisma.comment.findMany({
         take: limit || DEFAULT_LIMIT,
         ...(after && {
-          skip: 1
+          skip: 1,
         }),
         where: {
           postId: postId,
@@ -41,8 +41,11 @@ const commentQuery = {
     console.log('Result', result);
     console.log('count', count);
 
-    const sortedResult = result.sort((before, after) => after.votes - before.votes);
-    const hasNextPage = sortedResult.length !== 0 && sortedResult.length < count;
+    const sortedResult = result.sort(
+      (before, after) => after.votes - before.votes,
+    );
+    const hasNextPage =
+      sortedResult.length !== 0 && sortedResult.length < count;
     console.log('hasNextPage', hasNextPage);
 
     const nodes = sortedResult.map((each) => ({
@@ -76,7 +79,7 @@ const commentQuery = {
       prisma.comment.findMany({
         take: limit || DEFAULT_LIMIT,
         ...(after && {
-          skip: 1
+          skip: 1,
         }),
         where: {
           storyId: storyId,
@@ -100,8 +103,11 @@ const commentQuery = {
     console.log('Result', result);
     console.log('count', count);
 
-    const sortedResult = result.sort((before, after) => after.votes - before.votes);
-    const hasNextPage = sortedResult.length !== 0 && sortedResult.length < count;
+    const sortedResult = result.sort(
+      (before, after) => after.votes - before.votes,
+    );
+    const hasNextPage =
+      sortedResult.length !== 0 && sortedResult.length < count;
     console.log('hasNextPage', hasNextPage);
 
     const nodes = sortedResult.map((each) => ({
@@ -121,13 +127,13 @@ const commentQuery = {
   },
 
   /**
-   * 
-   * @param {*} parent 
-   * @param {{id: string}} args 
-   * @param {*} info 
+   *
+   * @param {*} parent
+   * @param {{id: string}} args
+   * @param {*} info
    */
   getCommentChild: async (parent, args, info) => {
-    const { id } = args
+    const { id } = args;
     const result = await prisma.comment.findFirst({
       where: {
         id: id,
@@ -139,11 +145,10 @@ const commentQuery = {
           },
         },
       },
-    })
+    });
 
-    return result
-  }
-
+    return result;
+  },
 };
 
 export default commentQuery;

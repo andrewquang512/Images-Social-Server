@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import commonDefs from './Common_Common.js'
+import commonDefs from './Common_Common.js';
 
 const storyDefs = gql`
   extend type Query {
@@ -13,7 +13,7 @@ const storyDefs = gql`
     pageInfo: PageInfo!
   }
   ${commonDefs}
-  
+
   type StoryEdge {
     node: Story
     cursor: String!

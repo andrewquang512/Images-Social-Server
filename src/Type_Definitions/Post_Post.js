@@ -23,8 +23,16 @@ const postDefs = gql`
 
     searchQuery(data: SearchQueryInput!): SearchReturnType!
 
-    explorePosts(data: ExplorePostsInput, limit: Int, after: String): PostPagination!
-    similarPosts(data: SimilarPostsInput!, limit: Int, after: String): PostPagination!
+    explorePosts(
+      data: ExplorePostsInput
+      limit: Int
+      after: String
+    ): PostPagination!
+    similarPosts(
+      data: SimilarPostsInput!
+      limit: Int
+      after: String
+    ): PostPagination!
   }
 
   type PostPagination {
@@ -32,16 +40,16 @@ const postDefs = gql`
     pageInfo: PageInfo!
   }
   ${commonDefs}
-  
+
   type PostEdge {
     node: Post
     cursor: String!
   }
-  
-  input ExplorePostsInput{
+
+  input ExplorePostsInput {
     categoryIds: [String]
   }
-  
+
   type SearchReturnType {
     tags: [Tag]!
     users: [User]!

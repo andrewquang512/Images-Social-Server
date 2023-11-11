@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 const comomonDefs = gql`
-    type PageInfo {
+  type PageInfo {
     hasNextPage: Boolean!
     hasPreviousPage: Boolean!
     startCursor: String

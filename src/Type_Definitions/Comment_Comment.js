@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import commonDefs from './Common_Common.js'
+import commonDefs from './Common_Common.js';
 
 const commentDefs = gql`
   # extend type Query {
@@ -16,8 +16,16 @@ const commentDefs = gql`
 
   extend type Query {
     getCommentChild(id: ID!): Comment!
-    getCommentsByPostId(data: GetCommentsByPostIdInput, limit: Int, after: String): CommentPagination!
-    getCommentsByStoryId(data: GetCommentsByStoryIdInput, limit: Int, after: String): CommentPagination!
+    getCommentsByPostId(
+      data: GetCommentsByPostIdInput
+      limit: Int
+      after: String
+    ): CommentPagination!
+    getCommentsByStoryId(
+      data: GetCommentsByStoryIdInput
+      limit: Int
+      after: String
+    ): CommentPagination!
   }
 
   type CommentPagination {
@@ -25,7 +33,7 @@ const commentDefs = gql`
     pageInfo: PageInfo!
   }
   ${commonDefs}
-  
+
   type CommentEdge {
     node: Comment
     cursor: String!

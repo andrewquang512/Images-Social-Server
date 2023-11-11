@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import commonDefs from './Common_Common.js'
+import commonDefs from './Common_Common.js';
 
 /**
  * @description {import('./User_User.js)}

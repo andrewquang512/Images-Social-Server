@@ -11,7 +11,9 @@
             "dev": "nodemon src/index",
             "start": "node src/index",
             "build": "webpack --config webpack.config.js",
-            "build_temp": "babel ./src --out-dir dist"
+            "build_temp": "babel ./src --out-dir dist",
+            "lint": "eslint --fix \"src/**\"",
+            "format": "prettier --write \"src/**\""
       },
       "repository": {
             "type": "git",
@@ -48,6 +50,9 @@
             "@babel/preset-env": "^7.23.3",
             "@types/uuid": "^9.0.5",
             "babel-loader": "^9.1.3",
+            "eslint": "^8.53.0",
+            "eslint-config-prettier": "^9.0.0",
+            "eslint-plugin-prettier": "^5.0.1",
             "nodemon": "^1.19.4",
             "prisma": "^5.5.2",
             "rimraf": "^5.0.5",

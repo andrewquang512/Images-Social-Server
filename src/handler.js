@@ -1,8 +1,6 @@
 // Apollo
 import { ApolloServer } from '@apollo/server';
-import {
-  ApolloServerPluginLandingPageLocalDefault,
-} from '@apollo/server/plugin/landingPage/default';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import {
   startServerAndCreateLambdaHandler,
   handlers,

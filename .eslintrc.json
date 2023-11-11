@@ -1,0 +1,36 @@
+{
+    "env": {
+        "node": true,
+        "es6": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:prettier/recommended"
+      ],
+    "ignorePatterns": [".eslintrc.js", "____Legacy/**"],
+    "parserOptions": {
+        "project": "jsconfig.json",
+        "sourceType": "module",
+        "ecmaVersion": "latest"
+      },
+    "rules": {
+      "no-unused-vars": "warn",
+      "prettier/prettier": [
+        "warn",
+        {
+          "trailingComma": "all",
+          "tabWidth": 2,
+          "semi": true,
+          "singleQuote": true,
+          "overrides": [
+                {
+                      "files": "*.json",
+                      "options": {
+                            "tabWidth": 6
+                      }
+                }
+          ]
+        }
+      ]
+    }
+}

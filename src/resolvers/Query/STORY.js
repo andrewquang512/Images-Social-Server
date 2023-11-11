@@ -24,7 +24,7 @@ const storyQuery = {
       prisma.story.findMany({
         take: limit || DEFAULT_LIMIT,
         ...(after && {
-          skip: 1
+          skip: 1,
         }),
         orderBy: {
           createdAt: 'desc',
