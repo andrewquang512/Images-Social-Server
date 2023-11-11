@@ -15,7 +15,7 @@ export const loggingPlugin = {
       },
 
       didEncounterErrors(errors) {
-        console.error('GraphQL request encountered errors:', errors);
+        console.error('GraphQL request encountered errors:', errors.errors);
       },
     };
   },
