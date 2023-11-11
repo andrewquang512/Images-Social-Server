@@ -12,13 +12,7 @@ export default {
         test: /\.m?js$/,
         exclude: /node_modules/,
         use: {
-          loaders: [
-            {
-              test: /\.js$/,
-              exclude: /node_modules/,
-              loader: 'babel-loader',
-            },
-          ],
+          loader: 'babel-loader',
         },
       },
     ],
