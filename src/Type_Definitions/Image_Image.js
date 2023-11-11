@@ -4,28 +4,12 @@ import commonDefs from './Common_Common.js'
 const imageDefs = gql`
   extend type Query {
     allImages: [Image]!
-    exploreImages(data: ExploreImagesInput, limit: Int, after: String): ImagePagination!
   }
 
- type ImagePagination {
-    edges: [ImageEdge!]!
-    pageInfo: PageInfo!
-  }
-  ${commonDefs}
-  
-  type ImageEdge {
-    node: Image
-    cursor: String!
-  }
-  
   # extend type Mutation {
   #   # createImage
   #   deleteAllImage: DeleteAllReturnType!
   # }
-
-  input ExploreImagesInput{
-    categoryId: String!
-  }
 
   type Image {
     id: ID!
@@ -34,7 +18,7 @@ const imageDefs = gql`
     createdAt: String!
     updatedAt: String!
 
-    postId: Post!
+    postConnection: Post!
     imageInfoId: ImageInfo!
   }
 `;

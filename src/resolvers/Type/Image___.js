@@ -1,7 +1,7 @@
 import { prisma } from '../../prisma/database.js';
 
 const Image = {
-  postId: async (parent, args, info) => {
+  postConnection: async (parent, args, info) => {
     return await prisma.post.findUnique({
       where: {
         id: parent.postId,

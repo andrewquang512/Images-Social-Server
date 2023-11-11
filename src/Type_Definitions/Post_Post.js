@@ -22,9 +22,25 @@ const postDefs = gql`
 
     searchQuery(data: SearchQueryInput!): SearchReturnType!
 
-    similarImages(data: SimilarImagesInput!): [Image]!
+    explorePosts(data: ExplorePostsInput, limit: Int, after: String): PostPagination!
+    similarPosts(data: SimilarPostsInput!, limit: Int, after: String): PostPagination!
   }
 
+  type PostPagination {
+    edges: [PostEdge!]!
+    pageInfo: PageInfo!
+  }
+  ${commonDefs}
+  
+  type PostEdge {
+    node: Post
+    cursor: String!
+  }
+  
+  input ExplorePostsInput{
+    categoryIds: [String]
+  }
+  
   type SearchReturnType {
     tags: [Tag]!
     users: [User]!
@@ -32,8 +48,8 @@ const postDefs = gql`
   ${tagDefs}
   ${userDefs}
 
-  input SimilarImagesInput {
-    postId: ID!
+  input SimilarPostsInput {
+    postId: String!
   }
 
   input SearchQueryInput {

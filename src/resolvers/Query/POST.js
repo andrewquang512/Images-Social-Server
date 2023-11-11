@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { prisma } from '../../prisma/database.js';
 import { compareImages } from '../Common/compareImages.js';
+import { DEFAULT_LIMIT } from '../../constants.js';
 
 const postQuery = {
   allPosts: async (parent, args, info) => {
@@ -15,7 +16,6 @@ const postQuery = {
   },
 
   /**
-   *
    * @param {*} parent
    * @param {{userId: string, categoryIds: String[], timeCall: number, after: string}} args
    * @param {*} info
@@ -331,40 +331,218 @@ const postQuery = {
 
     return { tags, users };
   },
-  similarImages: async (parent, args, info) => {
-    let result = [];
 
-    // const currentImage = await prisma.post.findUnique({
-    //   where: {
-    //     id: args.data.postId,
-    //   },
-    // });
+  /**
+   * @param {*} parent
+   * @param {{data: {postId: string}, limit: number, after: string}} args
+   * @param {*} info
+   * @returns
+   */
+  similarPosts: async (parent, args, info) => {
+    const { after, limit = DEFAULT_LIMIT } = args;
+    const { postId } = args.data ? args.data : {}
 
-    const currentImage = await prisma.image.findUnique({
-      where: {
-        postId: args.data.postId,
-      },
-    });
+    if (!postId) {
+      throw new Error('postId is not provided')
+    }
 
-    let allImages = await prisma.image.findMany();
+    // allImages = _.filter(allImages, (o) => o.id != currentImage.id);
 
-    allImages = _.filter(allImages, (o) => o.id != currentImage.id);
+    const [referenceImage, initPosts] = await prisma.$transaction([
+      prisma.image.findUnique({
+        where: {
+          postId: postId,
+        },
+      }),
+      prisma.post.findMany({
+        take: limit,
+        ...(after && {
+          skip: 1
+        }),
+        ...(after && {
+          cursor: {
+            id: after,
+          },
+        }),
+        where: {
+          image: {
+            isNot: null,
+          },
+        },
+        include: {
+          image: {
+            include: true,
+          },
+        },
+      }),
+    ]);
 
-    for (const img of allImages) {
-      try {
-        const isSimilar = await compareImages(currentImage.url, img.url);
-        if (isSimilar) {
-          result.push(img);
-        }
-      } catch (error) {
-        console.error(error);
-        continue;
+    if (!referenceImage) {
+      throw new Error('postId not have any image')
+    }
+
+    const result = [];
+    console.log('Init Stage')
+    const initImagesMap = []
+    const initImages = initPosts.map(each => each.image)
+    for (const img of initImages) {
+      initImagesMap.push(compareImages(referenceImage.url, img.url))
+    };
+
+    const isSimilarImages = await Promise.allSettled(initImagesMap)
+    for (const imgIndex in initImages) {
+      if (isSimilarImages[imgIndex]?.value) {
+        result.push(initPosts[imgIndex])
+      }
+      else {
+        // Error
+        console.log('isSimilarImages Error: ', isSimilarImages[imgIndex])
       }
     }
 
-    console.log(result);
-    return result;
+    let lastId = initPosts[initPosts.length - 1].id
+    let nextItem = await prisma.post.count({
+      take: 1,
+      skip: 1,
+      cursor: {
+        id: lastId,
+      },
+    })
+    console.log('Loop Stage')
+    while (result.length !== limit && nextItem) {
+
+      const nextPosts = await prisma.post.findMany({
+        take: limit,
+        skip: 1,
+        cursor: {
+          id: lastId,
+        },
+        where: {
+          image: {
+            isNot: null,
+          },
+        },
+        include: {
+          image: {
+            include: true,
+          },
+        },
+      })
+
+      const nextImages = nextPosts.map(each => each.image)
+      const nextImagesMap = []
+      for (const img of nextImages) {
+        nextImagesMap.push(compareImages(referenceImage.url, img.url))
+      };
+
+      const isSimilarImages = await Promise.allSettled(nextImagesMap)
+      for (const imgIndex in nextImages) {
+        if (result.length === limit) {
+          console.log('result is match limit, Stopping')
+          break
+        }
+        if (isSimilarImages[imgIndex]?.value) {
+          result.push(nextPosts[imgIndex])
+        }
+        else {
+          // Error
+          console.log('isSimilarImages Error: ', isSimilarImages[imgIndex])
+        }
+      }
+
+      lastId = result.length === limit ? result[result.length - 1].id : nextPosts[nextPosts.length - 1].id;
+      nextItem = await prisma.post.count({
+        take: 1,
+        skip: 1,
+        cursor: {
+          id: lastId,
+        },
+      })
+    }
+
+    console.log('Result length', result.length);
+
+    const hasNextPage = result.length !== 0 && nextItem;
+    console.log('hasNextPage', hasNextPage);
+
+    const nodes = result.map((each) => ({
+      node: each,
+      cursor: each.id,
+    }));
+    return {
+      edges: nodes,
+      pageInfo: {
+        hasNextPage,
+        hasPreviousPage: after ? true : false,
+        // startCursor,
+        startCursor: nodes.length === 0 ? '' : nodes[0].cursor,
+        endCursor: nodes.length === 0 ? '' : nodes.slice(-1)[0].cursor,
+      },
+    };
   },
+
+  /**
+   * @param {*} parent
+   * @param {{data: {categoryIds: string[]}, limit: number, after: string}} args
+   * @param {*} info
+   * @returns
+   */
+  explorePosts: async (parent, args, info) => {
+    const { categoryIds = [] } = args.data ? args.data : {}
+    const { after, limit = DEFAULT_LIMIT } = args;
+
+    const [result, count] = await Promise.all([
+      prisma.post.findMany({
+        take: limit || DEFAULT_LIMIT,
+        ...(after && {
+          skip: 1
+        }),
+        where: {
+          ...(categoryIds.length > 0 && {
+            categoryId: {
+              hasSome: categoryIds
+            },
+          }),
+          image: {
+            isNot: null,
+          },
+        },
+        include: {
+          image: {
+            include: true,
+          },
+        },
+        ...(after && {
+          cursor: {
+            id: after,
+          },
+        }),
+      }),
+      prisma.comment.count(),
+    ]);
+
+    console.log('Result', result);
+    console.log('count', count);
+
+    const sortedResult = result.sort((before, after) => after.votes - before.votes);
+    const hasNextPage = sortedResult.length !== 0 && sortedResult.length < count;
+    console.log('hasNextPage', hasNextPage);
+
+    const nodes = sortedResult.map((each) => ({
+      node: each,
+      cursor: each.id,
+    }));
+    return {
+      edges: _.shuffle(nodes),
+      pageInfo: {
+        hasNextPage,
+        hasPreviousPage: after ? true : false,
+        // startCursor,
+        startCursor: nodes.length === 0 ? '' : nodes[0].cursor,
+        endCursor: nodes.length === 0 ? '' : nodes.slice(-1)[0].cursor,
+      },
+    };
+  }
 };
 
 export default postQuery;
