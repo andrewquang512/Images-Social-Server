@@ -13,7 +13,8 @@ const imageQuery = {
    * @param {*} info
    */
   exploreImages: async (parent, args, info) => {
-    const { after, categoryId, limit = DEFAULT_LIMIT } = args.data;
+    const { categoryId, } = args.data;
+    const { after, limit = DEFAULT_LIMIT } = args;
 
     const [referencePost, initImages] = await prisma.$transaction([
       prisma.post.findFirst({
