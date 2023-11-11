@@ -49,6 +49,7 @@ const imageQuery = {
     const referenceImage = referencePost.image;
 
     const result = [];
+    console.log('Init Stage')
     const initImagesMap = []
     for (const img of initImages) {
       initImagesMap.push(compareImages(referenceImage.url, img.url))
@@ -58,6 +59,10 @@ const imageQuery = {
     for (const imgIndex in initImages) {
       if (isSimilarImages[imgIndex]?.value) {
         result.push(initImages[imgIndex])
+      }
+      else {
+        // Error
+        console.log(isSimilarImages[imgIndex])
       }
     }
 
@@ -69,6 +74,7 @@ const imageQuery = {
         id: lastId,
       },
     })
+    console.log('Loop Stage')
     while (result.length !== limit && nextItem) {
 
       const nextImages = await prisma.image.findMany({
@@ -88,6 +94,10 @@ const imageQuery = {
       for (const imgIndex in nextImages) {
         if (isSimilarImages[imgIndex]?.value) {
           result.push(nextImages[imgIndex])
+        }
+        else {
+          // Error
+          console.log(isSimilarImages[imgIndex])
         }
       }
 
