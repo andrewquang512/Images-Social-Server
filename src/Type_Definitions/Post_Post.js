@@ -14,6 +14,7 @@ const postDefs = gql`
       after: String
       timeCall: Int
     ): PostConnection!
+
     getAllUserPosts(
       userId: String
       currentUserId: String
@@ -134,6 +135,7 @@ const postDefs = gql`
 
     title: String!
     caption: String!
+    contestId: String
 
     postViewStatus: ViewStatus!
     points: Int!

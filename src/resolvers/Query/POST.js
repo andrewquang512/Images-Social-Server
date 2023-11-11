@@ -22,7 +22,7 @@ const postQuery = {
    * @returns
    */
   getNewFeed: async (parent, args, info) => {
-    const { userId = undefined, categoryIds = [] } = args
+    const { userId = undefined, categoryIds = [] } = args;
     console.log(args);
 
     let a,
@@ -38,7 +38,7 @@ const postQuery = {
         where: {
           userId: userId,
           categoryId: {
-            hasEvery: categoryIds
+            hasEvery: categoryIds,
           },
           OR: [
             { postViewStatus: 'PUBLIC' },
@@ -49,6 +49,8 @@ const postQuery = {
           createdAt: 'desc',
         },
       });
+
+      console.log({ a });
 
       nodes = a.slice(0, 2).map((post) => ({
         node: post,
@@ -82,7 +84,7 @@ const postQuery = {
             where: {
               userId: { in: b.userFollowing },
               categoryId: {
-                hasEvery: categoryIds
+                hasEvery: categoryIds,
               },
               OR: [
                 { postViewStatus: 'PUBLIC' },
@@ -127,7 +129,7 @@ const postQuery = {
                   userId: { notIn: b.userFollowing },
                   postViewStatus: 'PUBLIC',
                   categoryId: {
-                    hasEvery: categoryIds
+                    hasEvery: categoryIds,
                   },
                 },
                 orderBy: [
@@ -150,7 +152,7 @@ const postQuery = {
               userId: { notIn: b.userFollowing },
               postViewStatus: 'PUBLIC',
               categoryId: {
-                hasEvery: categoryIds
+                hasEvery: categoryIds,
               },
             },
             orderBy: [

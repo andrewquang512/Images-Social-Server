@@ -4,7 +4,8 @@ const contestDefs = gql`
   extend type Query {
     allContests: [Contest]!
     contestInfo(data: ContestInfoInput!): Contest!
-    contestPosts(data: ContestPostsInput!): [Post]!
+
+    contestPosts(contestId: String, after: String): PostConnection!
   }
 
   input ContestInfoInput {

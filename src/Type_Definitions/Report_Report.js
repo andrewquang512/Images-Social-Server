@@ -46,6 +46,9 @@ const reportDefs = gql`
     userId: ID!
 
     userReported: ID!
+
+    createdAt: String!
+    updatedAt: String!
   }
 `;
 
