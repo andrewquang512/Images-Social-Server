@@ -13,15 +13,16 @@ const imageQuery = {
    * @param {*} info
    */
   exploreImages: async (parent, args, info) => {
-    const { categoryId, } = args.data;
     const { after, limit = DEFAULT_LIMIT } = args;
 
     const [referencePost, initImages] = await prisma.$transaction([
       prisma.post.findFirst({
         where: {
-          categoryId: {
-            has: categoryId,
-          },
+          ...(args.data?.categoryId && {
+            categoryId: {
+              has: args.data?.categoryId || undefined,
+            },
+          }),
           image: {
             isNot: null,
           },
@@ -119,8 +120,6 @@ const imageQuery = {
         endCursor: nodes.length === 0 ? '' : nodes.slice(-1)[0].cursor,
       },
     };
-
-    return result;
   },
 };
 
