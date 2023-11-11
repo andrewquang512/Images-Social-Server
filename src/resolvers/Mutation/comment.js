@@ -104,8 +104,12 @@ const commentMutation = {
       throw Error('Comment Not Exsited');
     }
 
-    if (existedComment.userVoteComment.length > 0 && existedComment.userVoteComment.includes(userId)) {
-      throw Error('User has voted this comment already');
+    if (existedComment.upVoteUserlist.length > 0 && existedComment.upVoteUserlist.includes(userId)) {
+      throw Error('User has upvoted this comment already');
+    }
+
+    if (existedComment.downVoteUserlist.length > 0 && existedComment.downVoteUserlist.includes(userId)) {
+      throw Error('User has downvoted this comment already');
     }
 
     switch (action) {
@@ -116,7 +120,7 @@ const commentMutation = {
           },
           data: {
             votes: existedComment.votes - 1,
-            userVoteComment: {
+            downVoteUserlist: {
               push: userId
             }
           },
@@ -129,7 +133,7 @@ const commentMutation = {
           },
           data: {
             votes: existedComment.votes + 1,
-            userVoteComment: {
+            upVoteUserlist: {
               push: userId
             }
           },

@@ -250,7 +250,8 @@ model Comment {
   child Comment[] @relation(name: "Comment_Child")
 
   votes Int @default(0)
-  userVoteComment String[]
+  upVoteUserlist String[]
+  downVoteUserlist String[]
 }
 
 model Contest {

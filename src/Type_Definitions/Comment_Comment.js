@@ -79,7 +79,8 @@ const commentDefs = gql`
     votes: Int!
     child: [Comment]
 
-    userVoteComment: [String]!
+    upVoteUserlist: [String]!
+    downVoteUserlist: [String]!
   }
 `;
 
