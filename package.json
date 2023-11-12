@@ -11,8 +11,8 @@
             "dev": "nodemon src/index",
             "start": "node src/index",
             "start:prod": "node dist/handler",
-            "build": "rimraf dist & webpack --config webpack.config.js",
-            "build_temp": "rimraf dist & babel ./src --out-dir dist",
+            "build_temp": "rimraf dist & webpack --config webpack.config.js",
+            "build": "rimraf dist & babel ./src --out-dir dist",
             "lint": "eslint --fix \"src/**\"",
             "format": "prettier --write \"src/**\""
       },
