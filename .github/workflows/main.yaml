@@ -249,7 +249,10 @@ jobs:
           cp package.json nodejs/package.json
           cd nodejs
           npm install --omit=dev
-          rm package.json package-lock.json
+          cp ../src/prisma/ERD.svg ./ERD.svg
+          cp ../src/prisma/schema.prisma ./schema.prisma
+          prisma generate --schema=./schema.prisma 
+          rm package.json package-lock.json schema.prisma ERD.svg
           cd ..
           zip -r ${GITHUB_WORKSPACE}/package-layer.zip nodejs
           aws lambda publish-layer-version --layer-name arn:aws:lambda:ap-southeast-1:${OWNER_LAYER_ACCOUNT_ID}:layer:images-social-backend-service-package-layer --zip-file fileb://${GITHUB_WORKSPACE}/package-layer.zip --compatible-runtimes nodejs16.x --compatible-architectures "arm64" "x86_64"
