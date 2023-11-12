@@ -11,27 +11,31 @@ import typeDefs from './Type_Definitions/_typeDefs.js';
 import resolvers from './resolvers/resolvers.js';
 import { loggingPlugin } from './logging.js';
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  context: () => {
-    return { prisma };
-  },
-  introspection: true,
-  cors: {
-    origin: '*', // <- allow request from all domains
-    credentials: true, // <- enable CORS response for requests with credentials (cookies, http authentication)
-  },
-  plugins: [
-    ApolloServerPluginLandingPageLocalDefault({ embed: true }),
-    ...(parseInt(process.env.IS_LOGGING) ? [loggingPlugin] : []),
-  ],
-  logger: console,
-  // csrfPrevention: true,
-});
+export async function bootstrap() {
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: () => {
+      return { prisma };
+    },
+    introspection: true,
+    cors: {
+      origin: '*', // <- allow request from all domains
+      credentials: true, // <- enable CORS response for requests with credentials (cookies, http authentication)
+    },
+    plugins: [
+      ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+      ...(parseInt(process.env.IS_LOGGING) ? [loggingPlugin] : []),
+    ],
+    logger: console,
+    // csrfPrevention: true,
+  });
 
-const { url } = await startStandaloneServer(server, {
-  listen: { port: 4000 },
-});
+  const { url } = await startStandaloneServer(server, {
+    listen: { port: 4000 },
+  });
 
-console.log(`Server ready at: ${url}`);
+  console.log(`Server ready at: ${url}`);
+}
+
+bootstrap();
