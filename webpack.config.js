@@ -4,7 +4,9 @@ export default {
   mode: 'production',
   output: {
     filename: 'handler.js',
-    libraryTarget: 'commonjs2',
+    library: {
+      type: 'commonjs2',
+    },
   },
   resolve: {
     mainFields: ['module', 'main'],

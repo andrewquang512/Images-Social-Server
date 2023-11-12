@@ -1,12 +1,14 @@
-import * as Jimp from 'jimp';
+import Jimp from 'jimp';
 
 export async function compareImages(image1Url, image2Url) {
-  const image1 = await Jimp.default.read(image1Url);
-  const image2 = await Jimp.default.read(image2Url);
+  const [image1, image2] = await Promise.all([
+    Jimp.read(image1Url),
+    Jimp.read(image2Url),
+  ]);
   // Perceived distance
-  const distance = Jimp.default.distance(image1, image2);
+  const distance = Jimp.distance(image1, image2);
   // Pixel difference
-  const diff = Jimp.default.diff(image1, image2);
+  const diff = Jimp.diff(image1, image2);
 
   // console.log(
   //   `compareImages: distance: ${distance.toFixed(
