@@ -92,7 +92,7 @@ const commentMutation = {
   /**
    *
    * @param {*} parent
-   * @param {{data: {commentId: string, userId: string, action: UPVOTE | DOWNVOTE}}} args
+   * @param {{data: {commentId: string, userId: string, action: VOTE_COMMENT_ACTION }}} args
    * @param {*} info
    * @returns
    */
@@ -109,22 +109,78 @@ const commentMutation = {
       throw Error('Comment Not Exsited');
     }
 
-    if (
-      existedComment.upVoteUserlist.length > 0 &&
-      existedComment.upVoteUserlist.includes(userId)
-    ) {
-      throw Error('User has upvoted this comment already');
-    }
-
-    if (
-      existedComment.downVoteUserlist.length > 0 &&
-      existedComment.downVoteUserlist.includes(userId)
-    ) {
-      throw Error('User has downvoted this comment already');
-    }
-
     switch (action) {
+      case VOTE_COMMENT_ACTION.CANCEL:
+        if (
+          existedComment.downVoteUserlist.length > 0 &&
+          existedComment.downVoteUserlist.includes(userId)
+        ) {
+          return await prisma.comment.update({
+            where: {
+              id: commentId,
+            },
+            data: {
+              votes: existedComment.votes + 1,
+              downVoteUserlist: {
+                set: existedComment.downVoteUserlist.filter(
+                  (id) => id !== userId,
+                ),
+              },
+            },
+          });
+        }
+
+        if (
+          existedComment.upVoteUserlist.length > 0 &&
+          existedComment.upVoteUserlist.includes(userId)
+        ) {
+          return await prisma.comment.update({
+            where: {
+              id: commentId,
+            },
+            data: {
+              votes: existedComment.votes - 1,
+              upVoteUserlist: {
+                set: existedComment.upVoteUserlist.filter(
+                  (id) => id !== userId,
+                ),
+              },
+            },
+          });
+        }
+
+        throw Error('User has not upvoted or downvoted yet');
+
       case VOTE_COMMENT_ACTION.DOWNVOTE:
+        if (
+          existedComment.downVoteUserlist.length > 0 &&
+          existedComment.downVoteUserlist.includes(userId)
+        ) {
+          throw Error('User has downvoted this comment already');
+        }
+
+        if (
+          existedComment.upVoteUserlist.length > 0 &&
+          existedComment.upVoteUserlist.includes(userId)
+        ) {
+          return await prisma.comment.update({
+            where: {
+              id: commentId,
+            },
+            data: {
+              votes: existedComment.votes - 2,
+              downVoteUserlist: {
+                push: userId,
+              },
+              upVoteUserlist: {
+                set: existedComment.upVoteUserlist.filter(
+                  (id) => id !== userId,
+                ),
+              },
+            },
+          });
+        }
+
         return await prisma.comment.update({
           where: {
             id: commentId,
@@ -138,6 +194,35 @@ const commentMutation = {
         });
 
       case VOTE_COMMENT_ACTION.UPVOTE:
+        if (
+          existedComment.upVoteUserlist.length > 0 &&
+          existedComment.upVoteUserlist.includes(userId)
+        ) {
+          throw Error('User has upvoted this comment already');
+        }
+
+        if (
+          existedComment.downVoteUserlist.length > 0 &&
+          existedComment.downVoteUserlist.includes(userId)
+        ) {
+          return await prisma.comment.update({
+            where: {
+              id: commentId,
+            },
+            data: {
+              votes: existedComment.votes + 2,
+              upVoteUserlist: {
+                push: userId,
+              },
+              downVoteUserlist: {
+                set: existedComment.downVoteUserlist.filter(
+                  (id) => id !== userId,
+                ),
+              },
+            },
+          });
+        }
+
         return await prisma.comment.update({
           where: {
             id: commentId,
@@ -150,7 +235,7 @@ const commentMutation = {
           },
         });
       default:
-        throw Error('Action should be UPVOTE or DOWNVOTE');
+        throw Error('Action should be UPVOTE, DOWNVOTE, CANCEL');
     }
   },
 };

@@ -50,6 +50,7 @@ const commentDefs = gql`
   enum voteCommentAction {
     UPVOTE
     DOWNVOTE
+    CANCEL
   }
 
   input VoteCommentInput {
