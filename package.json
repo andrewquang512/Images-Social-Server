@@ -12,8 +12,8 @@
             "start": "node src/index",
             "start:dev": "node --watch src/index",
             "start:prod": "node dist/index",
-            "build_temp": "rimraf dist & webpack --config webpack.config.js",
-            "build": "rimraf dist & babel ./src --out-dir dist",
+            "build": "rimraf dist & webpack --config webpack.config.js",
+            "build_temp": "rimraf dist & babel ./src --out-dir dist",
             "lint": "eslint --fix \"src/**\"",
             "format": "prettier --write \"src/**\""
       },
