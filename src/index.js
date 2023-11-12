@@ -11,19 +11,6 @@ import typeDefs from './Type_Definitions/_typeDefs.js';
 import resolvers from './resolvers/resolvers.js';
 import { loggingPlugin } from './logging.js';
 
-const connectToDatabase = async () => {
-  try {
-    await prisma.$connect();
-    console.log('Connected to Database');
-  } catch (error) {
-    console.error('Error connecting to Database:', error);
-  } finally {
-    await prisma.$disconnect();
-  }
-};
-
-await connectToDatabase();
-
 const server = new ApolloServer({
   typeDefs,
   resolvers,
