@@ -7,6 +7,7 @@ const contestMutation = {
       result = await prisma.contest.create({
         data: {
           ...args.data,
+          userJoined: [],
         },
       });
     } catch (e) {
@@ -41,26 +42,26 @@ const contestMutation = {
 
     return result;
   },
-  //!!!!!!!!!!!!!!!!!!!!!!!
-  //   updateUser: async (parent, args, info) => {
-  //     const { userId, ...updateInfo } = args.data;
-  //     let updatedUser;
-  //     try {
-  //       updatedUser = await prisma.user.update({
-  //         where: {
-  //           id: userId,
-  //         },
-  //         data: {
-  //           ...updateInfo,
-  //         },
-  //       });
-  //     } catch (e) {
-  //       console.log(e);
-  //       throw e;
-  //     }
+  userJoinContest: async (parent, args, info) => {
+    let result;
+    try {
+      result = await prisma.contest.update({
+        where: {
+          id: args.data.contestId,
+        },
+        data: {
+          userJoined: {
+            push: args.data.userId,
+          },
+        },
+      });
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
 
-  //     return updatedUser;
-  //   },
+    return result;
+  },
 };
 
 export default contestMutation;

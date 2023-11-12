@@ -1,4 +1,5 @@
 import { prisma } from '../../prisma/database.js';
+import _ from 'lodash';
 
 const contestQuery = {
   allContests: async (parent, args, info) => {
@@ -12,7 +13,7 @@ const contestQuery = {
     });
   },
   contestPosts: async (parent, args, info) => {
-    const { contestId, after } = args;
+    const { contestId, userId: currentUserId, after } = args;
     console.log(args);
     let nodes, a;
 
@@ -27,6 +28,9 @@ const contestQuery = {
         },
       ],
     });
+
+    a = _.sortBy(a, ({ userId }) => (userId === currentUserId ? 0 : 1));
+    console.log({ a });
 
     if (!after) {
       nodes = a.slice(0, 4).map((post) => ({
