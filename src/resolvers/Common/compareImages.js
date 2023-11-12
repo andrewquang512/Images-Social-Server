@@ -1,4 +1,4 @@
-import Jimp from 'jimp';
+import * as Jimp from 'jimp'
 
 export async function compareImages(image1Url, image2Url) {
   const image1 = await Jimp.read(image1Url);
