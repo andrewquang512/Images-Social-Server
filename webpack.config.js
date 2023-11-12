@@ -6,6 +6,9 @@ export default {
     filename: 'handler.js',
     libraryTarget: 'commonjs2',
   },
+  resolve: {
+    mainFields: ['module', 'main'],
+  },
   module: {
     rules: [
       {
