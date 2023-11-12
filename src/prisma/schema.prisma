@@ -267,6 +267,7 @@ model Contest {
   startDate String
   endDate String
   prize String
+  userJoined String[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
