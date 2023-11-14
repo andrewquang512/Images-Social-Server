@@ -13,6 +13,9 @@ const Chat = {
       where: {
         id: { in: parent.messages },
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
   },
 };

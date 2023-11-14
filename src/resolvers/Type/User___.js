@@ -34,6 +34,9 @@ const User = {
       where: {
         userIDs: { has: parent.id },
       },
+      orderBy: {
+        updatedAt: 'desc',
+      },
     });
   },
   messages: async (parent, args, info) => {

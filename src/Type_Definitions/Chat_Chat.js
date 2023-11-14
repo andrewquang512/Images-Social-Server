@@ -4,10 +4,21 @@ const chatDefs = gql`
   extend type Query {
     allChats: [Chat]!
     chatInfo(data: ChatInfoInput!): Chat!
+    getChatMessage(chatId: String, after: String): MessageConnection!
   }
 
   input ChatInfoInput {
     chatId: ID!
+  }
+
+  type MessageConnection {
+    edges: [MessageEdge!]!
+    pageInfo: PageInfo!
+  }
+
+  type MessageEdge {
+    node: Message
+    cursor: String!
   }
 
   # _______________________________________________________
