@@ -14,6 +14,7 @@ import reportMutation from './report.js';
 import contestMutation from './contest.js';
 import chatMutation from './chat.js';
 import messageMutation from './message.js';
+import profileMutation from './profile.js';
 
 const Mutation = {
   // User
@@ -48,6 +49,7 @@ const Mutation = {
   ...chatMutation,
   // Message
   ...messageMutation,
+  ...profileMutation,
 };
 
 export default Mutation;

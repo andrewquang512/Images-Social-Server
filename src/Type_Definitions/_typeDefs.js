@@ -42,7 +42,6 @@ const typeDefs = [
   storyDefs,
   commentDefs,
   tagDefs,
-  // profileDefs,
   categoryDefs,
   albumDefs,
   followingDefs,
@@ -51,6 +50,7 @@ const typeDefs = [
   contestDefs,
   chatDefs,
   messageDefs,
+  profileDefs,
 ];
 
 export default typeDefs;

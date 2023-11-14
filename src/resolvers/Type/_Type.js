@@ -14,6 +14,9 @@ import Report from './Report___.js';
 import Contest from './Contest___.js';
 import Chat from './Chat___.js';
 import Message from './Message___.js';
+import Profile from './Profile___.js';
+import Skill from './Skill___.js';
+import Endorsement from './Endorsement___.js';
 
 const Type = {
   User,
@@ -32,6 +35,9 @@ const Type = {
   Contest,
   Chat,
   Message,
+  Profile,
+  Endorsement,
+  Skill,
 };
 
 export default Type;

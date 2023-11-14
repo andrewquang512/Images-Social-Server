@@ -8,19 +8,43 @@ import commonDefs from './Common_Common.js';
 const profileDefs = gql`
   extend type Query {
     getProfile(data: ProfileInfoInput!): Profile!
+    getSkillDefinedList: [Skill]!
+  }
+
+  extend type Mutation {
+    addBiography(data: AddBiographyInput!): Profile!
+    addSkill(data: AddSkillInput!): Profile!
   }
 
   input ProfileInfoInput {
     userId: ID!
   }
 
+  input AddBiographyInput {
+    userId: ID!
+    content: String!
+  }
+
+  input AddSkillInput {
+    userId: ID!
+    skillId: String!
+  }
+
   type Profile {
     id: ID!
-    isAdmin: Int!
-    createdAt: String!
-    updatedAt: String
+    endorsements: [Endorsement]
+  }
 
-    endosers: Level!
+  type Endorsement {
+    id: ID!
+    endorsers: [Profile]
+    skillId: Skill
+  }
+
+  type Skill {
+    id: ID!
+    name: String!
+    endorsements: [Endorsement]
   }
 `;
 
