@@ -15,6 +15,7 @@ import contestQuery from './CONTEST.js';
 import chatQuery from './CHAT.js';
 import messageQuery from './MESSAGE.js';
 import profileQuery from './PROFILE.js';
+import skillQuery from './SKILL.js';
 
 const Query = {
   // User
@@ -51,6 +52,7 @@ const Query = {
   ...messageQuery,
 
   ...profileQuery,
+  ...skillQuery,
 };
 
 export default Query;

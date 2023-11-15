@@ -15,6 +15,7 @@ import contestMutation from './contest.js';
 import chatMutation from './chat.js';
 import messageMutation from './message.js';
 import profileMutation from './profile.js';
+import skillMutation from './skill.js';
 
 const Mutation = {
   // User
@@ -50,6 +51,7 @@ const Mutation = {
   // Message
   ...messageMutation,
   ...profileMutation,
+  ...skillMutation,
 };
 
 export default Mutation;

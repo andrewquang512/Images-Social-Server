@@ -20,13 +20,6 @@ const profileQuery = {
     if (!result) return null;
     return result;
   },
-
-  getSkillDefinedList: async (parent, args, info) => {
-    const result = await prisma.skill.findMany();
-
-    if (result.length === 0) return [];
-    return result;
-  },
 };
 
 export default profileQuery;

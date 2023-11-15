@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import commonDefs from './Common_Common.js';
+import skillDefs from './Skill_Skill.js';
 
 /**
  * @description {import('./User_User.js)}
@@ -39,14 +40,9 @@ const profileDefs = gql`
   type Endorsement {
     id: ID!
     endorsers: [Profile]
-    skillId: Skill
+    skill: Skill
   }
-
-  type Skill {
-    id: ID!
-    name: String!
-    endorsements: [Endorsement]
-  }
+  ${skillDefs}
 `;
 
 export default profileDefs;

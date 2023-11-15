@@ -10,12 +10,10 @@ const Endorsement = {
       },
     });
   },
-  skillId: async (parent, args, info) => {
+  skill: async (parent, args, info) => {
     return await prisma.skill.findUnique({
       where: {
-        id: {
-          in: parent.skillId,
-        },
+        id: parent.skillId,
       },
     });
   },
