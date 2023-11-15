@@ -55,7 +55,7 @@ model User {
   courseIDs      String[] @db.ObjectId
   user_to_course Course[] @relation(fields: [courseIDs], references: [id])
 
-  endorsementIds      String[] @db.ObjectId
+  endorsementIds      String[]      @db.ObjectId
   user_to_endorsement Endorsement[] @relation(fields: [endorsementIds], references: [id])
 }
 
@@ -69,33 +69,33 @@ model User {
 // }
 
 model Endorsement {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  endorser User[] @relation( fields: [endorserIds], references: [id])
+  endorser    User[]   @relation(fields: [endorserIds], references: [id])
   endorserIds String[] @db.ObjectId
 
   skillId String @db.ObjectId
-  skill  Skill   @relation(fields: [skillId], references: [id])
+  skill   Skill  @relation(fields: [skillId], references: [id])
 }
 
 model Skill {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
   endorsements Endorsement[]
 }
 
 model Report {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   isFinished Boolean
-  reason String
-  postId String
-  userId String
+  reason     String
+  postId     String
+  userId     String
 
   userReported String
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Follower {
@@ -200,7 +200,7 @@ model Post {
   points         Int
   image          Image?
   cmts           Comment[]
-  contestId     String
+  contestId      String
 
   userId       String @db.ObjectId
   post_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -250,28 +250,27 @@ model Comment {
 
   parentId String?   @db.ObjectId
   parent   Comment?  @relation(name: "Comment_Child", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  child Comment[] @relation(name: "Comment_Child")
+  child    Comment[] @relation(name: "Comment_Child")
 
-  votes Int @default(0)
-  upVoteUserlist String[]
+  votes            Int      @default(0)
+  upVoteUserlist   String[]
   downVoteUserlist String[]
 }
 
 model Contest {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
 
   contestImageURL String
-  description String
+  description     String
 
-  startDate String
-  endDate String
-  prize String
+  startDate  String
+  endDate    String
+  prize      String
   userJoined String[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
 }
 
 model Course {
@@ -314,5 +313,3 @@ model Message {
   chatId          String @db.ObjectId
   message_to_chat Chat   @relation(fields: [chatId], references: [id])
 }
-
-
