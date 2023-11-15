@@ -32,6 +32,7 @@ const profileDefs = gql`
 
   type Profile {
     id: ID!
+    biography: String
     endorsements: [Endorsement]
   }
 
