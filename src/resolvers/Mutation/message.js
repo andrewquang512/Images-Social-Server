@@ -1,4 +1,5 @@
 import { prisma } from '../../prisma/database.js';
+import { pubsub } from '../../index.js';
 
 const messageMutation = {
   createMessage: async (parent, args, info) => {
@@ -8,7 +9,6 @@ const messageMutation = {
         data: {
           message: args.data.message,
           isImage: args.data.isImage,
-
           userId: args.data.userId,
           chatId: args.data.chatId,
         },
@@ -17,6 +17,9 @@ const messageMutation = {
       console.log(e);
       throw e;
     }
+
+    pubsub.publish('MESSAGE_CREATED', { createdMessage: result });
+
     return result;
   },
   deleteMessage: async (parent, args, info) => {

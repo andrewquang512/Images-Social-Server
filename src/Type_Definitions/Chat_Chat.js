@@ -43,6 +43,14 @@ const chatDefs = gql`
     chatId: ID!
   }
 
+  # _______________________________________________________
+  # _______________________________________________________
+
+  extend type Subscription {
+    createdMessage: Message
+    # userTyping: Boolean
+  }
+
   type Chat {
     id: ID!
 

@@ -27,6 +27,10 @@ const baseDefs = gql`
     _TEST_MUTATION: Int!
   }
 
+  type Subscription {
+    _TEST_SUBCRIPTION: Int!
+  }
+
   type DeleteAllReturnType {
     count: Int!
     message: String
