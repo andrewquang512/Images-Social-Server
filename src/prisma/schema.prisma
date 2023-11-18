@@ -56,8 +56,10 @@ model User {
   courseIDs      String[] @db.ObjectId
   user_to_course Course[] @relation(fields: [courseIDs], references: [id])
 
+  user_to_endorsement Endorsement[] @relation(name: "owner")
+
   endorsementIds      String[]      @db.ObjectId
-  user_to_endorsement Endorsement[] @relation(fields: [endorsementIds], references: [id])
+  endorsements Endorsement[] @relation(name: "endorser", fields: [endorsementIds], references: [id])
 }
 
 // model Notification {
@@ -72,8 +74,11 @@ model User {
 model Endorsement {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  endorser    User[]   @relation(fields: [endorserIds], references: [id])
-  endorserIds String[] @db.ObjectId
+  ownerId String @db.ObjectId
+  owner User   @relation(name: "owner", fields: [ownerId], references: [id])
+
+  endorserIds String[] @db.ObjectId 
+  endorser User[]   @relation(name: "endorser", fields: [endorserIds], references: [id])
 
   skillId String @db.ObjectId
   skill   Skill  @relation(fields: [skillId], references: [id])

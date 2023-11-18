@@ -13,7 +13,6 @@ import followingDefs from './Following_Following.js';
 import followerDefs from './Follower_Follower.js';
 import reportDefs from './Report_Report.js';
 import contestDefs from './Contest_Contest.js';
-import profileDefs from './Profile_Profile.js';
 import chatDefs from './Chat_Chat.js';
 import messageDefs from './Message_Message.js';
 import skillDefs from './Skill_Skill.js';
@@ -55,7 +54,6 @@ const typeDefs = [
   contestDefs,
   chatDefs,
   messageDefs,
-  profileDefs,
   skillDefs,
 ];
 

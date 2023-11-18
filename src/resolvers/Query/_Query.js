@@ -14,7 +14,6 @@ import reportQuery from './REPORT.js';
 import contestQuery from './CONTEST.js';
 import chatQuery from './CHAT.js';
 import messageQuery from './MESSAGE.js';
-import profileQuery from './PROFILE.js';
 import skillQuery from './SKILL.js';
 
 const Query = {
@@ -50,8 +49,6 @@ const Query = {
   ...chatQuery,
   // Message
   ...messageQuery,
-
-  ...profileQuery,
   ...skillQuery,
 };
 

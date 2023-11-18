@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import commonDefs from './Common_Common.js';
+import skillDefs from './Skill_Skill.js';
 
 const userDefs = gql`
   extend type Query {
@@ -45,6 +46,29 @@ const userDefs = gql`
     deleteUser(data: DeleteUserInput!): User!
     deleteAllUser: DeleteAllReturnType!
     updateUser(data: UpdateUserInput!): User!
+    addBiography(data: AddBiographyInput!): User!
+    addSkill(data: AddSkillInput!): User!
+    endorseSkill(data: EndorseSkillInput!): User!
+    unEndorseSkill(data: EndorseSkillInput!): User!
+  }
+
+  input EndorseSkillInput {
+    endorsementId: ID!
+    endorserUserId: ID!
+  }
+
+  input ProfileInfoInput {
+    userId: ID!
+  }
+
+  input AddBiographyInput {
+    userId: ID!
+    content: String!
+  }
+
+  input AddSkillInput {
+    userId: ID!
+    skillId: String!
   }
 
   input CreateUserInput {
@@ -95,7 +119,18 @@ const userDefs = gql`
 
     chatIDs: [Chat]!
     messages: [Message]!
+
+    biography: String
+    userEndorsements: [Endorsement]
   }
+
+  type Endorsement {
+    id: ID!
+    owner: User
+    endorsers: [User]
+    skill: Skill
+  }
+  ${skillDefs}
 `;
 
 export default userDefs;
