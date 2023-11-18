@@ -46,6 +46,13 @@ const User = {
       },
     });
   },
+  userEndorsements: async (parent, args, info) => {
+    return await prisma.endorsement.findMany({
+      where: {
+        ownerId: parent.id,
+      },
+    });
+  },
 };
 
 export default User;
