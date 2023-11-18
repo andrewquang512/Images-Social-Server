@@ -1,4 +1,5 @@
 import { prisma } from '../../prisma/database.js';
+import { pubsub } from '../../index.js';
 
 const chatMutation = {
   createChat: async (parent, args, info) => {
@@ -56,6 +57,8 @@ const chatMutation = {
         throw e;
       }
     }
+
+    pubsub.publish('UPDATE_STATUS_CHAT', { updateStatusChat: result });
 
     return result;
   },

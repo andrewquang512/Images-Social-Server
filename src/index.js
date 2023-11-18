@@ -102,7 +102,6 @@ export async function bootstrap() {
       },
     ],
     logger: console,
-
     // csrfPrevention: true,
   });
 

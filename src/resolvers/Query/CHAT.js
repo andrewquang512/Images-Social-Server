@@ -11,9 +11,18 @@ const chatQuery = {
       },
     });
   },
+  chatInfoByUserId: async (parent, args, info) => {
+    return await prisma.chat.findMany({
+      where: {
+        userIDs: {
+          hasEvery: args.data.userIDs,
+        },
+      },
+    });
+  },
   getChatMessage: async (parent, args, info) => {
     const { chatId, after } = args;
-    console.log(args);
+    // console.log(args);
     let nodes, a;
 
     a = await prisma.message.findMany({
@@ -33,7 +42,7 @@ const chatQuery = {
         cursor: post.id,
       }));
 
-      console.log({ nodes });
+      // console.log({ nodes });
     } else {
       const index = a.findIndex((post) => post.id === after);
       nodes = a.slice(index + 1, index + 10).map((post) => ({
@@ -41,7 +50,7 @@ const chatQuery = {
         cursor: post.id,
       }));
 
-      console.log({ nodes });
+      // console.log({ nodes });
     }
 
     const hasNextPage =

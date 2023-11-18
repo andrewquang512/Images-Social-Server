@@ -3,7 +3,7 @@ import { pubsub } from '../../index.js';
 
 const messageMutation = {
   createMessage: async (parent, args, info) => {
-    let result;
+    let result, chat;
     try {
       result = await prisma.message.create({
         data: {
@@ -13,12 +13,24 @@ const messageMutation = {
           chatId: args.data.chatId,
         },
       });
+
+      // console.log({ result }, 'chat');
+
+      chat = await prisma.chat.update({
+        where: {
+          id: args.data.chatId,
+        },
+        data: {
+          lastMessageAt: result.createdAt,
+        },
+      });
     } catch (e) {
       console.log(e);
       throw e;
     }
 
     pubsub.publish('MESSAGE_CREATED', { createdMessage: result });
+    pubsub.publish('UPDATE_STATUS_CHAT', { updateStatusChat: chat });
 
     return result;
   },

@@ -35,7 +35,7 @@ const User = {
         userIDs: { has: parent.id },
       },
       orderBy: {
-        updatedAt: 'desc',
+        lastMessageAt: 'desc',
       },
     });
   },

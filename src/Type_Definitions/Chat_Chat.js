@@ -4,11 +4,16 @@ const chatDefs = gql`
   extend type Query {
     allChats: [Chat]!
     chatInfo(data: ChatInfoInput!): Chat!
+    chatInfoByUserId(data: ChatInfoByUserIdInput!): [Chat]
     getChatMessage(chatId: String, after: String): MessageConnection!
   }
 
   input ChatInfoInput {
     chatId: ID!
+  }
+
+  input ChatInfoByUserIdInput {
+    userIDs: [ID]!
   }
 
   type MessageConnection {
@@ -42,12 +47,12 @@ const chatDefs = gql`
   input DeleteChatInput {
     chatId: ID!
   }
-
   # _______________________________________________________
   # _______________________________________________________
 
   extend type Subscription {
-    createdMessage: Message
+    createdMessage(chatId: String): Message
+    updateStatusChat(userId: String): Chat
     # userTyping: Boolean
   }
 
@@ -55,6 +60,7 @@ const chatDefs = gql`
     id: ID!
 
     createdAt: String!
+    lastMessageAt: String!
 
     userIDs: [User]!
     messages: [Message]!
