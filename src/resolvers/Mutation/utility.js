@@ -79,7 +79,7 @@ const utilityMutation = {
     const hash1 = images[0].hash;
     const hash2 = images[1].hash;
 
-    const result = compareImages(hash1, hash2, algo);
+    const result = await compareImages(hash1, hash2, algo);
     return {
       isSimilar: result,
       post1Imageurl: images[0].url,
