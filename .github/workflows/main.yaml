@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
     branches:
       - deploy
-     - develop
+      - develop
 
 jobs:
   build-and-deploy:
