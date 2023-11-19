@@ -1,4 +1,4 @@
-import Jimp from 'Jimp';
+import Jimp from 'jimp';
 
 export function compareImages(image1hash, image2hash) {
   // Perceived distance
