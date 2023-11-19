@@ -1,4 +1,4 @@
-import Jimp from 'jimp';
+import Jimp from 'Jimp';
 
 export async function hashImage(imageUrl) {
   try {
