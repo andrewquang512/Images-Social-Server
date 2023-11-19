@@ -2,11 +2,17 @@ name: Deploy to AWS Lambda
 
 on:
   push:
-    branches: [deploy, develop]
+    branches:
+      - deploy
+      - develop
   pull_request:
-    branches: [deploy, develop]
+    branches:
+      - deploy
+      - develop
   workflow_dispatch:
-    branches: [deploy, develop]
+    branches:
+      - deploy
+     - develop
 
 jobs:
   build-and-deploy:
