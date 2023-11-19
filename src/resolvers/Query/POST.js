@@ -343,7 +343,7 @@ const postQuery = {
    */
   similarPosts: async (parent, args, info) => {
     const { after, limit = DEFAULT_LIMIT } = args;
-    const { postId } = args.data ? args.data : {};
+    const { postId = undefined } = args.data ? args.data : {};
 
     if (!postId) {
       throw new Error('postId is not provided');
@@ -378,9 +378,7 @@ const postQuery = {
           ],
         },
         include: {
-          image: {
-            include: true,
-          },
+          image: true,
         },
       }),
     ]);
@@ -428,9 +426,7 @@ const postQuery = {
           ],
         },
         include: {
-          image: {
-            include: true,
-          },
+          image: true,
         },
       });
 
@@ -509,9 +505,7 @@ const postQuery = {
           },
         },
         include: {
-          image: {
-            include: true,
-          },
+          image: true,
         },
         ...(after && {
           cursor: {
@@ -519,20 +513,17 @@ const postQuery = {
           },
         }),
       }),
-      prisma.comment.count(),
+      prisma.post.count(),
     ]);
 
     console.log('Result', result);
     console.log('count', count);
 
-    const sortedResult = result.sort(
-      (before, after) => after.votes - before.votes,
-    );
     const hasNextPage =
-      sortedResult.length !== 0 && sortedResult.length < count;
+      result.length !== 0 && result.length < count && result.length === limit;
     console.log('hasNextPage', hasNextPage);
 
-    const nodes = sortedResult.map((each) => ({
+    const nodes = result.map((each) => ({
       node: each,
       cursor: each.id,
     }));

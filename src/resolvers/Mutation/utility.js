@@ -24,9 +24,7 @@ const utilityMutation = {
         },
       },
       include: {
-        image: {
-          include: true,
-        },
+        image: true,
       },
     });
 
@@ -69,9 +67,7 @@ const utilityMutation = {
         },
       },
       include: {
-        image: {
-          include: true,
-        },
+        image: true,
       },
     });
 

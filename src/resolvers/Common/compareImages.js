@@ -4,7 +4,6 @@ export function compareImages(image1hash, image2hash) {
   // Perceived distance
   const vihammingDistance = findHammingDistance(image1hash, image2hash);
   const jimphammingDistance = Jimp.compareHashes(image1hash, image2hash);
-
   console.log(
     `compareImages: vihammingDistance distance: ${vihammingDistance}`,
   );

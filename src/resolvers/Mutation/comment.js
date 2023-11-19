@@ -92,7 +92,7 @@ const commentMutation = {
   /**
    *
    * @param {*} parent
-   * @param {{data: {commentId: string, userId: string, action: VOTE_COMMENT_ACTION }}} args
+   * @param {{data: {commentId: string, userId: string, action: keyof VOTE_COMMENT_ACTION }}} args
    * @param {*} info
    * @returns
    */

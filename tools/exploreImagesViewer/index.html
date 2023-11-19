@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Images Viewer</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        img {
+            max-width: 500px;
+            max-height: 500px;
+        }
+    </style>
+</head>
+
+<body>
+    <label for="After">Enter After:</label>
+    <input type="text" id="After" />
+    <label for="Limit">Enter Limit:</label>
+    <input type="text" id="Limit" />
+
+    <button onclick="fetchImages()">Fetch Images</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>URL</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+        <tbody id="imageTableBody"></tbody>
+    </table>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@apollo/client/index.js"></script>
+    <script>
+        // Replace with your Apollo Server URL
+        const serverUrl = 'http://localhost:4000/graphql';
+
+        let default_limit = 5; // Default limit
+        let default_after = null; // Default after cursor
+
+        const query = `
+            query ExplorePosts($limit: Int, $after: String) {
+                explorePosts(limit: $limit, after: $after) {
+                    edges {
+                    node {
+                        id
+                        image {
+                        id
+                        url
+                        }
+                        title
+                    }
+                    cursor
+                    }
+                    pageInfo {
+                    hasNextPage
+                    hasPreviousPage
+                    startCursor
+                    endCursor
+                    }
+                }
+            }
+        `;
+
+        const fetchImages = async () => {
+            try {
+                const newLimit = parseInt(document.getElementById('Limit').value);
+                limit = newLimit || default_limit;
+
+                const newAfter = document.getElementById('After').value;
+                after = newAfter || default_after;
+
+                const variables = {
+                    limit: limit,
+                    after: after
+                }
+
+                console.log('Variables: ', variables)
+                const response = await axios.post(serverUrl, {
+                    query,
+                    variables: variables
+                });
+
+                const explorePosts = response.data.data.explorePosts
+                console.log('explorePosts: ', explorePosts)
+
+                const edges = explorePosts.edges;
+                if (explorePosts.pageInfo) {
+                    console.log('PageInfo: ', explorePosts.pageInfo)
+                }
+                console.log('Edges: ', edges)
+
+                const imageTableBody = document.getElementById('imageTableBody');
+                imageTableBody.innerHTML = ''; // Clear existing rows
+
+                edges.forEach((edge) => {
+                    console.log('Node: ', edge.node)
+                    const image = edge.node.image
+                    const row = imageTableBody.insertRow();
+
+                    // Insert ID cell
+                    const idCell = row.insertCell(0);
+                    idCell.textContent = image.id;
+
+                    // Insert URL cell
+                    const urlCell = row.insertCell(1);
+                    urlCell.textContent = image.url;
+
+                    // Insert Image cell
+                    const imageCell = row.insertCell(2);
+                    const imgElement = document.createElement('img');
+                    imgElement.src = image.url;
+                    imgElement.alt = `Image ${image.id}`;
+                    imageCell.appendChild(imgElement);
+                });
+            } catch (error) {
+                console.error('Error fetching images:', error);
+            }
+        };
+
+        fetchImages();
+    </script>
+</body>
+
+</html>

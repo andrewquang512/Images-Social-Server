@@ -45,7 +45,9 @@ const commentQuery = {
       (before, after) => after.votes - before.votes,
     );
     const hasNextPage =
-      sortedResult.length !== 0 && sortedResult.length < count;
+      sortedResult.length !== 0 &&
+      sortedResult.length < count &&
+      sortedResult.length === limit;
     console.log('hasNextPage', hasNextPage);
 
     const nodes = sortedResult.map((each) => ({
@@ -107,7 +109,9 @@ const commentQuery = {
       (before, after) => after.votes - before.votes,
     );
     const hasNextPage =
-      sortedResult.length !== 0 && sortedResult.length < count;
+      sortedResult.length !== 0 &&
+      sortedResult.length < count &&
+      sortedResult.length === limit;
     console.log('hasNextPage', hasNextPage);
 
     const nodes = sortedResult.map((each) => ({
