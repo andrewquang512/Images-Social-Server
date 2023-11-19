@@ -351,7 +351,7 @@ const postQuery = {
 
     // allImages = _.filter(allImages, (o) => o.id != currentImage.id);
 
-    const [referenceImage, initPosts] = await prisma.$transaction([
+    const [referenceImage, initPosts] = await Promise.all([
       prisma.image.findUnique({
         where: {
           postId: postId,
@@ -368,12 +368,14 @@ const postQuery = {
           },
         }),
         where: {
-          image: {
-            isNot: null,
-          },
-          id: {
-            not: postId,
-          },
+          NOT: [
+            {
+              image: null,
+            },
+            {
+              id: postId,
+            },
+          ],
         },
         include: {
           image: {
@@ -416,12 +418,14 @@ const postQuery = {
           id: lastId,
         },
         where: {
-          image: {
-            isNot: null,
-          },
-          id: {
-            not: postId,
-          },
+          NOT: [
+            {
+              image: null,
+            },
+            {
+              id: postId,
+            },
+          ],
         },
         include: {
           image: {
