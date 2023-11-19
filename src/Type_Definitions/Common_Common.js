@@ -10,10 +10,27 @@ const commonDefs = gql`
 
   extend type Mutation {
     hashImageWithPostIds(data: hashImageWithPostIdsInput): String!
+    checkSimilarPosts(
+      post1Id: String
+      post2Id: String
+      algo: similarImageAlgorithm
+    ): checkSimilarPostsDetails!
   }
 
   input hashImageWithPostIdsInput {
     postIds: [String]
+  }
+
+  enum similarImageAlgorithm {
+    HAMMING
+    LEVENSHTEIN
+    ALL
+  }
+
+  type checkSimilarPostsDetails {
+    isSimilar: Boolean
+    post1Imageurl: String
+    post2ImageUrl: String
   }
 `;
 

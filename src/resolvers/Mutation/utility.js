@@ -1,5 +1,6 @@
 import { prisma } from '../../prisma/database.js';
 import { hashImage } from '../Common/hashImage.js';
+import { compareImages } from '../Common/compareImages.js';
 
 const utilityMutation = {
   /**
@@ -50,6 +51,40 @@ const utilityMutation = {
     await Promise.all(promise);
 
     return 'SUCCESS';
+  },
+
+  /**
+   *
+   * @param {*} parent
+   * @param {{post1Id: string, post2Id: string, algo: string}} args
+   * @param {*} info
+   * @returns
+   */
+  checkSimilarPosts: async (parent, args, info) => {
+    const { post1Id, post2Id, algo } = args;
+    const allPosts = await prisma.post.findMany({
+      where: {
+        id: {
+          in: [post1Id, post2Id],
+        },
+      },
+      include: {
+        image: {
+          include: true,
+        },
+      },
+    });
+
+    const images = allPosts.map((each) => each.image);
+    const hash1 = images[0].hash;
+    const hash2 = images[1].hash;
+
+    const result = compareImages(hash1, hash2, algo);
+    return {
+      isSimilar: result,
+      post1Imageurl: images[0].url,
+      post2ImageUrl: images[1].url,
+    };
   },
 };
 
