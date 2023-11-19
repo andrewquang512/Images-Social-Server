@@ -77,7 +77,8 @@ const userQuery = {
     // console.log('Result', result);
     // console.log('count', count);
 
-    const hasNextPage = result.length !== 0 && result.length < count;
+    const hasNextPage =
+      result.length !== 0 && result.length < count && result.length === limit;
     // console.log('hasNextPage', hasNextPage);
 
     const nodes = result.map((each) => ({

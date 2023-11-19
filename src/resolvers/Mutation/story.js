@@ -74,64 +74,50 @@ const storyMutation = {
     let story;
 
     if (args.data.isLiked) {
-      try {
-        story = await prisma.story.update({
-          where: {
-            id: args.data.storyId,
+      story = await prisma.story.update({
+        where: {
+          id: args.data.storyId,
+        },
+        data: {
+          points: {
+            increment: 1,
           },
-          data: {
-            points: {
-              increment: 1,
-            },
-            userLikedStory: {
-              push: args.data.likedUserId,
-            },
+          userLikedStory: {
+            push: args.data.likedUserId,
           },
-        });
-      } catch (e) {
-        if (e instanceof Prisma.PrismaClientKnownRequestError) {
-          console.log(e);
-        }
-        throw e;
-      }
+        },
+      });
     } else {
-      try {
-        const { userLikedStory } = await prisma.story.findUnique({
-          where: {
-            id: args.data.storyId,
-          },
-        });
-        console.log(userLikedStory);
+      const { userLikedStory } = await prisma.story.findUnique({
+        where: {
+          id: args.data.storyId,
+        },
+      });
+      console.log(userLikedStory);
 
-        story = await prisma.story.update({
+      story = await prisma.story.update({
+        where: {
+          id: args.data.storyId,
+        },
+        data: {
+          points: {
+            increment: -1,
+          },
+          userLikedStory: {
+            set: userLikedStory.filter((id) => id !== args.data.likedUserId),
+          },
+        },
+      });
+
+      if (story.points == -1) {
+        story = await prisma.post.update({
           where: {
             id: args.data.storyId,
           },
           data: {
-            points: {
-              increment: -1,
-            },
-            userLikedStory: {
-              set: userLikedStory.filter((id) => id !== args.data.likedUserId),
-            },
+            points: 0,
           },
         });
-
-        if (story.points == -1) {
-          story = await prisma.post.update({
-            where: {
-              id: args.data.storyId,
-            },
-            data: {
-              points: 0,
-            },
-          });
-        }
-      } catch (e) {
-        if (e instanceof Prisma.PrismaClientKnownRequestError) {
-          console.log(e);
-        }
-        throw e;
       }
     }
 

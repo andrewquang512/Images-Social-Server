@@ -16,6 +16,7 @@ import chatMutation from './chat.js';
 import messageMutation from './message.js';
 import profileMutation from './profile.js';
 import skillMutation from './skill.js';
+import utilityMutation from './utility.js';
 
 const Mutation = {
   // User
@@ -52,6 +53,7 @@ const Mutation = {
   ...messageMutation,
   ...profileMutation,
   ...skillMutation,
+  ...utilityMutation,
 };
 
 export default Mutation;

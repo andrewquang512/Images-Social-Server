@@ -6,7 +6,7 @@ export const VOTE_COMMENT_ACTION = {
   CANCEL: 'CANCEL',
 };
 
-export const DEFINED_SKILL_LIST = [
+export const DEFAULT_DEFINED_SKILL_LIST = [
   'Abstract',
   'Animal',
   'Architecture',

@@ -105,7 +105,6 @@ const postDefs = gql`
     postViewStatus: ViewStatus!
 
     imageURL: String!
-    imageHash: String!
 
     categoryId: [String]
     albumId: [String]
