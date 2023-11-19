@@ -1,8 +1,10 @@
 import { prisma } from '../../prisma/database.js';
+import { hashImage } from '../Common/hashImage.js';
 
 const postMutation = {
   createPost: async (parent, args, info) => {
     let post;
+    const imageHash = await hashImage(args.data.imageURL);
     try {
       post = await prisma.post.create({
         data: {
@@ -20,7 +22,7 @@ const postMutation = {
           image: {
             create: {
               url: args.data.imageURL,
-              hash: args.data.imageHash,
+              hash: imageHash,
 
               imageInfoId: {
                 create: {
@@ -82,9 +84,7 @@ const postMutation = {
         data: {
           title: args.data.title || undefined,
           caption: args.data.caption || undefined,
-          postViewStatus: args.data.hasOwnProperty('postViewStatus')
-            ? args.data.postViewStatus
-            : undefined,
+          postViewStatus: args.data.postViewStatus || undefined,
         },
       });
     } catch (e) {
@@ -98,64 +98,50 @@ const postMutation = {
     let post;
 
     if (args.data.isLiked) {
-      try {
-        post = await prisma.post.update({
-          where: {
-            id: args.data.postId,
+      post = await prisma.post.update({
+        where: {
+          id: args.data.postId,
+        },
+        data: {
+          points: {
+            increment: 1,
           },
-          data: {
-            points: {
-              increment: 1,
-            },
-            userLikedPost: {
-              push: args.data.likedUserId,
-            },
+          userLikedPost: {
+            push: args.data.likedUserId,
           },
-        });
-      } catch (e) {
-        if (e instanceof Prisma.PrismaClientKnownRequestError) {
-          console.log(e);
-        }
-        throw e;
-      }
+        },
+      });
     } else {
-      try {
-        const { userLikedPost } = await prisma.post.findUnique({
-          where: {
-            id: args.data.postId,
-          },
-        });
-        console.log(userLikedPost);
+      const { userLikedPost } = await prisma.post.findUnique({
+        where: {
+          id: args.data.postId,
+        },
+      });
+      console.log(userLikedPost);
 
+      post = await prisma.post.update({
+        where: {
+          id: args.data.postId,
+        },
+        data: {
+          points: {
+            increment: -1,
+          },
+          userLikedPost: {
+            set: userLikedPost.filter((id) => id !== args.data.likedUserId),
+          },
+        },
+      });
+
+      if (post.points == -1) {
         post = await prisma.post.update({
           where: {
             id: args.data.postId,
           },
           data: {
-            points: {
-              increment: -1,
-            },
-            userLikedPost: {
-              set: userLikedPost.filter((id) => id !== args.data.likedUserId),
-            },
+            points: 0,
           },
         });
-
-        if (post.points == -1) {
-          post = await prisma.post.update({
-            where: {
-              id: args.data.postId,
-            },
-            data: {
-              points: 0,
-            },
-          });
-        }
-      } catch (e) {
-        if (e instanceof Prisma.PrismaClientKnownRequestError) {
-          console.log(e);
-        }
-        throw e;
       }
     }
 

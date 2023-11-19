@@ -385,20 +385,14 @@ const postQuery = {
     }
 
     const result = [];
-    console.log('Init Stage');
-    const initImagesMap = [];
+    console.log('Init Stage wit referenceImage URL: ', referenceImage.url);
     const initImages = initPosts.map((each) => each.image);
-    for (const img of initImages) {
-      initImagesMap.push(compareImages(referenceImage.url, img.url));
-    }
-
-    const isSimilarImages = await Promise.allSettled(initImagesMap);
+    const isSimilarImageMap = initImages.map((each) =>
+      compareImages(referenceImage.hash, each.hash),
+    );
     for (const imgIndex in initImages) {
-      if (isSimilarImages[imgIndex]?.value) {
+      if (isSimilarImageMap[imgIndex]) {
         result.push(initPosts[imgIndex]);
-      } else {
-        // Error
-        console.log('isSimilarImages Error: ', isSimilarImages[imgIndex]);
       }
     }
 
@@ -410,7 +404,7 @@ const postQuery = {
         id: lastId,
       },
     });
-    console.log('Loop Stage');
+    console.log('Loop Stage wit referenceImage URL: ', referenceImage.url);
     while (result.length !== limit && nextItem) {
       const nextPosts = await prisma.post.findMany({
         take: limit,
@@ -431,22 +425,16 @@ const postQuery = {
       });
 
       const nextImages = nextPosts.map((each) => each.image);
-      const nextImagesMap = [];
-      for (const img of nextImages) {
-        nextImagesMap.push(compareImages(referenceImage.url, img.url));
-      }
-
-      const isSimilarImages = await Promise.allSettled(nextImagesMap);
+      const isSimilarImageMap = nextImages.map((each) =>
+        compareImages(referenceImage.hash, each.hash),
+      );
       for (const imgIndex in nextImages) {
         if (result.length === limit) {
           console.log('result is match limit, Stopping');
           break;
         }
-        if (isSimilarImages[imgIndex]?.value) {
+        if (isSimilarImageMap[imgIndex]) {
           result.push(nextPosts[imgIndex]);
-        } else {
-          // Error
-          console.log('isSimilarImages Error: ', isSimilarImages[imgIndex]);
         }
       }
 
