@@ -6,12 +6,6 @@ export const VOTE_COMMENT_ACTION = {
   CANCEL: 'CANCEL',
 };
 
-export const SIMILAR_IMAGE_ALGORITHM = {
-  HAMMING: 'HAMMING',
-  LEVENSHTEIN: 'LEVENSHTEIN',
-  ALL: 'ALL',
-};
-
 export const DEFAULT_DEFINED_SKILL_LIST = [
   'Abstract',
   'Animal',

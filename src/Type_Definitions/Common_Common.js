@@ -13,18 +13,11 @@ const commonDefs = gql`
     checkSimilarPosts(
       post1Id: String
       post2Id: String
-      algo: similarImageAlgorithm
     ): checkSimilarPostsDetails!
   }
 
   input hashImageWithPostIdsInput {
     postIds: [String]
-  }
-
-  enum similarImageAlgorithm {
-    HAMMING
-    LEVENSHTEIN
-    ALL
   }
 
   type checkSimilarPostsDetails {

@@ -32,14 +32,7 @@ const postDefs = gql`
       data: SimilarPostsInput!
       limit: Int
       after: String
-      algo: similarImageAlgorithm
     ): PostPagination!
-  }
-
-  enum similarImageAlgorithm {
-    HAMMING
-    LEVENSHTEIN
-    ALL
   }
 
   type PostPagination {

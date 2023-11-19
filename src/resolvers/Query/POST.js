@@ -337,12 +337,12 @@ const postQuery = {
 
   /**
    * @param {*} parent
-   * @param {{data: {postId: string}, limit: number, after: string, algo: string}} args
+   * @param {{data: {postId: string}, limit: number, after: string}} args
    * @param {*} info
    * @returns
    */
   similarPosts: async (parent, args, info) => {
-    const { after, limit = DEFAULT_LIMIT, algo } = args;
+    const { after, limit = DEFAULT_LIMIT } = args;
     const { postId } = args.data ? args.data : {};
 
     if (!postId) {
@@ -393,7 +393,7 @@ const postQuery = {
     console.log('Init Stage wit referenceImage URL: ', referenceImage.url);
     const initImages = initPosts.map((each) => each.image);
     const isSimilarImageMap = initImages.map((each) =>
-      compareImages(referenceImage.hash, each.hash, algo),
+      compareImages(referenceImage.hash, each.hash),
     );
     for (const imgIndex in initImages) {
       if (isSimilarImageMap[imgIndex]) {
@@ -436,7 +436,7 @@ const postQuery = {
 
       const nextImages = nextPosts.map((each) => each.image);
       const isSimilarImageMap = nextImages.map((each) =>
-        compareImages(referenceImage.hash, each.hash, algo),
+        compareImages(referenceImage.hash, each.hash),
       );
       for (const imgIndex in nextImages) {
         if (result.length === limit) {
