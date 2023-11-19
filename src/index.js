@@ -26,7 +26,7 @@ const pubsub = new PubSub();
 
 export { pubsub };
 
-export async function bootstrap() {
+export async function bootstrap(port) {
   // const server = new ApolloServer({
   //   typeDefs,
   //   resolvers,
@@ -119,9 +119,10 @@ export async function bootstrap() {
     expressMiddleware(server),
   );
 
-  httpServer.listen(4000, () => {
-    console.log(`Server is now running on http://localhost:4000`);
+  httpServer.listen(port, () => {
+    console.log(`Server is now running on http://localhost:${port}`);
   });
 }
 
-bootstrap();
+bootstrap(4000);
+// bootstrap(4001);
