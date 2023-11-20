@@ -528,7 +528,7 @@ const postQuery = {
       cursor: each.id,
     }));
     return {
-      edges: _.shuffle(nodes),
+      edges: shuffleArrayExceptFirstAndLast(nodes),
       pageInfo: {
         hasNextPage,
         hasPreviousPage: after ? true : false,
@@ -538,6 +538,23 @@ const postQuery = {
       },
     };
   },
+};
+
+/**
+ * @link https://stackoverflow.com/questions/50536044/swapping-all-elements-of-an-array-except-for-first-and-last
+ * @param {any[]} arr
+ * @returns {any[]}
+ */
+const shuffleArrayExceptFirstAndLast = (arr) => {
+  if (arr.length < 3) {
+    return arr;
+  }
+  for (let i = arr.length - 2; i > 1; --i) {
+    const j = 1 + Math.floor(Math.random() * i);
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+
+  return arr;
 };
 
 export default postQuery;
