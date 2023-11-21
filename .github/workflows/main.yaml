@@ -51,7 +51,6 @@ jobs:
           npm run prisma_gen
           npm run build
           cp src/prisma/ERD.svg dist/ERD.svg
-          cp src/prisma/schema.prisma dist/schema.prisma
           cp src/libquery_engine-rhel-openssl-1.0.x.so.node dist/libquery_engine-rhel-openssl-1.0.x.so.node
           zip -r code.zip dist
           aws lambda update-function-code --function-name images-social-backend-service --zip-file fileb://code.zip

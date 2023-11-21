@@ -1,3 +1,5 @@
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+
 export default {
   entry: './src/handler.js',
   mode: 'production',
@@ -6,7 +8,8 @@ export default {
     library: {
       type: 'commonjs2',
     },
-    publicPath: '/',
+    publicPath: '',
+    globalObject: 'this',
   },
   resolve: {
     mainFields: ['module', 'main'],
@@ -23,6 +26,9 @@ export default {
       },
     ],
   },
+  plugins: [
+    new CopyWebpackPlugin({ patterns: ['./src/prisma/schema.prisma'] }), // without this the prisma generate above will not work
+  ],
   devServer: {
     proxy: {
       '/websocket': {
