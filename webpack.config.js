@@ -24,15 +24,15 @@ export default {
           loader: 'babel-loader',
         },
       },
+      {
+        test: [/\.(js|jsx)$/],
+        exclude: ['./src/index.js'],
+      },
     ],
   },
   plugins: [
     new CopyWebpackPlugin({ patterns: ['./src/prisma/schema.prisma'] }), // without this the prisma generate above will not work
   ],
-  exclude: {
-    test: [/\.(js|jsx)$/],
-    exclude: ['./src/index.js'],
-  },
   devServer: {
     proxy: {
       '/websocket': {
