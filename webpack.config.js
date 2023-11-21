@@ -7,6 +7,7 @@ export default {
       type: 'commonjs2',
     },
     publicPath: '',
+    globalObject: 'this',
   },
   resolve: {
     mainFields: ['module', 'main'],
