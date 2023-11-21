@@ -26,7 +26,7 @@ export default {
       },
       {
         test: [/\.(js|jsx)$/],
-        exclude: ['./src/index.js'],
+        exclude: ['src/index.js'],
       },
     ],
   },
