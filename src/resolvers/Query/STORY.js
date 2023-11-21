@@ -74,6 +74,88 @@ const storyQuery = {
       },
     });
   },
+  getAllUserStories: async (parent, args, info) => {
+    let a, nodes;
+    const after = args.after;
+
+    if (args.currentUserId === args.userId) {
+      a = await prisma.story.findMany({
+        where: {
+          userId: args.userId,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+    } else {
+      // console.log(2);
+      const follower = await prisma.follower.findUnique({
+        where: {
+          userId: args.userId,
+        },
+      });
+      // console.log({ follower });
+
+      if (follower.userFollower.includes(args.currentUserId)) {
+        // console.log(3);
+        a = await prisma.story.findMany({
+          where: {
+            userId: args.userId,
+            OR: [
+              { storyViewStatus: 'PUBLIC' },
+              { storyViewStatus: 'ONLY_FOLLOWERS' },
+            ],
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        });
+      } else {
+        a = await prisma.story.findMany({
+          where: {
+            userId: args.userId,
+            storyViewStatus: 'PUBLIC',
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        });
+      }
+    }
+
+    if (!after) {
+      nodes = a.slice(0, 2).map((story) => ({
+        node: story,
+        cursor: story.id,
+      }));
+
+      // console.log({ nodes });
+    } else {
+      // console.log('in after');
+      const index = a.findIndex((story) => story.id === after);
+      nodes = a.slice(index + 1, index + 3).map((story) => ({
+        node: story,
+        cursor: story.id,
+      }));
+
+      console.log({ nodes });
+    }
+
+    const hasNextPage =
+      nodes.length === 0
+        ? false
+        : nodes.slice(-1)[0].cursor !== a.slice(-1)[0].id;
+
+    return {
+      edges: nodes,
+      pageInfo: {
+        hasNextPage,
+        hasPreviousPage: after ? true : false,
+        startCursor: nodes.length === 0 ? '' : nodes[0].cursor,
+        endCursor: nodes.length === 0 ? '' : nodes.slice(-1)[0].cursor,
+      },
+    };
+  },
 };
 
 export default storyQuery;

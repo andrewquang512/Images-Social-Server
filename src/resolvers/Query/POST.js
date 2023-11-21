@@ -197,10 +197,8 @@ const postQuery = {
     };
   },
   getAllUserPosts: async (parent, args, info) => {
-    let nodes;
+    let a, nodes;
     const after = args.after;
-
-    let a;
 
     if (args.currentUserId === args.userId) {
       a = await prisma.post.findMany({

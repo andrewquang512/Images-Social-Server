@@ -6,6 +6,11 @@ const storyDefs = gql`
     allStories: [Story]!
     storyInfo(data: StoryInfoInput!): Story!
     getNewStories(limit: Int, after: String): StoryConnection!
+    getAllUserStories(
+      userId: String
+      currentUserId: String
+      after: String
+    ): StoryConnection!
   }
 
   type StoryConnection {
