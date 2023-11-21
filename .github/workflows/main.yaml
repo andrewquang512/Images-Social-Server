@@ -51,7 +51,6 @@ jobs:
           npm run prisma_gen
           npm run build
           cd dist
-          mkdir prisma_modules
           cd ..
           cp src/prisma/ERD.svg dist/prisma/ERD.svg
           cp src/prisma/schema.prisma dist/prisma/schema.prisma
