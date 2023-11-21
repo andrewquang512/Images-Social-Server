@@ -1,4 +1,5 @@
 import CopyWebpackPlugin from 'copy-webpack-plugin';
+import * as path from 'path';
 
 export default {
   entry: './src/handler.js',
@@ -26,7 +27,7 @@ export default {
       },
       {
         test: [/\.(js|jsx)$/],
-        exclude: ['src/index.js'],
+        exclude: [path.resolve(__dirname, 'src/index.js')],
       },
     ],
   },
