@@ -3,7 +3,6 @@
       "version": "1.0.0",
       "description": "Đề Cương Luận Văn BKU 2022",
       "main": "index.js",
-      "type": "module",
       "scripts": {
             "prisma_gen": "prisma generate --schema=./src/prisma/schema.prisma",
             "prisma_format": "prisma format --schema=./src/prisma/schema.prisma",
@@ -12,8 +11,8 @@
             "start": "node src/index",
             "start:dev": "node --watch src/index",
             "start:prod": "node dist/index",
-            "build": "rimraf dist & webpack --config webpack.config.js",
-            "build_temp": "rimraf dist & babel ./src --out-dir dist",
+            "build_temp": "rimraf dist & webpack --config webpack.config.js",
+            "build": "rimraf dist & babel ./src --out-dir dist",
             "lint": "eslint --fix \"src/**\"",
             "format": "prettier --write \"src/**\"",
             "serverless": "sls offline start"

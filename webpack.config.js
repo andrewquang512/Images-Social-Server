@@ -2,7 +2,9 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 import { resolve } from 'path';
 
 export default {
-  entry: './src/handler.js',
+  entry: {
+    handler: './src/handler.js',
+  },
   mode: 'production',
   output: {
     filename: 'handler.js',
@@ -19,20 +21,23 @@ export default {
   module: {
     rules: [
       {
-        test: /\*.js$/,
+        test: /.*\.js$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
         },
       },
       {
-        test: [/\.(js|jsx)$/],
-        exclude: [resolve('./src/index.js')],
+        test: /\.jsx?$/,
+        exclude: [resolve('src/index.js')],
+        use: {
+          loader: 'babel-loader',
+        },
       },
     ],
   },
   plugins: [
-    new CopyWebpackPlugin({ patterns: ['./src/prisma/schema.prisma'] }), // without this the prisma generate above will not work
+    new CopyWebpackPlugin({ patterns: ['./src/prisma/schema.prisma'] }),
   ],
   devServer: {
     proxy: {
