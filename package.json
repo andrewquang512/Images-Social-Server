@@ -48,6 +48,7 @@
             "prisma": "^5.5.2",
             "prisma-erd-generator": "^1.2.4",
             "uuid": "^9.0.1",
+            "webpack-node-externals": "^3.0.0",
             "ws": "^8.14.2"
       },
       "resolutions": {

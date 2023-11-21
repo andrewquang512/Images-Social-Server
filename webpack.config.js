@@ -1,3 +1,5 @@
+import nodeExternals from 'webpack-node-externals';
+
 export default {
   target: 'node',
   entry: './src/handler.js',
@@ -11,6 +13,7 @@ export default {
   resolve: {
     mainFields: ['module', 'main'],
   },
+  externals: [nodeExternals()],
   module: {
     rules: [
       {
@@ -21,5 +24,13 @@ export default {
         },
       },
     ],
+  },
+  devServer: {
+    proxy: {
+      '/websocket': {
+        target: 'ws://[address]:[port]',
+        ws: true, // important
+      },
+    },
   },
 };
