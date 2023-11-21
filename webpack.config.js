@@ -1,7 +1,4 @@
-import nodeExternals from 'webpack-node-externals';
-
 export default {
-  target: 'node',
   entry: './src/handler.js',
   mode: 'production',
   output: {
@@ -13,7 +10,7 @@ export default {
   resolve: {
     mainFields: ['module', 'main'],
   },
-  externals: [nodeExternals()],
+  externalsPresets: { node: true },
   module: {
     rules: [
       {

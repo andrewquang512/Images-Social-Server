@@ -27,33 +27,6 @@ const pubsub = new PubSub();
 export { pubsub };
 
 export async function bootstrap(port) {
-  const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    context: () => {
-      return { prisma };
-    },
-    introspection: true,
-    cors: {
-      origin: '*', // <- allow request from all domains
-      credentials: true, // <- enable CORS response for requests with credentials (cookies, http authentication)
-    },
-    plugins: [
-      ApolloServerPluginLandingPageLocalDefault({ embed: true }),
-      ...(parseInt(process.env.IS_LOGGING) ? [loggingPlugin] : []),
-    ],
-    logger: console,
-    // csrfPrevention: true,
-  });
-
-  const { url } = await startStandaloneServer(server, {
-    listen: { port: port },
-  });
-
-  console.log(`Server ready at: ${url}`);
-}
-
-export async function bootstrapWithSubscription(port) {
   // https://www.apollographql.com/docs/apollo-server/data/subscriptions/
 
   const app = express();
@@ -100,6 +73,4 @@ export async function bootstrapWithSubscription(port) {
   });
 }
 
-process.env.ALLOW_SUBSCRIPTION
-  ? bootstrapWithSubscription(4000)
-  : bootstrap(4000);
+bootstrap(4000);
