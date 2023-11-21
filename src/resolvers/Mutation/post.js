@@ -1,5 +1,6 @@
 import { prisma } from '../../prisma/database.js';
 import { hashImage } from '../Common/hashImage.js';
+import { sendNotificationToClient } from '../../notify.js';
 
 const postMutation = {
   createPost: async (parent, args, info) => {
@@ -40,6 +41,21 @@ const postMutation = {
           },
         },
       });
+
+      sendNotificationToClient(
+        [
+          'eUW71E0j4VAwZdHuyjdnQd:APA91bFKKXAsu_RxExCsDDK7V0AaqvHF9tW51bUBBDUkbvtxHEe9DpnFMhUfvgwVSAoud89y1rHxpeeEesWZZ9hkqAkkEMoP-7ys6QjYekcLln-bnXvvWfdG2ISZGwLtIm0iVH526VLr',
+        ],
+        {
+          title: 'New post',
+          body: 'New post',
+        },
+        {
+          title: 'New post',
+          body: 'New post',
+          post,
+        },
+      );
     } catch (e) {
       console.log(e);
       throw e;
