@@ -6,6 +6,7 @@ export default {
     library: {
       type: 'commonjs2',
     },
+    publicPath: '',
   },
   resolve: {
     mainFields: ['module', 'main'],
