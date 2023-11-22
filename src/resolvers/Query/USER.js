@@ -96,6 +96,35 @@ const userQuery = {
       },
     };
   },
+  getAllUserLeaderboard: async (parent, args, info) => {
+    return await prisma.user.findMany({
+      where: {
+        isAdmin: 0,
+      },
+      take: 5,
+      orderBy: {
+        level: { currentLevel: 'desc' },
+      },
+    });
+  },
+  getUserFollowingLeaderBoard: async (parent, args, info) => {
+    const currentUser = await prisma.following.findUnique({
+      where: {
+        userId: args.data.userId,
+      },
+    });
+
+    return await prisma.user.findMany({
+      where: {
+        id: { in: currentUser.userFollowing },
+        isAdmin: 0,
+      },
+      take: 5,
+      orderBy: {
+        level: { currentLevel: 'desc' },
+      },
+    });
+  },
 };
 
 export default userQuery;
