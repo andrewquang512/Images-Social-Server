@@ -17,7 +17,6 @@ const messageDefs = gql`
     createMessage(data: CreateMessageInput!): Message!
     deleteMessage(data: DeleteMessageInput!): Message!
     deleteAllMessage: DeleteAllReturnType!
-    # updateReport(data: UpdateReportInput!): Report!
   }
 
   input CreateMessageInput {

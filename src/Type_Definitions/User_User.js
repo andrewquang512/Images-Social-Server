@@ -12,6 +12,10 @@ const userDefs = gql`
       limit: Int
       after: String
     ): UserPagination!
+
+    getAllUserLeaderboard: [User]!
+
+    getUserFollowingLeaderBoard(data: UserFollowingLeaderInput!): [User]!
   }
 
   type UserPagination {
@@ -35,6 +39,10 @@ const userDefs = gql`
   }
 
   input UserInfoInput {
+    userId: ID!
+  }
+
+  input UserFollowingLeaderInput {
     userId: ID!
   }
 

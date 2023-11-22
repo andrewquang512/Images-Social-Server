@@ -114,3 +114,19 @@ export const DEFAULT_DEFINED_SKILL_LIST = [
   'Wedding',
   'White Balance',
 ];
+
+export const googleApplicationCredentials = {
+  type: 'service_account',
+  project_id: 'noti-flens',
+  private_key_id: 'd5b516cd19b60c188144258820df3c2644fe53b2',
+  private_key:
+    '-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCf6WjHA69eVx+U\n+BUv58rtSGurlHZqFbCbjBMwE432veLIAFF4TOc0ReG5KcVaKa4lNOBD/c72T6bc\nnDey/Z+iK1bohvDaN35tbNBnyG971QsPDyF7HTADXlTT+ALKqxb66odkFwuGLQ+Y\nqJiKD8BZps94yQ56VoI2VFW6FATG/j38CiGZ451Fg+aFPVA7cN7GwDKfkXWhjR5i\nS+AigJGjn9A+sGwC3GRIB9t2oEuKQEGcTRDhVUnuCBqmTcaj17e51M13dGO/47jg\ndgWNc/Ne3nvPtwt2nvByi6kYGoxnYBL1QxxP1VrCDNVHVnUWVcE6wWDx97KEZtHc\nnfyLUhaJAgMBAAECggEABC5UnHt2rtdFTp5L44RCdIDDu+k2TWDCzNZVPBkOyag+\nUS9c8fHEy8OV+sLiU5CqanOe93gf3KXJfZQiCq6B6XoLnCnHC1WPGypQqp39eDXi\nQ6MII5FoS3ZAbohZ/lWJ1MakApRtqzTrZvjlgBqYU1++pfBPzhgL8IK0+RgD5fX+\nMVUxRU4w8nEB5LvozYxSlF+sMiJfQxOaeT8R89R8Kv44kGnhFc6GrB7yRADVSaHy\npC0Ex++5Zq3NWKh2lWoKCSx5tdgcpbZDWC+tOMg+Vypx+b+kMIcIAQoheFY6BMfU\nsYUQSrwjy+DA5W0VeDNRcnuX20kaRonOjcng9PDXHwKBgQDLMtVgwXzkZVPAOWCM\n4CF/UqfI9IS5gDvbXPZPHjRrQE4vVscsxrKGtMQYLgVIace0QleMt5PTY2VENy2w\n0T324OXiwqkm7nPCc3bKP1rhcL8YpFWfvMIgG1NOg5tld2i0FoFyHCSOB4mQ0jfJ\nfbxyi/3LIZnYSAXXw2BVMxTKRwKBgQDJdw1e1ooXud+SbVuZh9AjXVk+JXlwsJ0m\nge3G9zvwrmjtOumLxpFUU+aNlMkiSEBWDeO+b7/rKgR3y0KPmntbhWp9S92dgeTv\nj5SSj9cEH8GKu2Lsj1MipohISH8ZVzm1eIb6YtZLfkvfgn6G8z4mctkMYePbVdbq\neMsZvR2wrwKBgQCkMnmWbAPeE7svk63faKXo2wPWMTCnLWYxBtfKax/0oswLGNZt\n6koM7DmhSF7gewnzMcDJZva/VIxaKTR0s0CdJHLfYGmLmhhUwzT0jWmEzrS81t6R\n69f6VdplkZea0Hj9PUpwySkI1DJnoleOLFqBPXpiEM7epKSEC87mSha8tQKBgGaX\nPnLF80pDt8rb72JOW7o2hgR0ltPAzDXYwhmouphEaGAtuNIZytXTZ7s/QfE4M7Le\nndPTGjsJiX7rPbjc5OZlGSY25OKZS9iGGBVONCMAfNFFvQlTrvUdMpcEe9yOo296\nsdl9TTziUoa97+qOoV5463g3vQ1rN+bsnhg8Sos3AoGBAI+od/8B4PUNbvSqX0o0\nsjkpuyMF0I+XWiozjeNk/MIAB0agXB/ZU28CUHiQSauosqMv9WexUatoU+4QvXm+\nmtPRu9n6kYHCC/WJoGInWn4BrLsy057ktVI1YgIMIEemEII+ZnpJo8822JPeefM3\nm7QYkQn9FDjoRI4yKPmpB7T4\n-----END PRIVATE KEY-----\n',
+  client_email: 'firebase-adminsdk-p9pt7@noti-flens.iam.gserviceaccount.com',
+  client_id: '100889841805636667459',
+  auth_uri: 'https://accounts.google.com/o/oauth2/auth',
+  token_uri: 'https://oauth2.googleapis.com/token',
+  auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs',
+  client_x509_cert_url:
+    'https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-p9pt7%40noti-flens.iam.gserviceaccount.com',
+  universe_domain: 'googleapis.com',
+};

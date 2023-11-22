@@ -18,10 +18,25 @@ import express from 'express';
 import http from 'http';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import { makeExecutableSchema } from '@graphql-tools/schema';
+// Websocket
 import { WebSocketServer } from 'ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import { PubSub } from 'graphql-subscriptions';
 
+// Firebase notification
+import admin from 'firebase-admin';
+import { googleApplicationCredentials } from './constants.js';
+
+admin.initializeApp({
+  credential: admin.credential.cert(googleApplicationCredentials),
+  databaseURL:
+    'https://noti-flens-default-rtdb.asia-southeast1.firebasedatabase.app',
+});
+
+export const firebaseMessaging = admin.messaging();
+// console.log({ firebaseMessaging });
+
+// Web socket
 const pubsub = new PubSub();
 
 export { pubsub };
