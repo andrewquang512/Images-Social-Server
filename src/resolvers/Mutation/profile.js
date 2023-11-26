@@ -135,7 +135,7 @@ const profileMutation = {
         id: endorsementId,
       },
       data: {
-        endorsers: {
+        endorser: {
           connect: {
             id: endorserUserId,
           },
