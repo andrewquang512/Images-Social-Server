@@ -65,7 +65,13 @@ jobs:
           rm package.json package-lock.json
           cd ..
           zip -r ${GITHUB_WORKSPACE}/package-layer.zip nodejs
-          aws lambda publish-layer-version --layer-name arn:aws:lambda:ap-southeast-1:${OWNER_LAYER_ACCOUNT_ID}:layer:images-social-backend-service-package-layer --zip-file fileb://${GITHUB_WORKSPACE}/package-layer.zip --compatible-runtimes nodejs16.x --compatible-architectures "arm64" "x86_64"
+
+          aws s3 cp ${GITHUB_WORKSPACE}/package-layer.zip s3://images-social-backend-service-package-layer/package-layer.zip
+
+          aws lambda publish-layer-version --layer-name arn:aws:lambda:ap-southeast-1:${OWNER_LAYER_ACCOUNT_ID}:layer:images-social-backend-service-package-layer --content S3Bucket=images-social-backend-service-package-layer,S3Key=package-layer.zip --compatible-runtimes nodejs16.x --compatible-architectures "arm64" "x86_64"
+
           maxLayerVersion=$(aws lambda list-layer-versions --layer-name arn:aws:lambda:ap-southeast-1:${OWNER_LAYER_ACCOUNT_ID}:layer:images-social-backend-service-package-layer --query 'max_by(LayerVersions, &Version).LayerVersionArn' | sed 's/"//g')
+
           aws lambda wait function-updated --function-name images-social-backend-service
+
           aws lambda update-function-configuration --function-name images-social-backend-service --layers $maxLayerVersion
