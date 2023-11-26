@@ -19,7 +19,19 @@ aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS")
 bucket_name = os.getenv("AWS_BUCKET_NAME")
 graphql_api_url = "http://localhost:4000/graphql"
 
-image_urls = ["https://picsum.photos"] * 100
+
+def getMockImageURLsMethodOne(count):
+    return ["https://picsum.photos"] * count
+
+
+def getMockImageURLsMethodTwo(count):
+    TOTAL = 873
+    MAX_LIMIT = 50
+    MIN_LIMIT = 5
+
+    url = "https://dummyapi.io/data/v1/post"
+    raise Exception("Not Complete yet")
+
 
 # Get user list from database
 current_user_list = [
@@ -112,8 +124,14 @@ def upload_images_to_s3(urls, bucket):
             print(f"Error uploading {url} to {bucket}: {str(e)}")
 
 
-t1 = threading.Thread(target=upload_images_to_s3, args=(image_urls, bucket_name))
-t2 = threading.Thread(target=upload_images_to_s3, args=(image_urls, bucket_name))
+t1 = threading.Thread(
+    target=upload_images_to_s3,
+    args=(getMockImageURLsMethodOne(50), bucket_name),
+)
+t2 = threading.Thread(
+    target=upload_images_to_s3,
+    args=(getMockImageURLsMethodOne(50), bucket_name),
+)
 
 t1.start()
 t2.start()
