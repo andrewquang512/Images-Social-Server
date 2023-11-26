@@ -76,7 +76,7 @@ const userDefs = gql`
 
   input AddSkillInput {
     userId: ID!
-    skillId: String!
+    skillIds: [String]!
   }
 
   input CreateUserInput {

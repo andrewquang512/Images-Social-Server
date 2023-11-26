@@ -22,12 +22,12 @@ const profileMutation = {
 
   /**
    * @param {*} parent
-   * @param {{data: {skillId: string, userId: string}}} args
+   * @param {{data: {skillIds: string[], userId: string}}} args
    * @param {*} info
    * @returns
    */
   addSkill: async (parent, args, info) => {
-    const { skillId, userId } = args.data;
+    const { skillIds, userId } = args.data;
 
     const user = await prisma.user.findUnique({
       where: {
@@ -42,9 +42,11 @@ const profileMutation = {
     }
     const userSkillIds = user.user_to_endorsement.map((each) => each.skillId);
 
-    if (userSkillIds.includes(skillId)) {
-      throw Error('User has already added this skill');
-    }
+    skillIds.forEach((id) => {
+      if (userSkillIds.includes(id)) {
+        throw Error('User has already added this skill');
+      }
+    });
 
     return await prisma.user.update({
       where: {
@@ -52,19 +54,29 @@ const profileMutation = {
       },
       data: {
         user_to_endorsement: {
-          create: {
-            skill: {
-              connect: {
-                id: skillId,
+          // create: {
+          //   skill: {
+          //     connect: {
+          //       id: skillId,
+          //     },
+          //   },
+          // },
+          create: skillIds.map((id) => {
+            return {
+              skill: {
+                connect: {
+                  id: id,
+                },
               },
-            },
-          },
+            };
+          }),
         },
       },
     });
   },
 
-  /**
+  /**.map
+   *
    * @param {*} parent
    * @param {{data: {endorsementId: string, endorserUserId: string}}} args
    * @param {*} info
