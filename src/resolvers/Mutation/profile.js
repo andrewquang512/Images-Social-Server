@@ -40,6 +40,19 @@ const profileMutation = {
     if (!user) {
       throw Error('User is not existed');
     }
+
+    const existedSkills = await prisma.skill.findMany({
+      where: {
+        id: {
+          in: skillIds,
+        },
+      },
+    });
+
+    if (existedSkills.length !== skillIds.length) {
+      throw Error('Some of skill not existed');
+    }
+
     const userSkillIds = user.user_to_endorsement.map((each) => each.skillId);
 
     skillIds.forEach((id) => {
@@ -54,13 +67,6 @@ const profileMutation = {
       },
       data: {
         user_to_endorsement: {
-          // create: {
-          //   skill: {
-          //     connect: {
-          //       id: skillId,
-          //     },
-          //   },
-          // },
           create: skillIds.map((id) => {
             return {
               skill: {

@@ -61,6 +61,10 @@ model User {
 
   endorsementIds      String[]      @db.ObjectId
   endorsements Endorsement[] @relation(name: "endorser", fields: [endorsementIds], references: [id])
+
+  interestCategoryIds      String[]      @db.ObjectId
+  interestCategories Category[] @relation(name: "interest", fields: [interestCategoryIds], references: [id])
+
 }
 
 // model Notification {
@@ -167,6 +171,9 @@ model Category {
 
   posts            String[] @db.ObjectId
   category_to_post Post[]   @relation(fields: [posts], references: [id])
+
+  interestUserIds String[] @db.ObjectId 
+  category_to_user User[]   @relation(name: "interest", fields: [interestUserIds], references: [id])
 }
 
 model Album {
