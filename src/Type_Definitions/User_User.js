@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 import commonDefs from './Common_Common.js';
 import skillDefs from './Skill_Skill.js';
+import categoryDefs from './Category_Category.js';
 
 const userDefs = gql`
   extend type Query {
@@ -58,6 +59,8 @@ const userDefs = gql`
     addSkill(data: AddSkillInput!): User!
     endorseSkill(data: EndorseSkillInput!): User!
     unEndorseSkill(data: EndorseSkillInput!): User!
+    addInterestCategories(data: InterestCategoriesInput!): User!
+    removeInterestCategories(data: InterestCategoriesInput!): User!
   }
 
   input EndorseSkillInput {
@@ -74,9 +77,14 @@ const userDefs = gql`
     content: String!
   }
 
+  input InterestCategoriesInput {
+    userId: ID!
+    categoryIds: [String]!
+  }
+
   input AddSkillInput {
     userId: ID!
-    skillId: String!
+    skillIds: [String]!
   }
 
   input CreateUserInput {
@@ -130,7 +138,9 @@ const userDefs = gql`
 
     biography: String
     userEndorsements: [Endorsement]
+    interestCategories: [Category]
   }
+  ${categoryDefs}
 
   type Endorsement {
     id: ID!

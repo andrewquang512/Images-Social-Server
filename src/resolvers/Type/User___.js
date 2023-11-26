@@ -53,6 +53,16 @@ const User = {
       },
     });
   },
+
+  interestCategories: async (parent, args, info) => {
+    return await prisma.category.findMany({
+      where: {
+        interestUserIds: {
+          has: parent.id,
+        },
+      },
+    });
+  },
 };
 
 export default User;
