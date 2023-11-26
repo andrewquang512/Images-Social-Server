@@ -20,17 +20,45 @@ bucket_name = os.getenv("AWS_BUCKET_NAME")
 graphql_api_url = "http://localhost:4000/graphql"
 
 
+def getMockImageURLs(count, methodCode):
+    if methodCode == 1:
+        return getMockImageURLsMethodOne(count)
+    else:
+        return getMockImageURLsMethodTwo(count)
+
+
 def getMockImageURLsMethodOne(count):
-    return ["https://picsum.photos"] * count
+    return ["https://picsum.photos/900/900"] * count
 
 
 def getMockImageURLsMethodTwo(count):
     TOTAL = 873
     MAX_LIMIT = 50
-    MIN_LIMIT = 5
 
     url = "https://dummyapi.io/data/v1/post"
-    raise Exception("Not Complete yet")
+    items = []
+
+    while len(items) < count:
+        limitQuery = random.randint(5, MAX_LIMIT)
+        page = random.randint(0, count // limitQuery)
+
+        if page > TOTAL // MAX_LIMIT:
+            page = random.randint(0, TOTAL // limitQuery)
+
+        print()
+        response = requests.get(
+            f"{url}?page={page}&limit={limitQuery}",
+            headers={"app-id": "656303bede22a264704a3a6b"},
+        )
+
+        if response.status_code == 200:
+            items.extend(response.json()["data"])
+        else:
+            print(f"Error getMockImageURLsMethodTwo: {response.status_code}")
+            return None
+
+    randomData = items[:count]
+    return [item["image"] for item in randomData]
 
 
 # Get user list from database
@@ -78,11 +106,11 @@ s3 = boto3.client(
 )
 
 
-def upload_images_to_s3(urls, bucket):
+def uploadImagesToS3(urls, bucket):
     uploaded_urls = []
     for url in urls:
         try:
-            imageLink = url + "/900/900"
+            imageLink = url
             response = requests.get(imageLink)
             print(f"Image Link {imageLink}")
             if response.status_code == 200:
@@ -124,17 +152,41 @@ def upload_images_to_s3(urls, bucket):
             print(f"Error uploading {url} to {bucket}: {str(e)}")
 
 
-t1 = threading.Thread(
-    target=upload_images_to_s3,
-    args=(getMockImageURLsMethodOne(50), bucket_name),
-)
-t2 = threading.Thread(
-    target=upload_images_to_s3,
-    args=(getMockImageURLsMethodOne(50), bucket_name),
-)
+def main(count, method_code):
+    LIMIT = 20
 
-t1.start()
-t2.start()
+    if count <= LIMIT:
+        uploadImagesToS3(getMockImageURLs(count, method_code), bucket_name)
+    else:
+        thread_count = (count + LIMIT - 1) // LIMIT
 
-t1.join()
-t2.join()
+        threads = []
+
+        for i in range(thread_count):
+            values = (i + 1) * LIMIT
+            if count - values >= LIMIT:
+                values = LIMIT
+            else:
+                values = abs(count - values)
+            thread = threading.Thread(
+                target=uploadImagesToS3,
+                args=(getMockImageURLs(values, method_code), bucket_name),
+            )
+            threads.append(thread)
+
+        print(f"There are total {len(threads)} Threads")
+        for thread in threads:
+            thread.start()
+
+        for thread in threads:
+            thread.join()
+
+
+if __name__ == "__main__":
+    count_value = input("Enter the amount of mock posts - default is 20: ")
+    method_code = input("Enter the method of mock posts generate - default is 1: ")
+    if count_value == "":
+        count_value = 20
+    if method_code == "":
+        method_code = 1
+    main(int(count_value), int(method_code))
