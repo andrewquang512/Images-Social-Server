@@ -20,6 +20,13 @@ const Story = {
       ],
     });
   },
+  categoryId: async (parent, args, info) => {
+    return await prisma.category.findMany({
+      where: {
+        id: { in: parent.categoryId },
+      },
+    });
+  },
 };
 
 export default Story;

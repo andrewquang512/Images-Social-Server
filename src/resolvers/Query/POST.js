@@ -23,7 +23,7 @@ const postQuery = {
    */
   getNewFeed: async (parent, args, info) => {
     const { userId = undefined, categoryIds = [] } = args;
-    console.log(args);
+    // console.log(args);
 
     let a,
       nodes = [],
@@ -64,7 +64,7 @@ const postQuery = {
           userId: userId,
         },
       });
-      console.log({ b });
+      // console.log({ b });
 
       // User not following anyone
       if (!b.userFollowing.length) {
@@ -83,14 +83,23 @@ const postQuery = {
         if (timeCall % 2 === 1) {
           a = await prisma.post.findMany({
             where: {
-              userId: { in: b.userFollowing },
-              categoryId: {
-                hasEvery: categoryIds,
-              },
+              AND: [
+                { userId: { in: b.userFollowing } },
+                {
+                  categoryId: {
+                    hasEvery: categoryIds,
+                  },
+                },
+              ],
               OR: [
                 { postViewStatus: 'PUBLIC' },
                 { postViewStatus: 'ONLY_FOLLOWERS' },
               ],
+              NOT: {
+                reportedUserIds: {
+                  has: userId,
+                },
+              },
             },
             orderBy: [
               {
@@ -119,31 +128,6 @@ const postQuery = {
 
         // Not Following
         if (timeCall % 2 === 0) {
-          console.log(
-            (
-              await prisma.post.findMany({
-                where: {
-                  AND: [
-                    { userId: { notIn: b.userFollowing } },
-                    { userId: { not: userId } },
-                  ],
-                  userId: { notIn: b.userFollowing },
-                  postViewStatus: 'PUBLIC',
-                  categoryId: {
-                    hasEvery: categoryIds,
-                  },
-                },
-                orderBy: [
-                  {
-                    createdAt: 'desc',
-                  },
-                  { points: 'desc' },
-                ],
-              })
-            ).length,
-            'total not following',
-          );
-
           a = await prisma.post.findMany({
             where: {
               AND: [
@@ -154,6 +138,11 @@ const postQuery = {
               postViewStatus: 'PUBLIC',
               categoryId: {
                 hasEvery: categoryIds,
+              },
+              NOT: {
+                reportedUserIds: {
+                  has: userId,
+                },
               },
             },
             orderBy: [

@@ -34,6 +34,8 @@ const storyDefs = gql`
     deleteAllStory: DeleteAllReturnType!
     updateStory(data: UpdateStoryInput!): Story!
     interactStory(data: InteractStoryInput!): Story!
+
+    reportedStory(data: ReportStoryInput!): Story!
   }
 
   input CreateStoryInput {
@@ -42,6 +44,8 @@ const storyDefs = gql`
     storyViewStatus: ViewStatus!
     content: String!
     images: [String]!
+    categoryId: [String]
+    tag: [String]
   }
 
   input DeleteStoryInput {
@@ -60,6 +64,11 @@ const storyDefs = gql`
     isLiked: Boolean!
   }
 
+  input ReportStoryInput {
+    storyId: ID!
+    userId: ID!
+  }
+
   type Story {
     id: ID!
     title: String!
@@ -70,12 +79,16 @@ const storyDefs = gql`
     content: String!
     points: Int!
 
+    tag: [String]!
+    categoryId: [Category]!
+
     images: [String]!
     comments: [Comment]!
 
     userId: User!
 
     userLikedStory: [String]!
+    reportedUserIds: [String]!
   }
 `;
 

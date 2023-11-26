@@ -19,6 +19,7 @@ const postMutation = {
           categoryId: args.data.categoryId ? args.data.categoryId : [],
           albumId: args.data.albumId ? args.data.albumId : [],
           tag: args.data.tag ? args.data.tag : [],
+          reportedUserIds: [],
 
           image: {
             create: {
@@ -160,6 +161,21 @@ const postMutation = {
         });
       }
     }
+
+    return post;
+  },
+  reportedPost: async (parent, args, info) => {
+    let post;
+    console.log({ args });
+
+    post = await prisma.post.update({
+      where: {
+        id: args.data.postId,
+      },
+      data: {
+        reportedUserIds: { push: args.data.userId },
+      },
+    });
 
     return post;
   },

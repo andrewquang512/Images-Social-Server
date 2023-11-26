@@ -88,6 +88,8 @@ const postDefs = gql`
     deleteAllPost: DeleteAllReturnType!
     updatePost(data: UpdatePostInput!): Post!
     interactPost(data: InteractPostInput!): Post!
+
+    reportedPost(data: ReportPostInput!): Post!
   }
 
   enum ViewStatus {
@@ -130,6 +132,11 @@ const postDefs = gql`
     isLiked: Boolean!
   }
 
+  input ReportPostInput {
+    postId: ID!
+    userId: ID!
+  }
+
   input UpdatePostInput {
     postId: ID!
     title: String
@@ -159,6 +166,7 @@ const postDefs = gql`
     image: Image!
 
     userLikedPost: [String]!
+    reportedUserIds: [String]!
   }
 `;
 

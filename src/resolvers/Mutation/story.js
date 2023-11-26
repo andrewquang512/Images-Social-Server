@@ -10,6 +10,8 @@ const storyMutation = {
           title: args.data.title,
           storyViewStatus: args.data.storyViewStatus,
           content: args.data.content,
+          categoryId: args.data.categoryId ? args.data.categoryId : [],
+          tag: args.data.tag ? args.data.tag : [],
           images: args.data.images,
           points: 0,
         },
@@ -120,6 +122,20 @@ const storyMutation = {
         });
       }
     }
+
+    return story;
+  },
+  reportedStory: async (parent, args, info) => {
+    let story;
+
+    story = await prisma.story.update({
+      where: {
+        id: args.data.storyId,
+      },
+      data: {
+        reportedUserIds: { push: args.data.userId },
+      },
+    });
 
     return story;
   },

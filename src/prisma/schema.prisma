@@ -61,6 +61,8 @@ model User {
 
   endorsementIds      String[]      @db.ObjectId
   endorsements Endorsement[] @relation(name: "endorser", fields: [endorsementIds], references: [id])
+
+  
 }
 
 // model Notification {
@@ -167,6 +169,9 @@ model Category {
 
   posts            String[] @db.ObjectId
   category_to_post Post[]   @relation(fields: [posts], references: [id])
+
+  stories            String[] @db.ObjectId
+  category_to_story Story[]   @relation(fields: [stories], references: [id])
 }
 
 model Album {
@@ -221,6 +226,7 @@ model Post {
   tag String[]
 
   userLikedPost String[]
+  reportedUserIds      String[] 
 }
 
 model Story {
@@ -235,10 +241,16 @@ model Story {
   images   String[]
   comments Comment[]
 
+  tag String[]
+
+  categoryId       String[]   @db.ObjectId
+  story_to_category Category[] @relation(fields: [categoryId], references: [id])
+
   userId        String @db.ObjectId
   story_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   userLikedStory String[]
+  reportedUserIds      String[] 
 }
 
 model Comment {
