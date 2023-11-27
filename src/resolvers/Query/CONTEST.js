@@ -12,6 +12,20 @@ const contestQuery = {
       },
     });
   },
+  getTopPostContest: async (parent, args, info) => {
+    return await prisma.post.findMany({
+      where: {
+        contestId: args.data.contestId,
+      },
+      orderBy: [
+        { points: 'desc' },
+        {
+          createdAt: 'desc',
+        },
+      ],
+      take: 5,
+    });
+  },
   contestPosts: async (parent, args, info) => {
     const { contestId, userId: currentUserId, after } = args;
     console.log(args);

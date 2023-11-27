@@ -4,6 +4,7 @@ const contestDefs = gql`
   extend type Query {
     allContests: [Contest]!
     contestInfo(data: ContestInfoInput!): Contest!
+    getTopPostContest(data: ContestInfoInput!): [Post]!
 
     contestPosts(
       contestId: String
@@ -13,10 +14,6 @@ const contestDefs = gql`
   }
 
   input ContestInfoInput {
-    contestId: ID!
-  }
-
-  input ContestPostsInput {
     contestId: ID!
   }
 
