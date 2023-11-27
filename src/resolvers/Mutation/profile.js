@@ -34,7 +34,7 @@ const profileMutation = {
         id: userId,
       },
       include: {
-        user_to_endorsement: true,
+        endorsements: true,
       },
     });
     if (!user) {
@@ -53,7 +53,7 @@ const profileMutation = {
       throw Error('Some of skill not existed');
     }
 
-    const userSkillIds = user.user_to_endorsement.map((each) => each.skillId);
+    const userSkillIds = user.endorsements.map((each) => each.skillId);
 
     skillIds.forEach((id) => {
       if (userSkillIds.includes(id)) {
@@ -66,7 +66,7 @@ const profileMutation = {
         id: userId,
       },
       data: {
-        user_to_endorsement: {
+        endorsements: {
           create: skillIds.map((id) => {
             return {
               skill: {
@@ -93,14 +93,14 @@ const profileMutation = {
     const [targetUser, endorser] = await Promise.all([
       prisma.user.findFirst({
         where: {
-          user_to_endorsement: {
+          endorsements: {
             some: {
               id: endorsementId,
             },
           },
         },
         include: {
-          user_to_endorsement: {
+          endorsements: {
             include: {
               skill: true,
             },
@@ -126,7 +126,7 @@ const profileMutation = {
       throw Error('endorser and targetUser can not be the same');
     }
 
-    const endorsement = targetUser.user_to_endorsement.find(
+    const endorsement = targetUser.endorsements.find(
       (each) => each.id === endorsementId,
     );
 

@@ -57,10 +57,10 @@ model User {
   courseIDs      String[] @db.ObjectId
   user_to_course Course[] @relation(fields: [courseIDs], references: [id])
 
-  user_to_endorsement Endorsement[] @relation(name: "owner")
+  endoseredIds      String[]      @db.ObjectId
+  endoseredList Endorsement[] @relation(name: "endorser", fields: [endoseredIds], references: [id])
 
-  endorsementIds      String[]      @db.ObjectId
-  endorsements Endorsement[] @relation(name: "endorser", fields: [endorsementIds], references: [id])
+  endorsements Endorsement[] @relation(name: "owner")
 
   interestCategoryIds      String[]      @db.ObjectId
   interestCategories Category[] @relation(name: "interest", fields: [interestCategoryIds], references: [id])
