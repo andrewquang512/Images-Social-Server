@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { prisma } from '../../prisma/database.js';
 import { DEFAULT_LIMIT } from '../../constants.js';
+import { UserSuggestion } from '../Common/suggestUser.js';
 
 const userQuery = {
   allUsers: async (parent, args, info) => {
@@ -38,13 +39,35 @@ const userQuery = {
     const { after, limit } = args;
     const { userId } = args.data;
 
-    const currentUser = await prisma.following.findUnique({
+    const currentUser = await prisma.user.findUnique({
       where: {
-        userId: userId,
+        id: userId,
       },
+      // include: {
+      //   endorsements: true,
+      //   followings: true,
+      //   interestCategories: true,
+      // },
     });
 
-    const [result, count] = await prisma.$transaction([
+    // const testAll = await prisma.user.findMany({
+    //   where: {
+    //     id: { not: userId },
+    //     isAdmin: 0,
+    //     NOT: {
+    //       id: { in: currentUser.userFollowing },
+    //     },
+    //   },
+    //   include: {
+    //     endorsements: true,
+    //     followings: true,
+    //     interestCategories: true,
+    //   },
+    // });
+    // const test = new UserSuggestion();
+    // const testSuggest = test.getUserSuggestion(currentUser, testAll);
+
+    const [result, count] = await Promise.all([
       prisma.user.findMany({
         where: {
           id: { not: userId },
