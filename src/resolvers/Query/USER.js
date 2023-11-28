@@ -146,7 +146,7 @@ const manualPagination = (limit = DEFAULT_LIMIT, after, list) => {
   }
 
   const breakPoint = list.findIndex((each) => each.id === after);
-  const result = list.slice(breakPoint, limit + breakPoint);
+  const result = list.slice(breakPoint + 1, limit + breakPoint + 1);
   return result;
 };
 
