@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { indexOf } from 'lodash';
 import { prisma } from '../../prisma/database.js';
 import { DEFAULT_LIMIT } from '../../constants.js';
 import { UserSuggestion } from '../Common/suggestUser.js';
@@ -43,31 +43,14 @@ const userQuery = {
       where: {
         id: userId,
       },
-      // include: {
-      //   endorsements: true,
-      //   followings: true,
-      //   interestCategories: true,
-      // },
+      include: {
+        endorsements: true,
+        followings: true,
+        interestCategories: true,
+      },
     });
 
-    // const testAll = await prisma.user.findMany({
-    //   where: {
-    //     id: { not: userId },
-    //     isAdmin: 0,
-    //     NOT: {
-    //       id: { in: currentUser.userFollowing },
-    //     },
-    //   },
-    //   include: {
-    //     endorsements: true,
-    //     followings: true,
-    //     interestCategories: true,
-    //   },
-    // });
-    // const test = new UserSuggestion();
-    // const testSuggest = test.getUserSuggestion(currentUser, testAll);
-
-    const [result, count] = await Promise.all([
+    const [allUsers, count] = await Promise.all([
       prisma.user.findMany({
         where: {
           id: { not: userId },
@@ -76,15 +59,11 @@ const userQuery = {
             id: { in: currentUser.userFollowing },
           },
         },
-        take: limit || DEFAULT_LIMIT,
-        ...(after && {
-          skip: 1,
-        }),
-        ...(after && {
-          cursor: {
-            id: after,
-          },
-        }),
+        include: {
+          endorsements: true,
+          followings: true,
+          interestCategories: true,
+        },
       }),
       prisma.user.count({
         where: {
@@ -97,8 +76,13 @@ const userQuery = {
       }),
     ]);
 
-    // console.log('Result', result);
-    // console.log('count', count);
+    const userSuggestion = new UserSuggestion();
+    const suggestedUsers = userSuggestion.getUserSuggestion(
+      currentUser,
+      allUsers,
+    );
+
+    const result = manualPagination(limit, after, suggestedUsers);
 
     const hasNextPage =
       result.length !== 0 && result.length < count && result.length === limit;
@@ -148,6 +132,22 @@ const userQuery = {
       },
     });
   },
+};
+
+/**
+ * @param {number} limit
+ * @param {string} index
+ * @param {import('../Common/suggestUser.js').UserInfo[]} list
+ */
+const manualPagination = (limit = DEFAULT_LIMIT, after, list) => {
+  if (!after) {
+    const result = list.slice(0, limit);
+    return result;
+  }
+
+  const breakPoint = list.findIndex((each) => each.id === after);
+  const result = list.slice(breakPoint, limit + breakPoint);
+  return result;
 };
 
 export default userQuery;

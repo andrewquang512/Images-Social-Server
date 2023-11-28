@@ -71,12 +71,15 @@ export class UserSuggestion {
     userList.forEach((user) => {
       // Getting Similar for skill
       const userSkillIds = user.endorsements.map((each) => each.skillId);
-      const skillSimilar = this.getJaacardIndex(currUserSkillIds, userSkillIds);
+      const skillSimilar = this.#getJaacardIndex(
+        currUserSkillIds,
+        userSkillIds,
+      );
       similarMap.set(user.id, skillSimilar * this._configs.following);
 
       // Getting Similar for interesst
       const userInterestIds = user.interestCategories.map((each) => each.id);
-      const interestSimilar = this.getJaacardIndex(
+      const interestSimilar = this.#getJaacardIndex(
         currUserInterestIds,
         userInterestIds,
       );
@@ -89,7 +92,7 @@ export class UserSuggestion {
       const userFollowingIds = user.followings.userFollowing.map(
         (each) => each.id,
       );
-      const followingSimilar = this.getJaacardIndex(
+      const followingSimilar = this.#getJaacardIndex(
         currUserFollowingIds,
         userFollowingIds,
       );
@@ -121,12 +124,12 @@ export class UserSuggestion {
    * @param {Ids} dataset1
    * @param {Ids} dataset2
    */
-  getJaacardIndex = (dataset1, dataset2) => {
+  #getJaacardIndex = (dataset1, dataset2) => {
     if (dataset1.length === 0 || dataset2.length === 0) {
       return 0;
     }
-    const intersection = this.getIntersection(dataset1, dataset2);
-    const union = this.getUnion(dataset1, dataset2);
+    const intersection = this.#getIntersection(dataset1, dataset2);
+    const union = this.#getUnion(dataset1, dataset2);
 
     return intersection.length / union.length;
   };
@@ -135,7 +138,7 @@ export class UserSuggestion {
    * @param {Ids} dataset1
    * @param {Ids} dataset2
    */
-  getIntersection = (dataset1, dataset2) => {
+  #getIntersection = (dataset1, dataset2) => {
     return dataset1.filter((value) => dataset2.includes(value));
   };
 
@@ -143,7 +146,7 @@ export class UserSuggestion {
    * @param {Ids} dataset1
    * @param {Ids} dataset2
    */
-  getUnion = (dataset1, dataset2) => {
+  #getUnion = (dataset1, dataset2) => {
     return [...new Set([...dataset1, ...dataset2])];
   };
 }
