@@ -1,4 +1,4 @@
-import _, { indexOf } from 'lodash';
+import _ from 'lodash';
 import { prisma } from '../../prisma/database.js';
 import { DEFAULT_LIMIT } from '../../constants.js';
 import { UserSuggestion } from '../Common/suggestUser.js';
