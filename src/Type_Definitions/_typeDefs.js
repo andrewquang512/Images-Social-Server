@@ -16,6 +16,7 @@ import contestDefs from './Contest_Contest.js';
 import chatDefs from './Chat_Chat.js';
 import messageDefs from './Message_Message.js';
 import skillDefs from './Skill_Skill.js';
+import notiDefs from './Noti_Noti.js';
 
 const baseDefs = gql`
   type Query {
@@ -55,6 +56,7 @@ const typeDefs = [
   chatDefs,
   messageDefs,
   skillDefs,
+  notiDefs,
 ];
 
 export default typeDefs;

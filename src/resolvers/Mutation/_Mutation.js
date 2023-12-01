@@ -17,43 +17,29 @@ import messageMutation from './message.js';
 import profileMutation from './profile.js';
 import skillMutation from './skill.js';
 import utilityMutation from './utility.js';
+import notiMutation from './notification.js';
 
 const Mutation = {
-  // User
   ...userMutation,
-  // Level
   ...levelMutation,
-  // Image
   ...imageMutation,
-  // Image Info
   ...imageInfoMutation,
-  // Post
   ...postMutation,
-  // Story
   ...storyMutation,
-  // Comment
   ...commentMutation,
-  // Category
   ...categoryMutation,
-  // Album
   ...albumMutation,
-  // Tag
   ...tagMutation,
-  // Follower
   ...followerMutation,
-  // Following
   ...followingMutation,
-  // Report
   ...reportMutation,
-  // Contest
   ...contestMutation,
-  // Chat
   ...chatMutation,
-  // Message
   ...messageMutation,
   ...profileMutation,
   ...skillMutation,
   ...utilityMutation,
+  ...notiMutation,
 };
 
 export default Mutation;

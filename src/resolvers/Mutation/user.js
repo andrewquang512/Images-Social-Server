@@ -15,6 +15,7 @@ const userMutation = {
           phoneNumber: '',
           isAdmin: 0,
           age: 18,
+          notifications: [],
           level: {
             create: {
               currentXP: 0,

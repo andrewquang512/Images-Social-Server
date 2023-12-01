@@ -50,7 +50,7 @@ const postQuery = {
         },
       });
 
-      console.log({ a });
+      // console.log({ a });
 
       nodes = a.slice(0, 2).map((post) => ({
         node: post,
@@ -115,14 +115,14 @@ const postQuery = {
             node: post,
             cursor: post.id,
           }));
-          console.log({ nodes }, 'in following');
+          // console.log({ nodes }, 'in following');
 
           timeCall += 1;
 
           if (nodes.length === 0) {
             timeCall += 1;
             countEmpty += 1;
-            console.log({ countEmpty });
+            // console.log({ countEmpty });
           } else break;
         }
 
@@ -159,20 +159,20 @@ const postQuery = {
             node: post,
             cursor: post.id,
           }));
-          console.log({ nodes }, 'not in following');
+          // console.log({ nodes }, 'not in following');
 
           timeCall += 1;
 
           if (nodes.length === 0) {
             timeCall += 1;
             countEmpty += 1;
-            console.log({ countEmpty });
+            // console.log({ countEmpty });
           } else break;
         }
       }
     }
 
-    console.log('return', { nodes, timeCall });
+    // console.log('return', { nodes, timeCall });
     return {
       edges: nodes,
       pageInfo: {
@@ -205,7 +205,7 @@ const postQuery = {
           userId: args.userId,
         },
       });
-      console.log({ follower });
+      // console.log({ follower });
 
       if (follower.userFollower.includes(args.currentUserId)) {
         // console.log(3);
@@ -249,7 +249,7 @@ const postQuery = {
         cursor: post.id,
       }));
 
-      console.log({ nodes });
+      // console.log({ nodes });
     }
 
     const hasNextPage =
@@ -375,7 +375,7 @@ const postQuery = {
     }
 
     const result = [];
-    console.log('Init Stage wit referenceImage URL: ', referenceImage.url);
+    // console.log('Init Stage wit referenceImage URL: ', referenceImage.url);
     const initImages = initPosts.map((each) => each.image);
     const isSimilarImageMap = initImages.map((each) =>
       compareImages(referenceImage.hash, each.hash),
@@ -394,7 +394,7 @@ const postQuery = {
         id: lastId,
       },
     });
-    console.log('Loop Stage wit referenceImage URL: ', referenceImage.url);
+    // console.log('Loop Stage wit referenceImage URL: ', referenceImage.url);
     while (result.length !== limit && nextItem) {
       const nextPosts = await prisma.post.findMany({
         take: limit,
@@ -423,7 +423,7 @@ const postQuery = {
       );
       for (const imgIndex in nextImages) {
         if (result.length === limit) {
-          console.log('result is match limit, Stopping');
+          // console.log('result is match limit, Stopping');
           break;
         }
         if (isSimilarImageMap[imgIndex]) {
@@ -444,10 +444,10 @@ const postQuery = {
       });
     }
 
-    console.log('Result length', result.length);
+    // console.log('Result length', result.length);
 
     const hasNextPage = result.length !== 0 && nextItem;
-    console.log('hasNextPage', hasNextPage);
+    // console.log('hasNextPage', hasNextPage);
 
     const nodes = result.map((each) => ({
       node: each,
@@ -503,12 +503,12 @@ const postQuery = {
       prisma.post.count(),
     ]);
 
-    console.log('Result', result);
-    console.log('count', count);
+    // console.log('Result', result);
+    // console.log('count', count);
 
     const hasNextPage =
       result.length !== 0 && result.length < count && result.length === limit;
-    console.log('hasNextPage', hasNextPage);
+    // console.log('hasNextPage', hasNextPage);
 
     const nodes = result.map((each) => ({
       node: each,

@@ -7,6 +7,13 @@ const postMutation = {
     let post;
     const imageHash = await hashImage(args.data.imageURL);
     try {
+      const follower = await prisma.follower.findUnique({
+        where: {
+          userId: args.data.userId,
+        },
+      });
+      console.log({ follower });
+
       post = await prisma.post.create({
         data: {
           title: args.data.title,
@@ -42,19 +49,25 @@ const postMutation = {
           },
         },
       });
+      console.log({ post });
+
+      const a = await prisma.notification.create({
+        data: {
+          type: 'POST_CREATED',
+          postId: post.id,
+          userTriggerId: post.userId,
+          userIds: follower.userFollower,
+        },
+      });
+      console.log({ a });
 
       sendNotificationToClient(
         [
           'eUW71E0j4VAwZdHuyjdnQd:APA91bFKKXAsu_RxExCsDDK7V0AaqvHF9tW51bUBBDUkbvtxHEe9DpnFMhUfvgwVSAoud89y1rHxpeeEesWZZ9hkqAkkEMoP-7ys6QjYekcLln-bnXvvWfdG2ISZGwLtIm0iVH526VLr',
         ],
         {
-          title: 'New post',
-          body: 'New post',
-        },
-        {
-          title: 'New post',
-          body: 'New post',
-          post,
+          title: 'Notify new post',
+          body: JSON.stringify({ post, follower }),
         },
       );
     } catch (e) {

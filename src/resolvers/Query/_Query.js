@@ -15,41 +15,27 @@ import contestQuery from './CONTEST.js';
 import chatQuery from './CHAT.js';
 import messageQuery from './MESSAGE.js';
 import skillQuery from './SKILL.js';
+import notiQuery from './NOTIFICATION.js';
 
 const Query = {
-  // User
   ...userQuery,
-  // Level
   ...levelQuery,
-  // Image
   ...imageQuery,
-  // Image Info
   ...imageInfoQuery,
-  // Post
   ...postQuery,
-  // Story
   ...storyQuery,
-  // Comment
   ...commentQuery,
-  // Category
   ...categoryQuery,
-  // ALbum
   ...albumQuery,
-  // Tag
   ...tagQuery,
-  // Follower
   ...followerQuery,
-  // Following
   ...followingQuery,
-  // Report
   ...reportQuery,
-  // Contest
   ...contestQuery,
-  // Chat
   ...chatQuery,
-  // Message
   ...messageQuery,
   ...skillQuery,
+  ...notiQuery,
 };
 
 export default Query;

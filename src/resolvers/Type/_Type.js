@@ -16,6 +16,7 @@ import Chat from './Chat___.js';
 import Message from './Message___.js';
 import Skill from './Skill___.js';
 import Endorsement from './Endorsement___.js';
+import Notification from './Notification___.js';
 
 const Type = {
   User,
@@ -36,6 +37,7 @@ const Type = {
   Message,
   Endorsement,
   Skill,
+  Notification,
 };
 
 export default Type;

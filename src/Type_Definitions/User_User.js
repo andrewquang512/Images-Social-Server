@@ -130,6 +130,7 @@ const userDefs = gql`
 
     level: Level!
     posts: [Post]!
+    notiIds: [Notification]!
     stories: [Story]!
     albums: [Album]!
 

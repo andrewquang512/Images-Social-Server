@@ -1,11 +1,11 @@
 // https://firebase.google.com/docs/cloud-messaging/send-message
 import { firebaseMessaging } from './index.js';
 
-export const sendNotificationToClient = (tokens, data, notification) => {
+export const sendNotificationToClient = (tokens, data) => {
   // Send a message to the devices corresponding to the provided
   // registration tokens.
   firebaseMessaging
-    .sendMulticast({ tokens, data, notification })
+    .sendMulticast({ tokens, data })
     .then((response) => {
       // Response is an object of the form { responses: [] }
       const successes = response.responses.filter(

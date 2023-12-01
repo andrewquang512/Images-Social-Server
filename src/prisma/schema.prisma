@@ -49,13 +49,16 @@ model User {
 
   messages Message[]
   // courses       Course[]
-  // notifications Notification[]
+  notiIds               String[] @db.ObjectId
+  user_to_notification Notification[]   @relation( fields: [notiIds], references: [id])
+
+  notificationsTriggered Notification[] @relation(name: "noti_trigger")
 
   chatIDs      String[] @db.ObjectId
   user_to_chat Chat[]   @relation(fields: [chatIDs], references: [id])
 
-  courseIDs      String[] @db.ObjectId
-  user_to_course Course[] @relation(fields: [courseIDs], references: [id])
+  // courseIDs      String[] @db.ObjectId
+  // user_to_course Course[] @relation(fields: [courseIDs], references: [id])
 
   endoseredIds      String[]      @db.ObjectId
   endoseredList Endorsement[] @relation(name: "endorser", fields: [endoseredIds], references: [id])
@@ -67,14 +70,23 @@ model User {
 
 }
 
-// model Notification {
-//   id      String  @id @default(auto()) @map("_id") @db.ObjectId
-//   content String
-//   isRead  Boolean
+enum TypeNoti {
+  POST_CREATED
+  POST_LIKED
+}
 
-//   userId               String @db.ObjectId
-//   notification_to_user User   @relation(fields: [userId], references: [id])
-// }
+model Notification {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  type    TypeNoti
+  postId  String
+  createdAt DateTime @default(now())
+
+  userIds               String[] @db.ObjectId
+  notification_to_user User[]   @relation( fields: [userIds], references: [id])
+
+  userTriggerId               String @db.ObjectId
+  notification_to_usertrigger User   @relation(name: "noti_trigger",fields: [userTriggerId], references: [id])
+}
 
 model Endorsement {
   id String @id @default(auto()) @map("_id") @db.ObjectId
@@ -297,21 +309,21 @@ model Contest {
   updatedAt DateTime @updatedAt
 }
 
-model Course {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  lessons Lesson[]
+// model Course {
+//   id      String   @id @default(auto()) @map("_id") @db.ObjectId
+//   lessons Lesson[]
 
-  userIDs        String[] @db.ObjectId
-  course_to_user User[]   @relation(fields: [userIDs], references: [id])
-}
+//   userIDs        String[] @db.ObjectId
+//   course_to_user User[]   @relation(fields: [userIDs], references: [id])
+// }
 
-model Lesson {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
-  content String
+// model Lesson {
+//   id      String @id @default(auto()) @map("_id") @db.ObjectId
+//   content String
 
-  courseId         String @db.ObjectId
-  lesson_to_course Course @relation(fields: [courseId], references: [id])
-}
+//   courseId         String @db.ObjectId
+//   lesson_to_course Course @relation(fields: [courseId], references: [id])
+// }
 
 // Chat Application
 model Chat {
