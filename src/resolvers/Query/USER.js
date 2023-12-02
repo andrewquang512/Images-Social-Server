@@ -17,6 +17,22 @@ const userQuery = {
       },
     });
   },
+
+  userFollow: async (parent, args, info) => {
+    const follower = await prisma.follower.findUnique({
+      where: {
+        userId: args.data.userId,
+      },
+    });
+
+    const following = await prisma.following.findUnique({
+      where: {
+        userId: args.data.userId,
+      },
+    });
+
+    return { follower, following };
+  },
   verifyUser: async (parent, args, info) => {
     return await prisma.user.findFirst({
       where: {

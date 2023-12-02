@@ -141,6 +141,26 @@ const postMutation = {
           },
         },
       });
+
+      const a = await prisma.notification.create({
+        data: {
+          type: 'POST_LIKED',
+          postId: post.id,
+          userTriggerId: args.data.likedUserId,
+          userIds: [post.userId],
+        },
+      });
+      console.log({ a });
+
+      sendNotificationToClient(
+        [
+          'eUW71E0j4VAwZdHuyjdnQd:APA91bFKKXAsu_RxExCsDDK7V0AaqvHF9tW51bUBBDUkbvtxHEe9DpnFMhUfvgwVSAoud89y1rHxpeeEesWZZ9hkqAkkEMoP-7ys6QjYekcLln-bnXvvWfdG2ISZGwLtIm0iVH526VLr',
+        ],
+        {
+          title: 'Notify user like post',
+          body: JSON.stringify({ post, likedUserId: args.data.likedUserId }),
+        },
+      );
     } else {
       const { userLikedPost } = await prisma.post.findUnique({
         where: {

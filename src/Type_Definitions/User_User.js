@@ -7,6 +7,7 @@ const userDefs = gql`
   extend type Query {
     allUsers: [User]!
     userInfo(data: UserInfoInput!): User!
+    userFollow(data: UserInfoInput!): UserFollow!
     verifyUser(data: VerifyUserInput!): User!
     suggestUserToFollow(
       data: SuggestUserToFollowInput!
@@ -17,6 +18,11 @@ const userDefs = gql`
     getAllUserLeaderboard: [User]!
 
     getUserFollowingLeaderBoard(data: UserFollowingLeaderInput!): [User]!
+  }
+
+  type UserFollow {
+    follower: Follower!
+    following: Following!
   }
 
   type UserPagination {
@@ -36,6 +42,10 @@ const userDefs = gql`
   }
 
   input SuggestUserToFollowInput {
+    userId: ID!
+  }
+
+  input UserInfoInput {
     userId: ID!
   }
 
