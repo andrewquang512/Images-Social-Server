@@ -26,7 +26,7 @@ const profileMutation = {
    * @param {*} info
    * @returns
    */
-  addSkill: async (parent, args, info) => {
+  setSkills: async (parent, args, info) => {
     const { skillIds, userId } = args.data;
 
     const user = await prisma.user.findUnique({
@@ -55,12 +55,18 @@ const profileMutation = {
 
     const userSkillIds = user.endorsements.map((each) => each.skillId);
 
-    const newSkillIds = skillIds.filter((id) => {
-      if (userSkillIds.includes(id)) {
-        console.log(`User has already added this skill ${id}`);
-        return false;
-      }
-      return true;
+    const intersectionSKillIds = userSkillIds.filter((value) =>
+      skillIds.includes(value),
+    );
+
+    const removeSkillIds = userSkillIds.filter(
+      (each) => !intersectionSKillIds.includes(each),
+    );
+
+    const addSkillIds = skillIds.filter((each) => {
+      if (intersectionSKillIds.length === 1 && !userSkillIds.includes(each))
+        return true;
+      return !intersectionSKillIds.includes(each);
     });
 
     return await prisma.user.update({
@@ -69,7 +75,12 @@ const profileMutation = {
       },
       data: {
         endorsements: {
-          create: newSkillIds.map((id) => {
+          deleteMany: removeSkillIds.map((id) => {
+            return {
+              skillId: id,
+            };
+          }),
+          create: addSkillIds.map((id) => {
             return {
               skill: {
                 connect: {

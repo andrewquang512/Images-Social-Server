@@ -66,7 +66,7 @@ const userDefs = gql`
     deleteAllUser: DeleteAllReturnType!
     updateUser(data: UpdateUserInput!): User!
     addBiography(data: AddBiographyInput!): User!
-    addSkill(data: AddSkillInput!): User!
+    setSkills(data: SetSkillInput!): User!
     endorseSkill(data: EndorseSkillInput!): User!
     unEndorseSkill(data: EndorseSkillInput!): User!
     addInterestCategories(data: InterestCategoriesInput!): User!
@@ -92,7 +92,7 @@ const userDefs = gql`
     categoryIds: [String]!
   }
 
-  input AddSkillInput {
+  input SetSkillInput {
     userId: ID!
     skillIds: [String]!
   }
