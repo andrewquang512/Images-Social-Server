@@ -281,11 +281,13 @@ const postQuery = {
           {
             name: {
               startsWith: args.data.searchString,
+              mode: 'insensitive',
             },
           },
           {
             name: {
               contains: args.data.searchString,
+              mode: 'insensitive',
             },
           },
         ],
@@ -300,6 +302,7 @@ const postQuery = {
           name: 'asc',
         },
       ],
+      take: 6,
     });
 
     tags = await prisma.tag.findMany({
@@ -317,9 +320,124 @@ const postQuery = {
           },
         ],
       },
+      take: 6,
     });
 
     return { tags, users };
+  },
+  searchResult: async (parent, args, info) => {
+    let tags = [],
+      users = [],
+      posts = [],
+      stories = [];
+
+    if (!args.data.searchString) {
+      return { tags, users, posts, stories };
+    }
+
+    users = await prisma.user.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              startsWith: args.data.searchString,
+              mode: 'insensitive',
+            },
+          },
+          {
+            name: {
+              contains: args.data.searchString,
+              mode: 'insensitive',
+            },
+          },
+        ],
+        AND: [
+          {
+            isAdmin: 0,
+          },
+        ],
+      },
+      orderBy: [
+        {
+          name: 'asc',
+        },
+      ],
+      take: 20,
+    });
+
+    tags = await prisma.tag.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              startsWith: args.data.searchString,
+              mode: 'insensitive',
+            },
+          },
+          {
+            name: {
+              contains: args.data.searchString,
+              mode: 'insensitive',
+            },
+          },
+        ],
+      },
+      take: 20,
+    });
+
+    posts = await prisma.post.findMany({
+      where: {
+        OR: [
+          {
+            title: {
+              startsWith: args.data.searchString,
+              mode: 'insensitive',
+            },
+          },
+          {
+            title: {
+              contains: args.data.searchString,
+              mode: 'insensitive',
+            },
+          },
+          {
+            caption: {
+              startsWith: args.data.searchString,
+              mode: 'insensitive',
+            },
+          },
+          {
+            caption: {
+              contains: args.data.searchString,
+              mode: 'insensitive',
+            },
+          },
+        ],
+      },
+      take: 100,
+    });
+
+    stories = await prisma.story.findMany({
+      where: {
+        OR: [
+          {
+            title: {
+              startsWith: args.data.searchString,
+              mode: 'insensitive',
+            },
+          },
+          {
+            title: {
+              contains: args.data.searchString,
+              mode: 'insensitive',
+            },
+          },
+        ],
+      },
+      take: 20,
+    });
+
+    return { tags, users, posts, stories };
   },
 
   /**

@@ -22,6 +22,7 @@ const postDefs = gql`
     ): PostConnection!
 
     searchQuery(data: SearchQueryInput!): SearchReturnType!
+    searchResult(data: SearchQueryInput!): SearchReturnType!
 
     explorePosts(
       data: ExplorePostsInput
@@ -56,6 +57,13 @@ const postDefs = gql`
   }
   ${tagDefs}
   ${userDefs}
+
+  type SearchReturnType {
+    tags: [Tag]!
+    users: [User]!
+    posts: [Post]!
+    stories: [Story]!
+  }
 
   input SimilarPostsInput {
     postId: String!
