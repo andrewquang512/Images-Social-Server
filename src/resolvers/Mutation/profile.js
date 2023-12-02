@@ -55,10 +55,12 @@ const profileMutation = {
 
     const userSkillIds = user.endorsements.map((each) => each.skillId);
 
-    skillIds.forEach((id) => {
+    const newSkillIds = skillIds.filter((id) => {
       if (userSkillIds.includes(id)) {
-        throw Error('User has already added this skill');
+        console.log(`User has already added this skill ${id}`);
+        return false;
       }
+      return true;
     });
 
     return await prisma.user.update({
@@ -67,7 +69,7 @@ const profileMutation = {
       },
       data: {
         endorsements: {
-          create: skillIds.map((id) => {
+          create: newSkillIds.map((id) => {
             return {
               skill: {
                 connect: {
@@ -158,7 +160,65 @@ const profileMutation = {
    */
   // Todo done this
   unEndorseSkill: async (parent, args, info) => {
-    throw Error('Not implement yet');
+    const { endorsementId, endorserUserId } = args.data;
+    const [targetUser, endorser] = await Promise.all([
+      prisma.user.findFirst({
+        where: {
+          endorsements: {
+            some: {
+              id: endorsementId,
+            },
+          },
+        },
+        include: {
+          endorsements: {
+            include: {
+              skill: true,
+            },
+          },
+        },
+      }),
+      prisma.user.findUnique({
+        where: {
+          id: endorserUserId,
+        },
+      }),
+    ]);
+
+    if (!targetUser) {
+      throw Error('User not have this skill');
+    }
+
+    if (!endorser) {
+      throw Error('Endorsing User is not existed');
+    }
+
+    if (endorser.id === targetUser.id) {
+      throw Error('endorser and targetUser can not be the same');
+    }
+
+    const endorsement = targetUser.endorsements.find(
+      (each) => each.id === endorsementId,
+    );
+
+    const endorserIds = endorsement.endorserIds;
+
+    if (!endorserIds.includes(endorserUserId)) {
+      throw Error('User have not endorsed this skill of user');
+    }
+
+    return await prisma.endorsement.update({
+      where: {
+        id: endorsementId,
+      },
+      data: {
+        endorser: {
+          disconnect: {
+            id: endorserUserId,
+          },
+        },
+      },
+    });
   },
 };
 

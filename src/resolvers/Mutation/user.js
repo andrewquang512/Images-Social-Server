@@ -150,9 +150,53 @@ const userMutation = {
    * @param {*} info
    * @returns
    */
-  // Todo done this
   removeInterestCategories: async (parent, args, info) => {
-    throw Error('Not implement yet');
+    const { categoryIds, userId } = args.data;
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      include: {
+        interestCategories: true,
+      },
+    });
+    if (!user) {
+      throw Error('User is not existed');
+    }
+
+    categoryIds.forEach((id) => {
+      if (!user.interestCategoryIds.includes(id)) {
+        throw Error('User has not added this category to interest');
+      }
+    });
+
+    const existedCategories = await prisma.category.findMany({
+      where: {
+        id: {
+          in: categoryIds,
+        },
+      },
+    });
+
+    if (existedCategories.length !== categoryIds.length) {
+      throw Error('Some of category not existed');
+    }
+
+    return await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        interestCategories: {
+          disconnect: categoryIds.map((id) => {
+            return {
+              id: id,
+            };
+          }),
+        },
+      },
+    });
   },
 };
 

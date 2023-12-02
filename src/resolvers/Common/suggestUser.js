@@ -126,7 +126,7 @@ export class UserSuggestion {
    */
   #getJaacardIndex = (dataset1, dataset2) => {
     if (dataset1.length === 0 || dataset2.length === 0) {
-      return 0;
+      return 1;
     }
     const intersection = this.#getIntersection(dataset1, dataset2);
     const union = this.#getUnion(dataset1, dataset2);
