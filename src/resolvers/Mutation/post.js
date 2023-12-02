@@ -55,6 +55,8 @@ const postMutation = {
         data: {
           type: 'POST_CREATED',
           postId: post.id,
+          postTitle: post.title,
+          postImage: args.data.imageURL,
           userTriggerId: post.userId,
           userIds: follower.userFollower,
         },
@@ -141,11 +143,20 @@ const postMutation = {
           },
         },
       });
+      let b = await prisma.post.findUnique({
+        where: {
+          id: args.data.postId,
+        },
+        include: { image: true },
+      });
+      console.log({ b });
 
       const a = await prisma.notification.create({
         data: {
           type: 'POST_LIKED',
           postId: post.id,
+          postTitle: post.title,
+          postImage: b.image.url,
           userTriggerId: args.data.likedUserId,
           userIds: [post.userId],
         },
