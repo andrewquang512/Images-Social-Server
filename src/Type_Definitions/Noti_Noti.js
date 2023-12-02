@@ -27,6 +27,8 @@ const notiDefs = gql`
 
     type: String!
     postId: String!
+    postTitle: String!
+    postImage: String!
 
     userTriggerId: User!
     userIds: [User]!
