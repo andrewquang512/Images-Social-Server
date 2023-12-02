@@ -69,11 +69,12 @@ const userQuery = {
     const [allUsers, count] = await Promise.all([
       prisma.user.findMany({
         where: {
-          id: { not: userId },
-          isAdmin: 0,
-          NOT: {
-            id: { in: currentUser.userFollowing },
+          id: {
+            not: {
+              in: [...currentUser.followings.userFollowing, userId],
+            },
           },
+          isAdmin: 0,
         },
         include: {
           endorsements: true,
