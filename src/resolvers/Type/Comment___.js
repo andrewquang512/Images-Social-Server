@@ -22,6 +22,14 @@ const Comment = {
       },
     });
   },
+
+  child: async (parent, args, info) => {
+    return await prisma.comment.findMany({
+      where: {
+        parentId: parent.id,
+      },
+    });
+  },
 };
 
 export default Comment;
