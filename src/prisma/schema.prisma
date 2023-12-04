@@ -68,6 +68,11 @@ model User {
   interestCategoryIds      String[]      @db.ObjectId
   interestCategories Category[] @relation(name: "interest", fields: [interestCategoryIds], references: [id])
 
+  submissions Contest_Score[] 
+  contestPrizeList Contest_Prize[] 
+
+  joinedContestIds String[] @db.ObjectId
+  joinedContests Contest[] @relation(fields: [joinedContestIds], references: [id])
 }
 
 enum TypeNoti {
@@ -246,6 +251,7 @@ model Post {
 
   userLikedPost String[]
   reportedUserIds      String[] 
+  submissions Contest_Score[]
 }
 
 model Story {
@@ -302,30 +308,61 @@ model Contest {
   contestImageURL String
   description     String
 
-  startDate  String
-  endDate    String
-  prize      String
-  userJoined String[]
+  startDate  DateTime
+  endDate    DateTime?
+
+  joinedUserIds String[] @db.ObjectId 
+  joinedUserList User[] @relation(fields: [joinedUserIds],references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  scores Contest_Score[]
+  contestPrizeList Contest_Prize[] 
 }
 
-// model Course {
-//   id      String   @id @default(auto()) @map("_id") @db.ObjectId
-//   lessons Lesson[]
+model Contest_Prize {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
 
-//   userIDs        String[] @db.ObjectId
-//   course_to_user User[]   @relation(fields: [userIDs], references: [id])
-// }
+  contestId String @db.ObjectId
+  contest Contest @relation(fields: [contestId],references: [id])
 
-// model Lesson {
-//   id      String @id @default(auto()) @map("_id") @db.ObjectId
-//   content String
+  prizeId String @db.ObjectId
+  prize Prize @relation(fields: [prizeId], references: [id])
 
-//   courseId         String @db.ObjectId
-//   lesson_to_course Course @relation(fields: [courseId], references: [id])
-// }
+  userId String? @db.ObjectId
+  user User? @relation(fields: [userId], references: [id])
+
+  title String
+  type String
+
+}
+
+model Prize {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  prizeImageURL String
+
+  contestPrizeList Contest_Prize[] 
+}
+
+model Contest_Score {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+
+  contestId String @db.ObjectId
+  contest Contest @relation(fields: [contestId], references: [id])
+
+  userId String @db.ObjectId
+  user User @relation(fields: [userId], references: [id])
+
+  postId String? @db.ObjectId
+  post Post? @relation(fields: [postId], references: [id])
+
+  score Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+}
 
 // Chat Application
 model Chat {

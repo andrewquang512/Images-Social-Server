@@ -4,13 +4,12 @@ const contestDefs = gql`
   extend type Query {
     allContests: [Contest]!
     contestInfo(data: ContestInfoInput!): Contest!
-    getTopPostContest(data: ContestInfoInput!): [Post]!
-
-    contestPosts(
-      contestId: String
-      userId: String
-      after: String
-    ): PostConnection!
+    contestPosts(contestId: String, after: String): PostConnection!
+    # getTopContestPosts
+    # getContestPosts
+    # getContestPrizes
+    # getPrizes
+    # getContestPostScore
   }
 
   input ContestInfoInput {
@@ -21,11 +20,21 @@ const contestDefs = gql`
   # _______________________________________________________
 
   extend type Mutation {
+    createPrize(data: CreatePrizeInput): Prize!
+    # createPrizeSet
     createContest(data: CreateContestInput!): Contest!
     deleteContest(data: DeleteContestInput!): Contest!
-    deleteAllContest: DeleteAllReturnType!
+    joinContest(data: JoinContestInput!): Contest!
+    # submitPostToContest
+    # deletePostToContest
+    # endContest
+    # voteContest
+    # unvoteContest
+  }
 
-    userJoinContest(data: UserJoinContestInput!): Contest!
+  input CreatePrizeInput {
+    name: String!
+    prizeImageURL: String!
   }
 
   input CreateContestInput {
@@ -33,16 +42,23 @@ const contestDefs = gql`
     contestImageURL: String!
     description: String!
 
-    startDate: String!
-    endDate: String!
-    prize: String!
+    startDate: Int!
+    endDate: Int
+
+    contestPrizeList: [CreateContestPrizeInput]!
+  }
+
+  input CreateContestPrizeInput {
+    prizeId: String
+    type: String
+    title: String
   }
 
   input DeleteContestInput {
     contestId: ID!
   }
 
-  input UserJoinContestInput {
+  input JoinContestInput {
     contestId: ID!
     userId: ID!
   }
@@ -53,13 +69,37 @@ const contestDefs = gql`
     contestImageURL: String!
     description: String!
 
-    startDate: String!
-    endDate: String!
-    prize: String!
-    userJoined: [String]
+    startDate: Int!
+    endDate: Int
 
-    createdAt: String!
-    updatedAt: String
+    joinedUserList: [User]!
+    scores: [Contest_Score]!
+    contestPrizeList: [Contest_Prize]!
+  }
+
+  type Contest_Score {
+    id: ID!
+
+    contest: Contest!
+    user: User!
+    post: Post!
+    score: Int
+  }
+
+  type Contest_Prize {
+    id: ID!
+    contest: Contest!
+    prize: Prize!
+    user: User
+    title: String!
+    type: String!
+  }
+
+  type Prize {
+    id: ID!
+    name: String!
+    prizeImageURL: String!
+    contestPrizeList: [Contest_Prize]
   }
 `;
 
