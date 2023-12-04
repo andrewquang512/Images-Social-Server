@@ -37,16 +37,20 @@ const Post = {
   //   });
   // },
   comments: async (parent, args, info) => {
-    return await prisma.comment.findMany({
+    const result = await prisma.comment.findMany({
       where: {
         postId: parent.id,
+        parent: null,
       },
-      orderBy: [
-        {
-          createdAt: 'desc',
+      include: {
+        child: {
+          include: {
+            child: true,
+          },
         },
-      ],
+      },
     });
+    return result;
   },
 };
 

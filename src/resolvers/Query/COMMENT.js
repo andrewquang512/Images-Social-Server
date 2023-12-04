@@ -21,7 +21,7 @@ const commentQuery = {
         }),
         where: {
           postId: postId,
-          parentId: null,
+          parent: null,
         },
         include: {
           child: {
