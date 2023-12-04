@@ -149,7 +149,7 @@ const profileMutation = {
       throw Error('User has endorsed this skill of user');
     }
 
-    return await prisma.endorsement.update({
+    await prisma.endorsement.update({
       where: {
         id: endorsementId,
       },
@@ -161,6 +161,8 @@ const profileMutation = {
         },
       },
     });
+
+    return targetUser;
   },
 
   /**
@@ -218,7 +220,7 @@ const profileMutation = {
       throw Error('User have not endorsed this skill of user');
     }
 
-    return await prisma.endorsement.update({
+    await prisma.endorsement.update({
       where: {
         id: endorsementId,
       },
@@ -230,6 +232,8 @@ const profileMutation = {
         },
       },
     });
+
+    return targetUser;
   },
 };
 
