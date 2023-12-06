@@ -1,4 +1,4 @@
-import { DEFAULT_LIMIT } from 'constants.js';
+import { DEFAULT_LIMIT } from '../../constants.js';
 import { prisma } from '../../prisma/database.js';
 import _ from 'lodash';
 

@@ -9,7 +9,7 @@ const contestDefs = gql`
       limit: Int
       after: String
     ): PostConnection!
-    getTopContestPosts(contestId: string, top: Int!): [Post]!
+    getTopContestPosts(contestId: String, top: Int!): [Post]!
     # getContestPrizes
     # getPrizes
     # getContestPostScore
