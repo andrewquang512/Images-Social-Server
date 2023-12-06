@@ -4,12 +4,19 @@ const contestDefs = gql`
   extend type Query {
     allContests: [Contest]!
     contestInfo(data: ContestInfoInput!): Contest!
-    contestPosts(contestId: String, after: String): PostConnection!
-    # getTopContestPosts
-    # getContestPosts
+    contestPosts(
+      data: ContestPostsInpout
+      limit: Int
+      after: String
+    ): PostConnection!
+    getTopContestPosts(contestId: string, top: Int!): [Post]!
     # getContestPrizes
     # getPrizes
     # getContestPostScore
+  }
+
+  input ContestPostsInpout {
+    contestId: ID!
   }
 
   input ContestInfoInput {
@@ -25,12 +32,17 @@ const contestDefs = gql`
     createContest(data: CreateContestInput!): Contest!
     deleteContest(data: DeleteContestInput!): Contest!
     joinContest(data: JoinContestInput!): Contest!
-    # submitPostToContest
-    # deletePostToContest
+    # submitPostToContest(data: SubmitPostToContestInput): Contest_Score
+    # deletePostToContest(data: SubmitPostToContestInput): Contest_Score
     # endContest
     # voteContest
     # unvoteContest
   }
+
+  # input SubmitPostToContestInput {
+  #   postId: ID!
+  #   contestId: ID!
+  # }
 
   input CreatePrizeInput {
     name: String!
