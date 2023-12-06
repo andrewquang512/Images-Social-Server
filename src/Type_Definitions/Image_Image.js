@@ -4,6 +4,7 @@ import commonDefs from './Common_Common.js';
 const imageDefs = gql`
   extend type Query {
     allImages: [Image]!
+    getImageById(id: String!): Image!
   }
 
   # extend type Mutation {
