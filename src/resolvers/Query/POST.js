@@ -31,7 +31,8 @@ const postQuery = {
 
     const after = args.after;
 
-    if (!after) {
+    if (!after && timeCall === 0) {
+      // console.log('No after');
       timeCall += 1;
 
       a = await prisma.post.findMany({
@@ -128,6 +129,7 @@ const postQuery = {
 
         // Not Following
         if (timeCall % 2 === 0) {
+          console.log('Not Following');
           a = await prisma.post.findMany({
             where: {
               AND: [
