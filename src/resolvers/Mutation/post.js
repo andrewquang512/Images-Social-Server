@@ -66,6 +66,7 @@ const postMutation = {
       sendNotificationToClient(
         [
           'eUW71E0j4VAwZdHuyjdnQd:APA91bFKKXAsu_RxExCsDDK7V0AaqvHF9tW51bUBBDUkbvtxHEe9DpnFMhUfvgwVSAoud89y1rHxpeeEesWZZ9hkqAkkEMoP-7ys6QjYekcLln-bnXvvWfdG2ISZGwLtIm0iVH526VLr',
+          'cL1Bw65HsSxGyqeJdii03m:APA91bGtBsY-8Wuj0SmG2qnmcqeluO5rqaUDerVpmHHs2Qy1dtTWWjnWXTpA2Lj-Mgx_8nRia_Fkhf96KIAYazyyDV-SHwR5PhPfJFzr9iMn4B4-z9qHdui5bYTh1fj5gt9jw-VGmBhX',
         ],
         {
           title: 'Notify new post',
@@ -166,6 +167,7 @@ const postMutation = {
       sendNotificationToClient(
         [
           'eUW71E0j4VAwZdHuyjdnQd:APA91bFKKXAsu_RxExCsDDK7V0AaqvHF9tW51bUBBDUkbvtxHEe9DpnFMhUfvgwVSAoud89y1rHxpeeEesWZZ9hkqAkkEMoP-7ys6QjYekcLln-bnXvvWfdG2ISZGwLtIm0iVH526VLr',
+          'cL1Bw65HsSxGyqeJdii03m:APA91bGtBsY-8Wuj0SmG2qnmcqeluO5rqaUDerVpmHHs2Qy1dtTWWjnWXTpA2Lj-Mgx_8nRia_Fkhf96KIAYazyyDV-SHwR5PhPfJFzr9iMn4B4-z9qHdui5bYTh1fj5gt9jw-VGmBhX',
         ],
         {
           title: 'Notify user like post',
