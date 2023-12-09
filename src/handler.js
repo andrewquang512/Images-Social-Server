@@ -29,12 +29,40 @@ const server = new ApolloServer({
   logger: console,
 });
 
+const corsMiddleware = cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    const localhostRegex = /^http:\/\/localhost(?::\d{1,5})?$/;
+    const allowedOrigins = [
+      'https://develop.d3rhlz96rgdfbq.amplifyapp.com',
+      'https://flens.website',
+    ];
+
+    if (localhostRegex.test(origin)) {
+      // Allow requests from localhost
+      callback(null, true);
+    }
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      // Allow requests from localhost
+      callback(null, true);
+    } else {
+      // Block requests from other origins
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+});
+
 export const handler = startServerAndCreateLambdaHandler(
   server,
   handlers.createAPIGatewayProxyEventRequestHandler(),
   {
     middleware: [
-      cors(),
+      corsMiddleware,
       async (event) => {
         console.log('###? received event=' + JSON.stringify(event));
       },
