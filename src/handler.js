@@ -29,73 +29,14 @@ const server = new ApolloServer({
   logger: console,
 });
 
-const corsMiddleware = async (event) => {
-  const origin = event.headers.origin;
-  // Allow requests with no origin (like mobile apps or curl requests)
-  if (!origin) {
-    // return callback(null, true);
-    return;
-  }
-
-  const localhostRegex = /^http:\/\/localhost(?::\d{1,5})?$/;
-  const allowedOrigins = [
-    'https://develop.d3rhlz96rgdfbq.amplifyapp.com',
-    'https://flens.website',
-  ];
-
-  if (localhostRegex.test(origin)) {
-    // Allow requests from localhost
-    // callback(null, );
-    return;
-  }
-  if (allowedOrigins.indexOf(origin) !== -1) {
-    // Allow requests from localhost
-    // callback(null, );
-    return;
-  } else {
-    // Block requests from other origins
-    // callback(new Error('Not allowed by CORS'));
-    // return false;
-    throw new Error('Not allowed by CORS');
-  }
-};
-
 export const handler = startServerAndCreateLambdaHandler(
   server,
   handlers.createAPIGatewayProxyEventRequestHandler(),
   {
     middleware: [
+      cors,
       async (event) => {
         console.log('###? received event=' + JSON.stringify(event));
-        const origin = event.headers.origin;
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) {
-          // return callback(null, true);
-          return;
-        }
-
-        const localhostRegex = /^http:\/\/localhost(?::\d{1,5})?$/;
-        const allowedOrigins = [
-          'https://develop.d3rhlz96rgdfbq.amplifyapp.com',
-          'https://flens.website',
-          'https://roxqm2ljb8.execute-api.ap-southeast-1.amazonaws.com/',
-        ];
-
-        if (localhostRegex.test(origin)) {
-          // Allow requests from localhost
-          // callback(null, );
-          return;
-        }
-        if (allowedOrigins.indexOf(origin) !== -1) {
-          // Allow requests from localhost
-          // callback(null, );
-          return;
-        } else {
-          // Block requests from other origins
-          // callback(new Error('Not allowed by CORS'));
-          // return false;
-          throw new Error('Not allowed by CORS');
-        }
       },
     ],
   },
