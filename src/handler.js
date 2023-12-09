@@ -78,6 +78,7 @@ export const handler = startServerAndCreateLambdaHandler(
         const allowedOrigins = [
           'https://develop.d3rhlz96rgdfbq.amplifyapp.com',
           'https://flens.website',
+          'https://roxqm2ljb8.execute-api.ap-southeast-1.amazonaws.com/',
         ];
 
         if (localhostRegex.test(origin)) {
