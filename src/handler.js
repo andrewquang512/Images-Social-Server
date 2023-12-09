@@ -7,7 +7,7 @@ import {
 } from '@as-integrations/aws-lambda';
 // Prisma
 import { prisma } from './prisma/database.js';
-
+import cors from 'cors';
 // Type definitions and resolvers
 import typeDefs from './Type_Definitions/_typeDefs.js';
 import resolvers from './resolvers/resolvers.js';
@@ -34,6 +34,7 @@ export const handler = startServerAndCreateLambdaHandler(
   handlers.createAPIGatewayProxyEventRequestHandler(),
   {
     middleware: [
+      cors(),
       async (event) => {
         console.log('###? received event=' + JSON.stringify(event));
       },

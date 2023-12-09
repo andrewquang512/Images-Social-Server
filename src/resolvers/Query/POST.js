@@ -327,6 +327,14 @@ const postQuery = {
 
     return { tags, users };
   },
+
+  /**
+   *
+   * @param {*} parent
+   * @param {{userId: string, searchString: string}} args
+   * @param {*} info
+   * @returns
+   */
   searchResult: async (parent, args, info) => {
     let tags = [],
       users = [],
