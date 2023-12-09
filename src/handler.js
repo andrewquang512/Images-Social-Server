@@ -34,7 +34,6 @@ export const handler = startServerAndCreateLambdaHandler(
   handlers.createAPIGatewayProxyEventRequestHandler(),
   {
     middleware: [
-      cors,
       async (event) => {
         console.log('###? received event=' + JSON.stringify(event));
       },
