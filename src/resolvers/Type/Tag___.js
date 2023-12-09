@@ -4,7 +4,7 @@ const Tag = {
   posts: async (parent, args, info) => {
     return await prisma.post.findMany({
       where: {
-        tagId: { has: parent.id },
+        tag: { has: parent.id },
       },
     });
   },
