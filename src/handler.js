@@ -39,6 +39,7 @@ const server = new ApolloServer({
     return { prisma };
   },
   introspection: true,
+  csrfPrevention: true,
   plugins: [
     ApolloServerPluginLandingPageLocalDefault({ embed: true }),
     ...(parseInt(process.env.IS_LOGGING) ? [loggingPlugin] : []),
