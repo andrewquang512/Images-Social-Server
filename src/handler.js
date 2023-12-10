@@ -67,7 +67,7 @@ export const handler = startServerAndCreateLambdaHandler(
     ],
     cors: {
       origin: '*',
-      credentials: true,
+      credentials: false,
     },
   },
 );
