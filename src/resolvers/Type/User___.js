@@ -29,6 +29,27 @@ const User = {
       },
     });
   },
+  notiIds: async (parent, args, info) => {
+    return await prisma.album.findMany({
+      where: {
+        userIds: { has: parent.id },
+      },
+    });
+  },
+  joinedContestIds: async (parent, args, info) => {
+    return await prisma.contest.findMany({
+      where: {
+        id: { in: parent.joinedContestIds },
+      },
+    });
+  },
+  contestPrizeList: async (parent, args, info) => {
+    return await prisma.contest_prize.findMany({
+      where: {
+        user: parent.id,
+      },
+    });
+  },
   chatIDs: async (parent, args, info) => {
     return await prisma.chat.findMany({
       where: {

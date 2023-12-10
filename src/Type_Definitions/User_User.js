@@ -150,6 +150,9 @@ const userDefs = gql`
     biography: String
     userEndorsements: [Endorsement]
     interestCategories: [Category]
+
+    joinedContestIds: [Contest]!
+    contestPrizeList: [Contest_Prize]!
   }
   ${categoryDefs}
 

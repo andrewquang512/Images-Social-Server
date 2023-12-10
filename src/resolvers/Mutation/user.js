@@ -16,6 +16,7 @@ const userMutation = {
           isAdmin: 0,
           age: 18,
           notiIds: [],
+          contestPrizeList: [],
           level: {
             create: {
               currentXP: 0,
@@ -161,6 +162,7 @@ const userMutation = {
         interestCategories: true,
       },
     });
+
     if (!user) {
       throw Error('User is not existed');
     }

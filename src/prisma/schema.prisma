@@ -68,7 +68,7 @@ model User {
   interestCategoryIds      String[]      @db.ObjectId
   interestCategories Category[] @relation(name: "interest", fields: [interestCategoryIds], references: [id])
 
-  submissions Contest_Score[] 
+  // submissions Contest_Score[] 
   contestPrizeList Contest_Prize[] 
 
   joinedContestIds String[] @db.ObjectId
@@ -251,7 +251,7 @@ model Post {
 
   userLikedPost String[]
   reportedUserIds      String[] 
-  submissions Contest_Score[]
+  // submissions Contest_Score[]
 }
 
 model Story {
@@ -308,8 +308,10 @@ model Contest {
   contestImageURL String
   description     String
 
-  startDate  DateTime
-  endDate    DateTime?
+  startDate  DateTime @default(now())
+  endDate    DateTime
+
+  isFinished Boolean
 
   joinedUserIds String[] @db.ObjectId 
   joinedUserList User[] @relation(fields: [joinedUserIds],references: [id])
@@ -317,52 +319,55 @@ model Contest {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  scores Contest_Score[]
+  // scores Contest_Score[]
   contestPrizeList Contest_Prize[] 
 }
 
 model Contest_Prize {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
 
-  contestId String @db.ObjectId
-  contest Contest @relation(fields: [contestId],references: [id])
+  // contestId String @db.ObjectId
+  // contest Contest @relation(fields: [contestId],references: [id])
 
-  prizeId String @db.ObjectId
-  prize Prize @relation(fields: [prizeId], references: [id])
+  // prizeId String @db.ObjectId
+  // prize Prize @relation(fields: [prizeId], references: [id])
+
+  contestId       String @db.ObjectId
+  prize_to_contest Contest   @relation(fields: [contestId], references: [id])
 
   userId String? @db.ObjectId
   user User? @relation(fields: [userId], references: [id])
 
   title String
   type String
-
-}
-
-model Prize {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
   prizeImageURL String
-
-  contestPrizeList Contest_Prize[] 
 }
 
-model Contest_Score {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
+// model Prize {
+//   id   String @id @default(auto()) @map("_id") @db.ObjectId
+//   name String
+//   prizeImageURL String
 
-  contestId String @db.ObjectId
-  contest Contest @relation(fields: [contestId], references: [id])
+//   contestPrizeList Contest_Prize[] 
+// }
 
-  userId String @db.ObjectId
-  user User @relation(fields: [userId], references: [id])
+// model Contest_Score {
+//   id   String @id @default(auto()) @map("_id") @db.ObjectId
 
-  postId String? @db.ObjectId
-  post Post? @relation(fields: [postId], references: [id])
+//   contestId String @db.ObjectId
+//   contest Contest @relation(fields: [contestId], references: [id])
 
-  score Int?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+//   userId String @db.ObjectId
+//   user User @relation(fields: [userId], references: [id])
 
-}
+//   postId String? @db.ObjectId
+//   post Post? @relation(fields: [postId], references: [id])
+
+//   score Int?
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+// }
 
 // Chat Application
 model Chat {

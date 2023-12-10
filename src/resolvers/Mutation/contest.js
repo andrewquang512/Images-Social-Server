@@ -7,15 +7,15 @@ const contestMutation = {
    * @param {*} info
    * @returns
    */
-  createPrize: async (parent, args, info) => {
-    const { name, prizeImageURL } = args.data;
-    return prisma.prize.create({
-      data: {
-        name: name,
-        prizeImageURL: prizeImageURL,
-      },
-    });
-  },
+  // createPrize: async (parent, args, info) => {
+  //   const { name, prizeImageURL } = args.data;
+  //   return prisma.prize.create({
+  //     data: {
+  //       name: name,
+  //       prizeImageURL: prizeImageURL,
+  //     },
+  //   });
+  // },
 
   /**
    * @param {*} parent
@@ -26,29 +26,58 @@ const contestMutation = {
    */
   createContest: async (parent, args, info) => {
     const { data } = args;
-    const { contestPrizeList } = data;
+
     const result = await prisma.contest.create({
       data: {
         name: data.name,
         contestImageURL: data.contestImageURL,
         description: data.description,
+        isFinished: false,
         startDate: new Date(data.startDate),
-        endDate: data.endDate ? new Date(data.endDate) : null,
-        contestPrizeList: {
-          create: contestPrizeList.map((each) => {
-            return {
-              prize: {
-                connect: {
-                  id: each.prizeId,
-                },
-              },
-              type: each.type,
-              title: each.title,
-            };
-          }),
+        endDate: new Date(data.endDate),
+      },
+    });
+
+    return result;
+  },
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  endContest: async (parent, args, info) => {
+    const { contestId } = args.data;
+
+    const result = await prisma.contest.update({
+      where: {
+        id: contestId,
+      },
+      data: {
+        isFinished: true,
+      },
+    });
+
+    const users = await prisma.post.findMany({
+      where: {
+        contestId: contestId,
+      },
+      orderBy: [
+        { points: 'desc' },
+        {
+          createdAt: 'desc',
+        },
+      ],
+      take: 3,
+      include: {
+        userId: {
+          id: true,
         },
       },
     });
+
+    console.log({ users });
+
+    // await prisma.contest_Prize.create({
+    //   data: {
+    //     contestId: contestId,
+    //   },
+    // });
 
     return result;
   },
@@ -77,7 +106,7 @@ const contestMutation = {
           id: args.data.contestId,
         },
         data: {
-          userJoined: {
+          joinedUserIds: {
             push: args.data.userId,
           },
         },

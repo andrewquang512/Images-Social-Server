@@ -12,6 +12,7 @@ import Follower from './Follower___.js';
 import Following from './Following___.js';
 import Report from './Report___.js';
 import Contest from './Contest___.js';
+import Contest_Prize from './ContestPrize___.js';
 import Chat from './Chat___.js';
 import Message from './Message___.js';
 import Skill from './Skill___.js';
@@ -33,6 +34,7 @@ const Type = {
   Following,
   Report,
   Contest,
+  Contest_Prize,
   Chat,
   Message,
   Endorsement,

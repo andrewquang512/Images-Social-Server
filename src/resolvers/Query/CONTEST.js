@@ -20,53 +20,52 @@ const contestQuery = {
    * @param {*} info
    */
   contestPosts: async (parent, args, info) => {
-    const { contestId } = args.data || {};
-    const { after, limit } = args;
+    const { contestId, userId: currentUserId, after } = args;
+    console.log(args);
+    let nodes, a;
 
-    const [contestScores, count] = await Promise.all([
-      prisma.contest_Score.findMany({
-        take: limit || DEFAULT_LIMIT,
-        ...(after && {
-          skip: 1,
-        }),
-        where: {
-          id: contestId,
+    a = await prisma.post.findMany({
+      where: {
+        contestId: contestId,
+      },
+      orderBy: [
+        { points: 'desc' },
+        {
+          createdAt: 'desc',
         },
-        include: {
-          post: true,
-        },
-        ...(after && {
-          cursor: {
-            id: after,
-          },
-        }),
-      }),
-      prisma.contest_Score.count(),
-    ]);
+      ],
+    });
 
-    const result = contestScores.map((each) => each.post);
-    console.log('Result', result);
-    console.log('count', count);
+    a = _.sortBy(a, ({ userId }) => (userId === currentUserId ? 0 : 1));
+    console.log({ a });
 
-    const sortedResult = result.sort(
-      (before, after) => after.votes - before.votes,
-    );
+    if (!after) {
+      nodes = a.slice(0, 4).map((post) => ({
+        node: post,
+        cursor: post.id,
+      }));
+
+      console.log({ nodes });
+    } else {
+      const index = a.findIndex((post) => post.id === after);
+      nodes = a.slice(index + 1, index + 3).map((post) => ({
+        node: post,
+        cursor: post.id,
+      }));
+
+      console.log({ nodes });
+    }
+
     const hasNextPage =
-      sortedResult.length !== 0 &&
-      sortedResult.length < count &&
-      sortedResult.length === limit;
-    console.log('hasNextPage', hasNextPage);
+      nodes.length === 0
+        ? false
+        : nodes.slice(-1)[0].cursor !== a.slice(-1)[0].id;
 
-    const nodes = sortedResult.map((each) => ({
-      node: each,
-      cursor: each.id,
-    }));
     return {
       edges: nodes,
       pageInfo: {
         hasNextPage,
         hasPreviousPage: after ? true : false,
-        // startCursor,
         startCursor: nodes.length === 0 ? '' : nodes[0].cursor,
         endCursor: nodes.length === 0 ? '' : nodes.slice(-1)[0].cursor,
       },
@@ -79,27 +78,40 @@ const contestQuery = {
    * @param {*} info
    */
   getTopContestPosts: async (parent, args, info) => {
-    const { contestId, top } = args;
+    // const { contestId, top } = args;
 
-    const result = await prisma.contest_Score.findMany({
+    // const result = await prisma.contest_Score.findMany({
+    //   where: {
+    //     contestId: contestId,
+    //   },
+    //   take: top,
+    //   include: {
+    //     post: true,
+    //   },
+    //   orderBy: [
+    //     { score: 'desc' },
+    //     {
+    //       createdAt: 'asc',
+    //     },
+    //   ],
+    // });
+
+    // if (result.length === 0) return [];
+
+    // return result.map((each) => each.post);
+
+    return await prisma.post.findMany({
       where: {
-        contestId: contestId,
-      },
-      take: top,
-      include: {
-        post: true,
+        contestId: args.data.contestId,
       },
       orderBy: [
-        { score: 'desc' },
+        { points: 'desc' },
         {
-          createdAt: 'asc',
+          createdAt: 'desc',
         },
       ],
+      take: 5,
     });
-
-    if (result.length === 0) return [];
-
-    return result.map((each) => each.post);
   },
 };
 
