@@ -49,6 +49,9 @@ const Post = {
           },
         },
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
     return result;
   },
