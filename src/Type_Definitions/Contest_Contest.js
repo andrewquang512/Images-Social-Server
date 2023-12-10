@@ -116,3 +116,7 @@ const contestDefs = gql`
 `;
 
 export default contestDefs;
+
+// https://bku-profile-pic.s3.ap-southeast-1.amazonaws.com/3.png
+// https://bku-profile-pic.s3.ap-southeast-1.amazonaws.com/2.png
+// https://bku-profile-pic.s3.ap-southeast-1.amazonaws.com/1.png
