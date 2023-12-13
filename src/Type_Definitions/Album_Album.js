@@ -4,7 +4,7 @@ const albumDefs = gql`
   extend type Query {
     allAlbums: [Album]!
     userAllAlbum(data: UserAllAlbumInput!): [Album]!
-    albumInfo(data: AlbumInfoInput!): Album!
+    albumInfo(data: AlbumInfoInput!): [Post]!
   }
 
   input UserAllAlbumInput {
@@ -12,6 +12,8 @@ const albumDefs = gql`
   }
 
   input AlbumInfoInput {
+    currentUserId: ID!
+    userId: ID!
     albumId: ID!
   }
 
@@ -37,13 +39,6 @@ const albumDefs = gql`
     albumId: ID!
     name: String!
   }
-
-  #   input UpdatePostInput {
-  #     postId: ID!
-  #     title: String
-  #     body: String
-  #     published: Boolean
-  #   }
 
   type Album {
     id: ID!

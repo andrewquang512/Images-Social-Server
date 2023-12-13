@@ -5,21 +5,60 @@ const albumQuery = {
     return await prisma.album.findMany();
   },
   albumInfo: async (parent, args, info) => {
-    return await prisma.album.findUnique({
-      where: {
-        id: args.data.albumId,
-      },
-    });
+    const { currentUserId, userId, albumId } = args.data;
+
+    if (currentUserId === userId) {
+      return await prisma.post.findMany({
+        where: {
+          albumId: { has: albumId },
+        },
+      });
+    } else {
+      const follower = await prisma.follower.findUnique({
+        where: {
+          userId: userId,
+        },
+      });
+
+      if (follower.userFollower.includes(currentUserId)) {
+        let a = await prisma.post.findMany({
+          where: {
+            albumId: { has: albumId },
+            OR: [
+              { postViewStatus: 'PUBLIC' },
+              { postViewStatus: 'ONLY_FOLLOWERS' },
+            ],
+          },
+
+          orderBy: {
+            createdAt: 'desc',
+          },
+        });
+
+        console.log({ a });
+        return a;
+      } else {
+        let a = await prisma.post.findMany({
+          where: {
+            albumId: { has: albumId },
+            OR: [{ postViewStatus: 'PUBLIC' }],
+          },
+
+          orderBy: {
+            createdAt: 'desc',
+          },
+        });
+
+        console.log({ a });
+        return a;
+      }
+    }
   },
   userAllAlbum: async (parent, args, info) => {
     return await prisma.album.findMany({
       where: {
         userId: args.data.userId,
-        // skip: (args.timeCall - 1) * 6,
-        // take: 2,
       },
-      // skip: (args.timeCall - 1) * 6,
-      // take: 1,
     });
   },
 };
