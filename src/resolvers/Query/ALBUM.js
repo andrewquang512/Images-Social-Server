@@ -61,6 +61,16 @@ const albumQuery = {
       },
     });
   },
+  postNotInAlbum: async (parent, args, info) => {
+    return await prisma.post.findMany({
+      where: {
+        userId: args.data.userId,
+        NOT: {
+          albumId: { has: args.data.albumId },
+        },
+      },
+    });
+  },
 };
 
 export default albumQuery;

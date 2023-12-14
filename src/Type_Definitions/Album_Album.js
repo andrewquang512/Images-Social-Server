@@ -5,6 +5,7 @@ const albumDefs = gql`
     allAlbums: [Album]!
     userAllAlbum(data: UserAllAlbumInput!): [Album]!
     albumInfo(data: AlbumInfoInput!): [Post]!
+    postNotInAlbum(data: NotInAlbumInfoInput!): [Post]!
   }
 
   input UserAllAlbumInput {
@@ -13,6 +14,11 @@ const albumDefs = gql`
 
   input AlbumInfoInput {
     currentUserId: ID!
+    userId: ID!
+    albumId: ID!
+  }
+
+  input NotInAlbumInfoInput {
     userId: ID!
     albumId: ID!
   }
