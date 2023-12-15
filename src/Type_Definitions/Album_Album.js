@@ -29,7 +29,7 @@ const albumDefs = gql`
     deleteAlbum(data: DeleteAlbumInput!): Album!
     deleteAllAlbum: DeleteAllReturnType!
 
-    updateAlbum(data: UpdateAlbumInput!): Album!
+    addNewPhotoToAlbum(data: UpdateAlbumInput!): Album!
   }
 
   input CreateAlbumInput {
@@ -43,7 +43,7 @@ const albumDefs = gql`
 
   input UpdateAlbumInput {
     albumId: ID!
-    name: String!
+    postIds: [ID]!
   }
 
   type Album {

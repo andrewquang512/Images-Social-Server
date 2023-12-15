@@ -44,24 +44,27 @@ const albumMutation = {
     return result;
   },
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  updateAlbum: async (parent, args, info) => {
-    const { updatedUser, ...updateInfo } = args.data;
-    let result;
-    try {
-      updatedUser = await prisma.user.update({
-        where: {
-          id: userId,
-        },
-        data: {
-          ...updateInfo,
-        },
-      });
-    } catch (e) {
-      console.log(e);
-      throw e;
-    }
+  addNewPhotoToAlbum: async (parent, args, info) => {
+    const { albumId, postIds } = args.data;
 
-    return updatedUser;
+    await prisma.post.updateMany({
+      where: {
+        id: {
+          in: postIds,
+        },
+      },
+      data: {
+        albumId: {
+          push: albumId,
+        },
+      },
+    });
+
+    return await prisma.album.findUnique({
+      where: {
+        id: albumId,
+      },
+    });
   },
 };
 
