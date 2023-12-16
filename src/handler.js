@@ -77,11 +77,8 @@ export const handler = startServerAndCreateLambdaHandler(
             },
             body: '',
           };
-          return callback(null, response);
+          return response;
         }
-
-        // Handle regular requests
-        return callback(null);
       },
     ],
     cors: {
