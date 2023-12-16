@@ -62,12 +62,11 @@ export const handler = startServerAndCreateLambdaHandler(
   handlers.createAPIGatewayProxyEventRequestHandler(),
   {
     middleware: [
-      async (event) => {
-        console.log('###? received event=' + JSON.stringify(event));
-      },
       async (event, lambdaContext, callback) => {
+        console.log('###? received event' + JSON.stringify(event));
         // Handle CORS preflight request
         if (event.httpMethod === 'OPTIONS') {
+          console.log('###? received event OPTIONS' + JSON.stringify(event));
           const response = {
             statusCode: 200,
             headers: {
