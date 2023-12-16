@@ -65,10 +65,28 @@ export const handler = startServerAndCreateLambdaHandler(
       async (event) => {
         console.log('###? received event=' + JSON.stringify(event));
       },
+      async (event, lambdaContext, callback) => {
+        // Handle CORS preflight request
+        if (event.httpMethod === 'OPTIONS') {
+          const response = {
+            statusCode: 200,
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Credentials': true,
+              'Access-Control-Allow-Methods': 'OPTIONS, POST, GET',
+              'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            },
+            body: '',
+          };
+          return callback(null, response);
+        }
+
+        // Handle regular requests
+        return callback(null);
+      },
     ],
     cors: {
       origin: '*',
-      credentials: true,
     },
   },
 );
