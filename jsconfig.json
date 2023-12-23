@@ -1,0 +1,16 @@
+{
+      "compilerOptions": {
+            "module": "ES6",
+            "moduleResolution": "node",
+            "target": "ES6",
+            "allowSyntheticDefaultImports": true,
+            "baseUrl": "./src",
+            "skipLibCheck": true,
+            "skipDefaultLibCheck": true,
+            "checkJs": false
+      },
+      "include": [
+            "src/*"
+      ],
+      "exclude": ["node_modules/*", "**/node_modules/*", "**/dist/*", "**/draft.js/*","**/____Legacy/*"]
+}

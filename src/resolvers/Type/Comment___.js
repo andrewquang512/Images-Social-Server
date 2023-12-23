@@ -1,14 +1,35 @@
+import { prisma } from '../../prisma/database.js';
+
 const Comment = {
-  author(parent, args, { db }, info) {
-    return db.users.find((user) => {
-      return user.id === parent.author;
+  userId: async (parent, args, info) => {
+    return await prisma.user.findUnique({
+      where: {
+        id: parent.userId,
+      },
     });
   },
-  post(parent, args, { db }, info) {
-    return db.posts.find((post) => {
-      return post.id === parent.post;
+  postId: async (parent, args, info) => {
+    return await prisma.post.findUnique({
+      where: {
+        id: parent.postId,
+      },
+    });
+  },
+  storyId: async (parent, args, info) => {
+    return await prisma.story.findUnique({
+      where: {
+        id: parent.storyId,
+      },
+    });
+  },
+
+  child: async (parent, args, info) => {
+    return await prisma.comment.findMany({
+      where: {
+        parentId: parent.id,
+      },
     });
   },
 };
 
-module.exports = Comment;
+export default Comment;

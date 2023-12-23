@@ -1,0 +1,77 @@
+name: Deploy to AWS Lambda
+
+on:
+  push:
+    branches:
+      - deploy
+      - develop
+  pull_request:
+    branches:
+      - deploy
+      - develop
+  workflow_dispatch:
+    branches:
+      - deploy
+      - develop
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_IAM_ROLE_ARN: ${{ secrets.AWS_IAM_ROLE_ARN }}
+      OWNER_LAYER_ACCOUNT_ID: ${{ secrets.OWNER_LAYER_ACCOUNT_ID }}
+
+    steps:
+      - name: Check if it's a merge commit
+        run: |
+          if [ -n "$(git log -1 --merges --pretty=%B)" ]; then
+            echo "This is a merge commit. Skipping the workflow."
+            exit 78
+          fi
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-southeast-1
+
+      - name: Update Code
+        run: |
+          npm install
+          npm run prisma_gen
+          npm run build
+          cp src/prisma/ERD.svg dist/prisma/ERD.svg
+          cp src/prisma/schema.prisma dist/prisma/schema.prisma
+          cp -r src/prisma_modules dist/prisma_modules
+          zip -r code.zip dist
+          aws lambda update-function-code --function-name images-social-backend-service --zip-file fileb://code.zip
+
+      - name: Update Node Modules
+        run: |
+          mkdir nodejs
+          cp package.json nodejs/package.json
+          cd nodejs
+          npm install --omit=dev
+          rm package.json package-lock.json
+          cd ..
+          zip -r ${GITHUB_WORKSPACE}/package-layer.zip nodejs
+
+          aws s3 cp ${GITHUB_WORKSPACE}/package-layer.zip s3://images-social-backend-service-package-layer/package-layer.zip
+
+          aws lambda publish-layer-version --layer-name arn:aws:lambda:ap-southeast-1:${OWNER_LAYER_ACCOUNT_ID}:layer:images-social-backend-service-package-layer --content S3Bucket=images-social-backend-service-package-layer,S3Key=package-layer.zip --compatible-runtimes nodejs16.x --compatible-architectures "arm64" "x86_64"
+
+          maxLayerVersion=$(aws lambda list-layer-versions --layer-name arn:aws:lambda:ap-southeast-1:${OWNER_LAYER_ACCOUNT_ID}:layer:images-social-backend-service-package-layer --query 'max_by(LayerVersions, &Version).LayerVersionArn' | sed 's/"//g')
+
+          aws lambda wait function-updated --function-name images-social-backend-service
+
+          aws lambda update-function-configuration --function-name images-social-backend-service --layers $maxLayerVersion

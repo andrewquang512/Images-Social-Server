@@ -10,3 +10,8 @@ https://www.section.io/engineering-education/how-to-setup-prisma-client-server-t
 Important
 https://www.youtube.com/watch?v=rtshCulV2hk
 https://byanr.com/aws/deploy-a-node-js-app-on-aws-lightsail/
+
+git pull, enter personal access key
+forever list
+forever stop 0
+forever start src/index.js

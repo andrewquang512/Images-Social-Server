@@ -4,7 +4,17 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+  output = "../prisma_modules"
+}
+
+generator erd {
+  provider                  = "prisma-erd-generator"
+  output                    = "ERD.svg"
+  theme                     = "forest"
+  includeRelationFromFields = true
+  binaryTargets             = ["native", "rhel-openssl-1.0.x"]
 }
 
 // https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/mongodb/install-prisma-client-typescript-mongodb
@@ -12,29 +22,375 @@ generator client {
 // https://www.prisma.io/docs/concepts/components/prisma-schema/relations
 
 model User {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  // email String  @unique
-  name  String
-  // age   Int  @default(18)
-  // posts Post[]
-  // createdAt DateTime  @default(now())
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  email              String   @unique
+  phoneNumber        String
+  hashPassword       String
+  name               String
+  profileImageURL    String
+  backgroundImageURL String
+  age                Int      @default(18)
+  birthday           String
+  isAdmin            Int      @default(0)
+  createdAt          DateTime @default(now())
   
+  updatedAt          DateTime @updatedAt
+  biography          String?   
+
+  level Level?
+
+  albums   Album[]
+  posts    Post[]
+  stories  Story[]
+  comments Comment[]
+
+  followers  Follower?
+  followings Following?
+
+  messages Message[]
+  // courses       Course[]
+  notiIds               String[] @db.ObjectId
+  user_to_notification Notification[]   @relation( fields: [notiIds], references: [id])
+
+  notificationsTriggered Notification[] @relation(name: "noti_trigger")
+
+  chatIDs      String[] @db.ObjectId
+  user_to_chat Chat[]   @relation(fields: [chatIDs], references: [id])
+
+  // courseIDs      String[] @db.ObjectId
+  // user_to_course Course[] @relation(fields: [courseIDs], references: [id])
+
+  endoseredIds      String[]      @db.ObjectId
+  endoseredList Endorsement[] @relation(name: "endorser", fields: [endoseredIds], references: [id])
+
+  endorsements Endorsement[] @relation(name: "owner")
+
+  interestCategoryIds      String[]      @db.ObjectId
+  interestCategories Category[] @relation(name: "interest", fields: [interestCategoryIds], references: [id])
+
+  // submissions Contest_Score[] 
+  contestPrizeList Contest_Prize[] 
+
+  joinedContestIds String[] @db.ObjectId
+  joinedContests Contest[] @relation(fields: [joinedContestIds], references: [id])
 }
-// model Post {
-//   id    String @id @default(auto()) @map("_id") @db.ObjectId
-//   title  String
-//   content   String?
-//   author    User @relation(fields: [authorId], references: [id])
-//   authorId  String   @db.ObjectId
-//   createdAt DateTime  @default(now())
+
+enum TypeNoti {
+  POST_CREATED
+  POST_LIKED
+}
+
+model Notification {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  type    TypeNoti
+  postId  String
+  postTitle  String
+  postImage  String
+  createdAt DateTime @default(now())
+
+  userIds               String[] @db.ObjectId
+  notification_to_user User[]   @relation( fields: [userIds], references: [id])
+
+  userTriggerId               String @db.ObjectId
+  notification_to_usertrigger User   @relation(name: "noti_trigger",fields: [userTriggerId], references: [id])
+}
+
+model Endorsement {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  ownerId String @db.ObjectId
+  owner User   @relation(name: "owner", fields: [ownerId], references: [id])
+
+  endorserIds String[] @db.ObjectId 
+  endorser User[]   @relation(name: "endorser", fields: [endorserIds], references: [id])
+
+  skillId String @db.ObjectId
+  skill   Skill  @relation(fields: [skillId], references: [id])
+}
+
+model Skill {
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  endorsements Endorsement[]
+}
+
+model Report {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  isFinished Boolean
+  reason     String
+  postId     String
+  userId     String
+
+  userReported String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Follower {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  userFollower String[] @db.ObjectId
+
+  userId           String @unique @db.ObjectId
+  follower_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Following {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  userFollowing String[] @db.ObjectId
+
+  userId            String @unique @db.ObjectId
+  following_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Level {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  currentXP    Int
+  currentLevel Int
+
+  userId        String @unique @db.ObjectId
+  level_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Image {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  url       String
+  hash      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  postId        String @unique @db.ObjectId
+  image_to_post Post   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  imageInfoId ImageInfo?
+}
+
+model ImageInfo {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  camera       String
+  lens         String
+  aperture     String
+  focalLength  String
+  shutterSpeed String
+  ISO          String
+  takenWhen    String
+  copyRight    String
+
+  imageId            String @unique @db.ObjectId
+  imageInfo_to_image Image  @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Category {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  posts            String[] @db.ObjectId
+  category_to_post Post[]   @relation(fields: [posts], references: [id])
+
+  stories            String[] @db.ObjectId
+  category_to_story Story[]   @relation(fields: [stories], references: [id])
+  
+  interestUserIds String[] @db.ObjectId 
+  category_to_user User[]   @relation(name: "interest", fields: [interestUserIds], references: [id])
+}
+
+model Album {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId        String @db.ObjectId
+  album_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  posts         String[] @db.ObjectId
+  album_to_post Post[]   @relation(fields: [posts], references: [id])
+}
+
+model Tag {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ViewStatus {
+  PUBLIC
+  ONLY_FOLLOWERS
+  PRIVATE
+}
+
+model Post {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  title   String
+  caption String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  postViewStatus ViewStatus @default(PUBLIC)
+  points         Int
+  image          Image?
+  cmts           Comment[]
+  contestId      String
+
+  userId       String @db.ObjectId
+  post_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  categoryId       String[]   @db.ObjectId
+  post_to_category Category[] @relation(fields: [categoryId], references: [id])
+
+  albumId       String[] @db.ObjectId
+  post_to_album Album[]  @relation(fields: [albumId], references: [id])
+
+  tag String[]
+
+  userLikedPost String[]
+  reportedUserIds      String[] 
+  // submissions Contest_Score[]
+}
+
+model Story {
+  id              String     @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  storyViewStatus ViewStatus @default(PUBLIC)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  points          Int
+
+  content  String
+  images   String[]
+  comments Comment[]
+
+  tag String[]
+
+  categoryId       String[]   @db.ObjectId
+  story_to_category Category[] @relation(fields: [categoryId], references: [id])
+
+  userId        String @db.ObjectId
+  story_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  userLikedStory String[]
+  reportedUserIds      String[] 
+}
+
+model Comment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String?
+  createdAt DateTime @default(now())
+
+  userId      String @db.ObjectId
+  cmt_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  postId      String? @db.ObjectId
+  cmt_to_post Post?   @relation(fields: [postId], references: [id])
+
+  storyId      String? @db.ObjectId
+  cmt_to_story Story?  @relation(fields: [storyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  parentId String?   @db.ObjectId
+  parent   Comment?  @relation(name: "Comment_Child", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  child    Comment[] @relation(name: "Comment_Child")
+
+  votes            Int      @default(0)
+  upVoteUserlist   String[]
+  downVoteUserlist String[]
+}
+
+model Contest {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+
+  contestImageURL String
+  description     String
+
+  startDate  DateTime @default(now())
+  endDate    DateTime
+
+  isFinished Boolean
+
+  joinedUserIds String[] @db.ObjectId 
+  joinedUserList User[] @relation(fields: [joinedUserIds],references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // scores Contest_Score[]
+  contestPrizeList Contest_Prize[] 
+}
+
+model Contest_Prize {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+
+  // contestId String @db.ObjectId
+  // contest Contest @relation(fields: [contestId],references: [id])
+
+  // prizeId String @db.ObjectId
+  // prize Prize @relation(fields: [prizeId], references: [id])
+
+  contestId       String @db.ObjectId
+  prize_to_contest Contest   @relation(fields: [contestId], references: [id])
+
+  userId String? @db.ObjectId
+  user User? @relation(fields: [userId], references: [id])
+
+  title String
+  type String
+  prizeImageURL String
+}
+
+// model Prize {
+//   id   String @id @default(auto()) @map("_id") @db.ObjectId
+//   name String
+//   prizeImageURL String
+
+//   contestPrizeList Contest_Prize[] 
+// }
+
+// model Contest_Score {
+//   id   String @id @default(auto()) @map("_id") @db.ObjectId
+
+//   contestId String @db.ObjectId
+//   contest Contest @relation(fields: [contestId], references: [id])
+
+//   userId String @db.ObjectId
+//   user User @relation(fields: [userId], references: [id])
+
+//   postId String? @db.ObjectId
+//   post Post? @relation(fields: [postId], references: [id])
+
+//   score Int?
+//   createdAt DateTime @default(now())
 //   updatedAt DateTime @updatedAt
+
 // }
 
-// model Comment {
-//   id    String @id @default(auto()) @map("_id") @db.ObjectId
-//   // email String  @unique
-//   content   String?
-//   name  String
-//   createdAt DateTime  @default(now())
-// }
+// Chat Application
+model Chat {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lastMessageAt DateTime @default(now())
 
+  messages Message[]
+
+  userIDs      String[] @db.ObjectId
+  chat_to_user User[]   @relation(fields: [userIDs], references: [id])
+}
+
+model Message {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  message   String?
+  createdAt DateTime @default(now())
+  isImage   Boolean
+
+  userId          String @db.ObjectId
+  message_to_user User   @relation(fields: [userId], references: [id])
+
+  chatId          String @db.ObjectId
+  message_to_chat Chat   @relation(fields: [chatId], references: [id])
+}

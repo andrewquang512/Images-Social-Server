@@ -1,14 +1,89 @@
+import { prisma } from '../../prisma/database.js';
+
 const User = {
-  // posts(parent, args, { prisma }, info) {
-  //   // return db.posts.filter((post) => {
-  //   //   return post.author === parent.id;
-  //   // });
-  // },
-  // comments(parent, args, { prisma }, info) {
-  //   return db.comments.filter((comment) => {
-  //     return comment.author === parent.id;
-  //   });
-  // },
+  level: async (parent, args, info) => {
+    return await prisma.level.findUnique({
+      where: {
+        userId: parent.id,
+      },
+    });
+  },
+  posts: async (parent, args, info) => {
+    return await prisma.post.findMany({
+      where: {
+        userId: parent.id,
+      },
+    });
+  },
+  stories: async (parent, args, info) => {
+    return await prisma.story.findMany({
+      where: {
+        userId: parent.id,
+      },
+    });
+  },
+  albums: async (parent, args, info) => {
+    return await prisma.album.findMany({
+      where: {
+        userId: parent.id,
+      },
+    });
+  },
+  notiIds: async (parent, args, info) => {
+    return await prisma.album.findMany({
+      where: {
+        userIds: { has: parent.id },
+      },
+    });
+  },
+  joinedContestIds: async (parent, args, info) => {
+    return await prisma.contest.findMany({
+      where: {
+        id: { in: parent.joinedContestIds },
+      },
+    });
+  },
+  contestPrizeList: async (parent, args, info) => {
+    return await prisma.contest_prize.findMany({
+      where: {
+        user: parent.id,
+      },
+    });
+  },
+  chatIDs: async (parent, args, info) => {
+    return await prisma.chat.findMany({
+      where: {
+        userIDs: { has: parent.id },
+      },
+      orderBy: {
+        lastMessageAt: 'desc',
+      },
+    });
+  },
+  messages: async (parent, args, info) => {
+    return await prisma.chat.findMany({
+      where: {
+        userId: parent.id,
+      },
+    });
+  },
+  userEndorsements: async (parent, args, info) => {
+    return await prisma.endorsement.findMany({
+      where: {
+        ownerId: parent.id,
+      },
+    });
+  },
+
+  interestCategories: async (parent, args, info) => {
+    return await prisma.category.findMany({
+      where: {
+        interestUserIds: {
+          has: parent.id,
+        },
+      },
+    });
+  },
 };
 
 export default User;

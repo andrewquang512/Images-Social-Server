@@ -1,3 +1,4 @@
+prisma_modules
 # Logs
 logs
 *.log
@@ -102,3 +103,5 @@ dist
 # .env
 # .env.test
 # .env.production
+
+# .env

@@ -1,67 +1,205 @@
-const userMutation = {
-  createUser: async (parent, args, { prisma }, info) => {
-    // console.log(prisma);
+import { prisma } from '../../prisma/database.js';
 
-    const result = await prisma.user.create({
-      data: {
-        name: 'Hung',
+const userMutation = {
+  createUser: async (parent, args, info) => {
+    let user;
+    try {
+      user = await prisma.user.create({
+        data: {
+          ...args.data,
+          profileImageURL:
+            'https://bku-profile-pic.s3.ap-southeast-1.amazonaws.com/images.jpg',
+          backgroundImageURL:
+            'https://bku-profile-pic.s3.ap-southeast-1.amazonaws.com/background.png',
+          birthday: '2000-01-01',
+          phoneNumber: '',
+          isAdmin: 0,
+          age: 18,
+          notiIds: [],
+          contestPrizeList: [],
+          level: {
+            create: {
+              currentXP: 0,
+              currentLevel: 1,
+            },
+          },
+          followers: {
+            create: {
+              userFollower: [],
+            },
+          },
+          followings: {
+            create: {
+              userFollowing: [],
+            },
+          },
+        },
+      });
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+    return user;
+  },
+
+  // TODO: Update delele User that lead to all records relate to user also be deleted
+  deleteUser: async (parent, args, info) => {
+    let user;
+    try {
+      user = await prisma.user.delete({
+        where: {
+          id: args.data.userId,
+        },
+      });
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+
+    return user;
+  },
+  deleteAllUser: async (parent, args, info) => {
+    let result;
+    try {
+      result = await prisma.user.deleteMany({});
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+
+    return result;
+  },
+  //!!!!!!!!!!!!!!!!!!!!!!!
+  updateUser: async (parent, args, info) => {
+    const { userId, ...updateInfo } = args.data;
+    let updatedUser;
+    try {
+      updatedUser = await prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          ...updateInfo,
+        },
+      });
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+
+    return updatedUser;
+  },
+
+  /**
+   * @param {*} parent
+   * @param {{data: {categoryIds: string[], userId: string}}} args
+   * @param {*} info
+   * @returns
+   */
+  addInterestCategories: async (parent, args, info) => {
+    const { categoryIds, userId } = args.data;
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      include: {
+        interestCategories: true,
+      },
+    });
+    if (!user) {
+      throw Error('User is not existed');
+    }
+
+    categoryIds.forEach((id) => {
+      if (user.interestCategoryIds.includes(id)) {
+        throw Error('User has already added this category to interest');
+      }
+    });
+
+    const existedCategories = await prisma.category.findMany({
+      where: {
+        id: {
+          in: categoryIds,
+        },
       },
     });
 
-    return result;
+    if (existedCategories.length !== categoryIds.length) {
+      throw Error('Some of category not existed');
+    }
 
-    // const allUsers = await prisma.user.findMany();
+    return await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        interestCategories: {
+          connect: categoryIds.map((id) => {
+            return {
+              id: id,
+            };
+          }),
+        },
+      },
+    });
   },
-  // deleteUser(parent, args, { db }, info) {
-  //   const userIndex = db.users.findIndex((user) => user.id === args.id);
 
-  //   if (userIndex === -1) {
-  //     throw new Error('User not found');
-  //   }
+  /**
+   * @param {*} parent
+   * @param {{data: {categoryIds: string, userId: string}}} args
+   * @param {*} info
+   * @returns
+   */
+  removeInterestCategories: async (parent, args, info) => {
+    const { categoryIds, userId } = args.data;
 
-  //   const deletedUsers = db.users.splice(userIndex, 1);
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      include: {
+        interestCategories: true,
+      },
+    });
 
-  //   db.posts = db.posts.filter((post) => {
-  //     const match = post.author === args.id;
+    if (!user) {
+      throw Error('User is not existed');
+    }
 
-  //     if (match) {
-  //       db.comments = db.comments.filter((comment) => comment.post !== post.id);
-  //     }
+    categoryIds.forEach((id) => {
+      if (!user.interestCategoryIds.includes(id)) {
+        throw Error('User has not added this category to interest');
+      }
+    });
 
-  //     return !match;
-  //   });
-  //   db.comments = db.comments.filter((comment) => comment.author !== args.id);
+    const existedCategories = await prisma.category.findMany({
+      where: {
+        id: {
+          in: categoryIds,
+        },
+      },
+    });
 
-  //   return deletedUsers[0];
-  // },
-  // updateUser(parent, args, { db }, info) {
-  //   const { id, data } = args;
-  //   const user = db.users.find((user) => user.id === id);
+    if (existedCategories.length !== categoryIds.length) {
+      throw Error('Some of category not existed');
+    }
 
-  //   if (!user) {
-  //     throw new Error('User not found');
-  //   }
-
-  //   if (typeof data.email === 'string') {
-  //     const emailTaken = db.users.some((user) => user.email === data.email);
-
-  //     if (emailTaken) {
-  //       throw new Error('Email taken');
-  //     }
-
-  //     user.email = data.email;
-  //   }
-
-  //   if (typeof data.name === 'string') {
-  //     user.name = data.name;
-  //   }
-
-  //   if (typeof data.age !== 'undefined') {
-  //     user.age = data.age;
-  //   }
-
-  //   return user;
-  // },
+    return await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        interestCategories: {
+          disconnect: categoryIds.map((id) => {
+            return {
+              id: id,
+            };
+          }),
+        },
+      },
+    });
+  },
 };
 
 export default userMutation;
