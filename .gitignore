@@ -104,4 +104,4 @@ dist
 # .env.test
 # .env.production
 
-.env
+# .env
