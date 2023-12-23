@@ -287,7 +287,7 @@ model Comment {
   cmt_to_user User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   postId      String? @db.ObjectId
-  cmt_to_post Post?   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  cmt_to_post Post?   @relation(fields: [postId], references: [id])
 
   storyId      String? @db.ObjectId
   cmt_to_story Story?  @relation(fields: [storyId], references: [id], onDelete: Cascade, onUpdate: Cascade)

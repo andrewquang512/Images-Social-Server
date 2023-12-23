@@ -238,6 +238,17 @@ const commentMutation = {
         throw Error('Action should be UPVOTE, DOWNVOTE, CANCEL');
     }
   },
+  deleteAllComment: async (parent, args, info) => {
+    let result;
+    try {
+      result = await prisma.comment.deleteMany({});
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+
+    return result;
+  },
 };
 
 export default commentMutation;

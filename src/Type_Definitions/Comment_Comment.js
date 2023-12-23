@@ -12,6 +12,7 @@ const commentDefs = gql`
     deleteComment(data: DeleteCommentInput!): Comment!
     updateComment(data: UpdateCommentInput!): Comment!
     voteComment(data: VoteCommentInput!): Comment!
+    deleteAllComment: DeleteAllReturnType!
   }
 
   extend type Query {
