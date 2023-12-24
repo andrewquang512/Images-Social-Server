@@ -55,6 +55,7 @@ jobs:
           cp -r src/prisma_modules dist/prisma_modules
           zip -r code.zip dist
           aws lambda update-function-code --function-name images-social-backend-service --zip-file fileb://code.zip
+          aws s3 cp ${GITHUB_WORKSPACE}/code.zip s3://image-social-backend-service-source/code.zip
 
       - name: Update Node Modules
         run: |
