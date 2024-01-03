@@ -38,6 +38,7 @@ const postQuery = {
       a = await prisma.post.findMany({
         where: {
           userId: userId,
+          contestId: '',
           categoryId: {
             hasEvery: categoryIds,
           },
@@ -84,6 +85,7 @@ const postQuery = {
         if (timeCall % 2 === 1) {
           a = await prisma.post.findMany({
             where: {
+              contestId: '',
               AND: [
                 { userId: { in: b.userFollowing } },
                 {
@@ -138,6 +140,7 @@ const postQuery = {
               ],
               userId: { notIn: b.userFollowing },
               postViewStatus: 'PUBLIC',
+              contestId: '',
               categoryId: {
                 hasEvery: categoryIds,
               },

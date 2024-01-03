@@ -11,6 +11,7 @@ const contestDefs = gql`
     ): PostConnection!
     # getTopContestPosts(contestId: String, top: Int!): [Post]!
     getTopContestPosts(data: ContestInfoInput!): [Post]!
+    getUserPrizes(data: UserPrizeInput!): [Contest_Prize]!
     # getContestPrizes
     # getPrizes
     # getContestPostScore
@@ -77,6 +78,10 @@ const contestDefs = gql`
 
   input EndContestInput {
     contestId: ID!
+  }
+
+  input UserPrizeInput {
+    userId: ID!
   }
 
   type Contest {

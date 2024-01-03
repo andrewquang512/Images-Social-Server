@@ -113,6 +113,13 @@ const contestQuery = {
       take: 5,
     });
   },
+  getUserPrizes: async (parent, args, info) => {
+    return await prisma.contest_Prize.findMany({
+      where: {
+        userId: args.data.userId,
+      },
+    });
+  },
 };
 
 export default contestQuery;
