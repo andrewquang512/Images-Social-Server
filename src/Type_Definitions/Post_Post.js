@@ -35,6 +35,11 @@ const postDefs = gql`
       limit: Int
       after: String
     ): PostPagination!
+    tagSearchPosts(
+      data: TagSearchPostInput!
+      limit: Int
+      after: String
+    ): PostPagination!
   }
 
   type PostPagination {
@@ -73,6 +78,10 @@ const postDefs = gql`
 
   input SimilarPostsInput {
     postId: String!
+  }
+
+  input TagSearchPostInput {
+    tagName: String!
   }
 
   input SearchQueryInput {
