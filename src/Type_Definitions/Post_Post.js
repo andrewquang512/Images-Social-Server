@@ -147,9 +147,20 @@ const postDefs = gql`
 
   input UpdatePostInput {
     postId: ID!
+
+    postViewStatus: ViewStatus
+
     title: String
     caption: String
-    postViewStatus: ViewStatus
+
+    camera: String
+    lens: String
+    aperture: String
+    focalLength: String
+    shutterSpeed: String
+    ISO: String
+    takenWhen: String
+    copyRight: String
   }
 
   type Post {

@@ -108,7 +108,7 @@ const contestMutation = {
       ],
     });
 
-    console.log({ a });
+    // console.log({ a });
 
     return result;
   },

@@ -109,7 +109,9 @@ const postMutation = {
   },
   updatePost: async (parent, args, info) => {
     let result;
+
     console.log(args.data);
+
     try {
       result = await prisma.post.update({
         where: {
@@ -119,6 +121,28 @@ const postMutation = {
           title: args.data.title || undefined,
           caption: args.data.caption || undefined,
           postViewStatus: args.data.postViewStatus || undefined,
+        },
+      });
+
+      await prisma.image.update({
+        where: {
+          postId: args.data.postId,
+        },
+        data: {
+          imageInfoId: {
+            update: {
+              data: {
+                camera: args.data.camera || undefined,
+                lens: args.data.lens || undefined,
+                aperture: args.data.aperture || undefined,
+                focalLength: args.data.focalLength || undefined,
+                shutterSpeed: args.data.shutterSpeed || undefined,
+                ISO: args.data.ISO || undefined,
+                takenWhen: args.data.takenWhen || undefined,
+                copyRight: args.data.copyRight || undefined,
+              },
+            },
+          },
         },
       });
     } catch (e) {
