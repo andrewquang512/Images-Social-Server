@@ -7,6 +7,14 @@ const postQuery = {
   allPosts: async (parent, args, info) => {
     return await prisma.post.findMany();
   },
+  allPostsTimestamp: async (parent, args, info) => {
+    const a = await prisma.post.findMany();
+
+    return a.map((a) => ({
+      month: a.createdAt.getMonth() + 1,
+      year: a.createdAt.getFullYear(),
+    }));
+  },
   postInfo: async (parent, args, info) => {
     return await prisma.post.findUnique({
       where: {

@@ -6,6 +6,7 @@ import commonDefs from './Common_Common.js';
 const postDefs = gql`
   extend type Query {
     allPosts: [Post]!
+    allPostsTimestamp: [Static]!
     postInfo(data: PostInfoInput!): Post!
 
     getNewFeed(
@@ -41,6 +42,11 @@ const postDefs = gql`
     pageInfo: PageInfo!
   }
   ${commonDefs}
+
+  type Static {
+    month: String
+    year: String
+  }
 
   type PostEdge {
     node: Post
