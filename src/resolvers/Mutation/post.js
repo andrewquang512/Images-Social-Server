@@ -12,7 +12,7 @@ const postMutation = {
           userId: args.data.userId,
         },
       });
-      console.log({ follower });
+      // console.log({ follower });
 
       post = await prisma.post.create({
         data: {
@@ -111,7 +111,7 @@ const postMutation = {
   updatePost: async (parent, args, info) => {
     let result;
 
-    console.log(args.data);
+    // console.log(args.data);
 
     try {
       result = await prisma.post.update({
@@ -176,7 +176,7 @@ const postMutation = {
         },
         include: { image: true },
       });
-      console.log({ b });
+      // console.log({ b });
 
       const a = await prisma.notification.create({
         data: {
@@ -188,7 +188,7 @@ const postMutation = {
           userIds: [post.userId],
         },
       });
-      console.log({ a });
+      // console.log({ a });
 
       sendNotificationToClient(
         [
@@ -208,7 +208,7 @@ const postMutation = {
           id: args.data.postId,
         },
       });
-      console.log(userLikedPost);
+      // console.log(userLikedPost);
 
       post = await prisma.post.update({
         where: {
@@ -240,7 +240,7 @@ const postMutation = {
   },
   reportedPost: async (parent, args, info) => {
     let post;
-    console.log({ args });
+    // console.log({ args });
 
     post = await prisma.post.update({
       where: {
