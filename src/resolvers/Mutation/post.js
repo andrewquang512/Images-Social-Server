@@ -51,7 +51,7 @@ const postMutation = {
       });
       // console.log({ post });
 
-      const a = await prisma.notification.create({
+      await prisma.notification.create({
         data: {
           type: 'POST_CREATED',
           postId: post.id,
