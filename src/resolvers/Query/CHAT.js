@@ -37,7 +37,7 @@ const chatQuery = {
     });
 
     if (!after) {
-      nodes = a.slice(0, 10).map((post) => ({
+      nodes = a.slice(0, 20).map((post) => ({
         node: post,
         cursor: post.id,
       }));
@@ -45,7 +45,7 @@ const chatQuery = {
       // console.log({ nodes });
     } else {
       const index = a.findIndex((post) => post.id === after);
-      nodes = a.slice(index + 1, index + 10).map((post) => ({
+      nodes = a.slice(index + 1, index + 20).map((post) => ({
         node: post,
         cursor: post.id,
       }));

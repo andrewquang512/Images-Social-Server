@@ -49,7 +49,7 @@ const postMutation = {
           },
         },
       });
-      console.log({ post });
+      // console.log({ post });
 
       const a = await prisma.notification.create({
         data: {
@@ -61,7 +61,7 @@ const postMutation = {
           userIds: follower.userFollower,
         },
       });
-      console.log({ a });
+      // console.log({ a });
 
       sendNotificationToClient(
         [
@@ -76,7 +76,7 @@ const postMutation = {
         },
       );
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       throw e;
     }
 
