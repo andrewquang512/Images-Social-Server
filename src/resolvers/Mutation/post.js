@@ -22,11 +22,14 @@ const postMutation = {
           postViewStatus: args.data.postViewStatus,
           contestId: args.data.contestId,
           points: 0,
+          // points: Math.floor(Math.random() * 30) + 1,
 
           categoryId: args.data.categoryId ? args.data.categoryId : [],
           albumId: args.data.albumId ? args.data.albumId : [],
           tag: args.data.tag ? args.data.tag : [],
           reportedUserIds: [],
+          // createdAt: new Date(1701979626 * 1000),
+          // createdAt: new Date(1699387626 * 1000),
 
           image: {
             create: {
@@ -49,6 +52,39 @@ const postMutation = {
           },
         },
       });
+
+      // let newTag = [
+      //   ...new Set(
+      //     args.data.tag.map((element) => {
+      //       return element.toLowerCase();
+      //     }),
+      //   ),
+      // ];
+
+      // await Promise.all(
+      //   newTag.map(async (tagName) => {
+      //     const a = await prisma.tag.count({
+      //       where: {
+      //         name: tagName,
+      //       },
+      //     });
+
+      //     if (!a) {
+      //       try {
+      //         await prisma.tag.create({
+      //           data: {
+      //             name: tagName,
+      //           },
+      //         });
+
+      //         // console.log({ tag });
+      //       } catch (e) {
+      //         console.log(e);
+      //         throw e;
+      //       }
+      //     }
+      //   }),
+      // );
       // console.log({ post });
 
       await prisma.notification.create({
