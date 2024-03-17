@@ -12,7 +12,7 @@ const postMutation = {
           userId: args.data.userId,
         },
       });
-      console.log({ follower });
+      // console.log({ follower });
 
       post = await prisma.post.create({
         data: {
@@ -22,11 +22,14 @@ const postMutation = {
           postViewStatus: args.data.postViewStatus,
           contestId: args.data.contestId,
           points: 0,
+          // points: Math.floor(Math.random() * 30) + 1,
 
           categoryId: args.data.categoryId ? args.data.categoryId : [],
           albumId: args.data.albumId ? args.data.albumId : [],
           tag: args.data.tag ? args.data.tag : [],
           reportedUserIds: [],
+          // createdAt: new Date(1701979626 * 1000),
+          // createdAt: new Date(1699387626 * 1000),
 
           image: {
             create: {
@@ -49,9 +52,42 @@ const postMutation = {
           },
         },
       });
-      console.log({ post });
 
-      const a = await prisma.notification.create({
+      // let newTag = [
+      //   ...new Set(
+      //     args.data.tag.map((element) => {
+      //       return element.toLowerCase();
+      //     }),
+      //   ),
+      // ];
+
+      // await Promise.all(
+      //   newTag.map(async (tagName) => {
+      //     const a = await prisma.tag.count({
+      //       where: {
+      //         name: tagName,
+      //       },
+      //     });
+
+      //     if (!a) {
+      //       try {
+      //         await prisma.tag.create({
+      //           data: {
+      //             name: tagName,
+      //           },
+      //         });
+
+      //         // console.log({ tag });
+      //       } catch (e) {
+      //         console.log(e);
+      //         throw e;
+      //       }
+      //     }
+      //   }),
+      // );
+      // console.log({ post });
+
+      await prisma.notification.create({
         data: {
           type: 'POST_CREATED',
           postId: post.id,
@@ -61,13 +97,14 @@ const postMutation = {
           userIds: follower.userFollower,
         },
       });
-      console.log({ a });
+      // console.log({ a });
 
       sendNotificationToClient(
         [
           'eUW71E0j4VAwZdHuyjdnQd:APA91bFKKXAsu_RxExCsDDK7V0AaqvHF9tW51bUBBDUkbvtxHEe9DpnFMhUfvgwVSAoud89y1rHxpeeEesWZZ9hkqAkkEMoP-7ys6QjYekcLln-bnXvvWfdG2ISZGwLtIm0iVH526VLr',
           'cL1Bw65HsSxGyqeJdii03m:APA91bGtBsY-8Wuj0SmG2qnmcqeluO5rqaUDerVpmHHs2Qy1dtTWWjnWXTpA2Lj-Mgx_8nRia_Fkhf96KIAYazyyDV-SHwR5PhPfJFzr9iMn4B4-z9qHdui5bYTh1fj5gt9jw-VGmBhX',
           'f4P4yK6nWsran8PhBsgeIm:APA91bFw4NZSX4NyHuXXQDP1MkKE5lm1m_1MssnCCgftX2LQdcKfsKUuRYd1T4d_XHjvncZOOfoxCxPbjrtf38FQj89n3PucD1xYXJuBI-ckBTfUMpKsACY-RfgHVLi_827zZVbIw74L',
+          'eOQ74KLA5zHh2m5YnP1J6Q:APA91bGaIUzKp4HtZlwMxDIung_YWBhOQH-VsSN8nxucYYJh1ylhi9FJLXx4Ae4zCVF4iS2SaYPxmD5RSjGqpaq9rAWvohPPLvqJ-KRiqqdmi8R_h_hLC4fuh1rOmAZlLZ4o2ev18sfp',
         ],
         {
           title: 'Notify new post',
@@ -75,7 +112,7 @@ const postMutation = {
         },
       );
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       throw e;
     }
 
@@ -109,7 +146,9 @@ const postMutation = {
   },
   updatePost: async (parent, args, info) => {
     let result;
-    console.log(args.data);
+
+    // console.log(args.data);
+
     try {
       result = await prisma.post.update({
         where: {
@@ -119,6 +158,28 @@ const postMutation = {
           title: args.data.title || undefined,
           caption: args.data.caption || undefined,
           postViewStatus: args.data.postViewStatus || undefined,
+        },
+      });
+
+      await prisma.image.update({
+        where: {
+          postId: args.data.postId,
+        },
+        data: {
+          imageInfoId: {
+            update: {
+              data: {
+                camera: args.data.camera || undefined,
+                lens: args.data.lens || undefined,
+                aperture: args.data.aperture || undefined,
+                focalLength: args.data.focalLength || undefined,
+                shutterSpeed: args.data.shutterSpeed || undefined,
+                ISO: args.data.ISO || undefined,
+                takenWhen: args.data.takenWhen || undefined,
+                copyRight: args.data.copyRight || undefined,
+              },
+            },
+          },
         },
       });
     } catch (e) {
@@ -151,7 +212,7 @@ const postMutation = {
         },
         include: { image: true },
       });
-      console.log({ b });
+      // console.log({ b });
 
       const a = await prisma.notification.create({
         data: {
@@ -163,13 +224,14 @@ const postMutation = {
           userIds: [post.userId],
         },
       });
-      console.log({ a });
+      // console.log({ a });
 
       sendNotificationToClient(
         [
           'eUW71E0j4VAwZdHuyjdnQd:APA91bFKKXAsu_RxExCsDDK7V0AaqvHF9tW51bUBBDUkbvtxHEe9DpnFMhUfvgwVSAoud89y1rHxpeeEesWZZ9hkqAkkEMoP-7ys6QjYekcLln-bnXvvWfdG2ISZGwLtIm0iVH526VLr',
           'cL1Bw65HsSxGyqeJdii03m:APA91bGtBsY-8Wuj0SmG2qnmcqeluO5rqaUDerVpmHHs2Qy1dtTWWjnWXTpA2Lj-Mgx_8nRia_Fkhf96KIAYazyyDV-SHwR5PhPfJFzr9iMn4B4-z9qHdui5bYTh1fj5gt9jw-VGmBhX',
           'f4P4yK6nWsran8PhBsgeIm:APA91bFw4NZSX4NyHuXXQDP1MkKE5lm1m_1MssnCCgftX2LQdcKfsKUuRYd1T4d_XHjvncZOOfoxCxPbjrtf38FQj89n3PucD1xYXJuBI-ckBTfUMpKsACY-RfgHVLi_827zZVbIw74L',
+          'eOQ74KLA5zHh2m5YnP1J6Q:APA91bGaIUzKp4HtZlwMxDIung_YWBhOQH-VsSN8nxucYYJh1ylhi9FJLXx4Ae4zCVF4iS2SaYPxmD5RSjGqpaq9rAWvohPPLvqJ-KRiqqdmi8R_h_hLC4fuh1rOmAZlLZ4o2ev18sfp',
         ],
         {
           title: 'Notify user like post',
@@ -182,7 +244,7 @@ const postMutation = {
           id: args.data.postId,
         },
       });
-      console.log(userLikedPost);
+      // console.log(userLikedPost);
 
       post = await prisma.post.update({
         where: {
@@ -214,7 +276,7 @@ const postMutation = {
   },
   reportedPost: async (parent, args, info) => {
     let post;
-    console.log({ args });
+    // console.log({ args });
 
     post = await prisma.post.update({
       where: {

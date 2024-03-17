@@ -7,6 +7,14 @@ const postQuery = {
   allPosts: async (parent, args, info) => {
     return await prisma.post.findMany();
   },
+  allPostsTimestamp: async (parent, args, info) => {
+    const a = await prisma.post.findMany();
+
+    return a.map((a) => ({
+      month: a.createdAt.getMonth() + 1,
+      year: a.createdAt.getFullYear(),
+    }));
+  },
   postInfo: async (parent, args, info) => {
     return await prisma.post.findUnique({
       where: {
@@ -38,6 +46,7 @@ const postQuery = {
       a = await prisma.post.findMany({
         where: {
           userId: userId,
+          contestId: '',
           categoryId: {
             hasEvery: categoryIds,
           },
@@ -84,6 +93,7 @@ const postQuery = {
         if (timeCall % 2 === 1) {
           a = await prisma.post.findMany({
             where: {
+              contestId: '',
               AND: [
                 { userId: { in: b.userFollowing } },
                 {
@@ -138,6 +148,7 @@ const postQuery = {
               ],
               userId: { notIn: b.userFollowing },
               postViewStatus: 'PUBLIC',
+              contestId: '',
               categoryId: {
                 hasEvery: categoryIds,
               },
@@ -642,6 +653,58 @@ const postQuery = {
       node: each,
       cursor: each.id,
     }));
+    return {
+      edges: shuffleArrayExceptFirstAndLast(nodes),
+      pageInfo: {
+        hasNextPage,
+        hasPreviousPage: after ? true : false,
+        // startCursor,
+        startCursor: nodes.length === 0 ? '' : nodes[0].cursor,
+        endCursor: nodes.length === 0 ? '' : nodes.slice(-1)[0].cursor,
+      },
+    };
+  },
+  tagSearchPosts: async (parent, args, info) => {
+    const { after, limit = DEFAULT_LIMIT } = args;
+    const { tagName } = args.data;
+    console.log({ tagName });
+
+    const [result, count] = await Promise.all([
+      prisma.post.findMany({
+        take: limit || DEFAULT_LIMIT,
+        ...(after && {
+          skip: 1,
+        }),
+        where: {
+          tag: { has: tagName },
+          image: {
+            isNot: null,
+          },
+        },
+        include: {
+          image: true,
+        },
+        ...(after && {
+          cursor: {
+            id: after,
+          },
+        }),
+      }),
+      prisma.post.count(),
+    ]);
+
+    // console.log('Result', result);
+    // console.log('count', count);
+
+    const hasNextPage =
+      result.length !== 0 && result.length < count && result.length === limit;
+    // console.log('hasNextPage', hasNextPage);
+
+    const nodes = result.map((each) => ({
+      node: each,
+      cursor: each.id,
+    }));
+
     return {
       edges: shuffleArrayExceptFirstAndLast(nodes),
       pageInfo: {

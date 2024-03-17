@@ -15,11 +15,16 @@ const notiDefs = gql`
 
   extend type Mutation {
     deleteNoti(data: DeleteNotiInput!): Notification!
+    deleteNotiUser(data: DeleteNotiUserInput!): Notification!
     deleteAllNoti: DeleteAllReturnType!
   }
 
   input DeleteNotiInput {
     notiId: ID!
+  }
+
+  input DeleteNotiUserInput {
+    userId: ID!
   }
 
   type Notification {

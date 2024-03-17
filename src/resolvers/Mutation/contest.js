@@ -52,10 +52,11 @@ const contestMutation = {
         isFinished: true,
       },
     });
+    console.log({ result });
 
-    const users = await prisma.post.findMany({
+    const top3 = await prisma.post.findMany({
       where: {
-        contestId: contestId,
+        contestId,
       },
       orderBy: [
         { points: 'desc' },
@@ -65,19 +66,49 @@ const contestMutation = {
       ],
       take: 3,
       include: {
-        userId: {
-          id: true,
-        },
+        post_to_user: { select: { id: true } },
       },
     });
 
-    console.log({ users });
+    console.log({ top3 });
+    // console.log(top3[0]);
 
-    // await prisma.contest_Prize.create({
-    //   data: {
-    //     contestId: contestId,
-    //   },
-    // });
+    const a = await prisma.contest_Prize.createMany({
+      data: [
+        {
+          contestId,
+          userId: top3[0]
+            ? top3[0].post_to_user.id
+            : '000000000000000000000000',
+          title: 'First place ' + result.name,
+          type: 'First',
+          prizeImageURL:
+            'https://bku-profile-pic.s3.ap-southeast-1.amazonaws.com/1.png',
+        },
+        {
+          contestId,
+          userId: top3[1]
+            ? top3[1].post_to_user.id
+            : '000000000000000000000000',
+          title: 'Second place ' + result.name,
+          type: 'Second',
+          prizeImageURL:
+            'https://bku-profile-pic.s3.ap-southeast-1.amazonaws.com/2.png',
+        },
+        {
+          contestId,
+          userId: top3[2]
+            ? top3[2].post_to_user.id
+            : '000000000000000000000000',
+          title: 'Third place ' + result.name,
+          type: 'Third',
+          prizeImageURL:
+            'https://bku-profile-pic.s3.ap-southeast-1.amazonaws.com/3.png',
+        },
+      ],
+    });
+
+    // console.log({ a });
 
     return result;
   },
@@ -97,7 +128,6 @@ const contestMutation = {
 
     return result;
   },
-
   joinContest: async (parent, args, info) => {
     let result;
     try {

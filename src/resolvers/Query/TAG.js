@@ -6,7 +6,7 @@ const tagQuery = {
   },
   suggestTags: async (parent, args, info) => {
     const a = await prisma.tag.findMany();
-    return a.slice(0, 10);
+    return a.slice(0, 20);
   },
   tagInfo: async (parent, args, info) => {
     return await prisma.tag.findUnique({

@@ -16,7 +16,7 @@ const userMutation = {
           isAdmin: 0,
           age: 18,
           notiIds: [],
-          contestPrizeList: [],
+          // contestPrizeList: [],
           level: {
             create: {
               currentXP: 0,

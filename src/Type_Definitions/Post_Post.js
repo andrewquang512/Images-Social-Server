@@ -6,6 +6,7 @@ import commonDefs from './Common_Common.js';
 const postDefs = gql`
   extend type Query {
     allPosts: [Post]!
+    allPostsTimestamp: [Static]!
     postInfo(data: PostInfoInput!): Post!
 
     getNewFeed(
@@ -34,6 +35,11 @@ const postDefs = gql`
       limit: Int
       after: String
     ): PostPagination!
+    tagSearchPosts(
+      data: TagSearchPostInput!
+      limit: Int
+      after: String
+    ): PostPagination!
   }
 
   type PostPagination {
@@ -41,6 +47,11 @@ const postDefs = gql`
     pageInfo: PageInfo!
   }
   ${commonDefs}
+
+  type Static {
+    month: String
+    year: String
+  }
 
   type PostEdge {
     node: Post
@@ -67,6 +78,10 @@ const postDefs = gql`
 
   input SimilarPostsInput {
     postId: String!
+  }
+
+  input TagSearchPostInput {
+    tagName: String!
   }
 
   input SearchQueryInput {
@@ -147,9 +162,20 @@ const postDefs = gql`
 
   input UpdatePostInput {
     postId: ID!
+
+    postViewStatus: ViewStatus
+
     title: String
     caption: String
-    postViewStatus: ViewStatus
+
+    camera: String
+    lens: String
+    aperture: String
+    focalLength: String
+    shutterSpeed: String
+    ISO: String
+    takenWhen: String
+    copyRight: String
   }
 
   type Post {

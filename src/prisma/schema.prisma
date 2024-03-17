@@ -9,13 +9,7 @@ generator client {
   output = "../prisma_modules"
 }
 
-generator erd {
-  provider                  = "prisma-erd-generator"
-  output                    = "ERD.svg"
-  theme                     = "forest"
-  includeRelationFromFields = true
-  binaryTargets             = ["native", "rhel-openssl-1.0.x"]
-}
+
 
 // https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/mongodb/install-prisma-client-typescript-mongodb
 // https://www.prisma.io/docs/concepts/components/prisma-schema/data-model
